@@ -179,7 +179,7 @@ export const App = () => {
                         userId={user.id}
                         accessToken={user.session.access_token}
                         useValidationFields
-                        isCustomerMode
+                        isHiddenAddress
                       />
                     ) : <Redirect to='/login' />}
                   </Route>

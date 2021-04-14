@@ -6,7 +6,7 @@ export const Profile = (props) => {
   return (
     <>
       <HelmetTags page='profile' />
-      <UserProfileForm {...props} isHiddenAddress />
+      <UserProfileForm {...props} />
     </>
   )
 }
