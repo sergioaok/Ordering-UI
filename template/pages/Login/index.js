@@ -8,7 +8,9 @@ export const Login = (props) => {
 
   const loginProps = {
     ...props,
-    urlToRedirect: location?.state?.from || null
+    urlToRedirect: location?.state?.from || null,
+    isDisableButtons: true,
+    allowedLevels: [0, 2]
   }
   return (
     <>

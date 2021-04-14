@@ -69,6 +69,7 @@ export const CheckoutPage = (props) => {
 
   const checkoutProps = {
     ...props,
+    isCustomerMode: true,
     cartUuid,
     actionsBeforePlace,
     query: useQuery(),

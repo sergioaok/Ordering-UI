@@ -6,7 +6,7 @@ import {
   Link,
   useLocation
 } from 'react-router-dom'
-import { useSession, useLanguage, useOrder, Analytics, useConfig } from 'ordering-components'
+import { useSession, useLanguage, useOrder, Analytics, useConfig, useEvent } from 'ordering-components'
 
 import { Header } from '../src/components/Header'
 import { Footer } from '../src/components/Footer'
@@ -22,21 +22,20 @@ import { Cms } from './pages/Cms'
 import { ForgotPassword } from './pages/ForgotPassword'
 import { HomePage } from './pages/Home'
 import { Login } from './pages/Login'
-import { MyOrders } from './pages/MyOrders'
 import { OrderDetailsPage } from './pages/OrderDetails'
 import { PageNotFound } from './pages/PageNotFound'
 import { PagesList } from './pages/PagesList'
 import { Profile } from './pages/Profile'
 import { ResetPassword } from './pages/ResetPassword'
-import { SignUp } from './pages/SignUp'
 
 import { ScrollToTop } from './components/ScrollToTop'
 import { ListenPageChanges } from './components/ListenPageChanges'
 import { HelmetTags } from './components/HelmetTags'
 
 export const App = () => {
-  const [{ auth, user, loading }, { login }] = useSession()
+  const [{ auth, user, loading }] = useSession()
   const [orderStatus] = useOrder()
+  const [events] = useEvent()
   const [{ configs }] = useConfig()
   const [, t] = useLanguage()
   const [loaded, setLoaded] = useState(false)
@@ -59,16 +58,19 @@ export const App = () => {
 
   const isHome = location.pathname === '/' || location.pathname === '/home'
 
-  const handleSuccessSignup = (user) => {
-    login({
-      user,
-      token: user?.session?.access_token
-    })
-  }
+  const userCustomer = JSON.parse(window.localStorage.getItem('user-customer'))
 
   useEffect(() => {
     if (!loaded && !orderStatus.loading) {
       setLoaded(true)
+    }
+    if (
+      orderStatus?.options?.user_id &&
+      orderStatus?.options?.user_id === parseInt(userCustomer?.id, 10) &&
+      (window.location.pathname === '/' ||
+      window.location.pathname === '/home')
+    ) {
+      events.emit('go_to_page', { page: 'search' })
     }
   }, [orderStatus])
 
@@ -104,38 +106,28 @@ export const App = () => {
       {
         loaded && (
           <>
-            <Header isHome={isHome} location={location} />
+            <Header
+              isHome={isHome}
+              location={location}
+              isShowOrderOptions={!!userCustomer?.id}
+              isCustomerMode
+              isHideSignup
+            />
             <NotNetworkConnectivity />
             {onlineStatus && (
               <ScrollToTop>
                 <HelmetTags />
                 <Switch>
                   <Route exact path='/home'>
-                    {
-                      orderStatus.options?.address?.location
-                        ? <Redirect to='/search' />
-                        : <HomePage />
+                    {auth
+                      ? <HomePage />
+                      : <Redirect to='/signin' />
                     }
                   </Route>
                   <Route exact path='/'>
-                    {
-                      orderStatus.options?.address?.location
-                        ? <Redirect to='/search' />
-                        : <HomePage />
-                    }
-                  </Route>
-                  <Route exact path='/signup'>
-                    {
-                      !auth
-                        ? (
-                          <SignUp
-                            elementLinkToLogin={<Link to='/login'>{t('LOGIN', 'Login')}</Link>}
-                            useLoginByCellphone
-                            useChekoutFileds
-                            handleSuccessSignup={handleSuccessSignup}
-                          />
-                        )
-                        : <Redirect to='/' />
+                    {auth
+                      ? <HomePage />
+                      : <Redirect to='/signin' />
                     }
                   </Route>
                   <Route exact path='/login'>
@@ -143,19 +135,14 @@ export const App = () => {
                       !auth
                         ? (
                           <Login
-                            elementLinkToSignup={<Link to='/signup'>{t('CREATE_ACCOUNT', 'Create account')}</Link>}
                             elementLinkToForgotPassword={<Link to='/password/forgot'>{t('RESET_PASSWORD', 'Reset password')}</Link>}
                             useLoginByCellphone
                           />
                         )
                         : (
-                        orderStatus?.options?.user_id && !orderStatus?.loading ? (
-                          orderStatus.options?.address?.location
+                          userCustomer?.id && userCustomer?.address
                             ? <Redirect to='/search' />
                             : <Redirect to='/' />
-                        ) : (
-                          <SpinnerLoader />
-                        )
                         )
                     }
                   </Route>
@@ -164,19 +151,14 @@ export const App = () => {
                       !auth
                         ? (
                           <Login
-                            elementLinkToSignup={<Link to='/signup'>{t('CREATE_ACCOUNT', 'Create account')}</Link>}
                             elementLinkToForgotPassword={<Link to='/password/forgot'>{t('RESET_PASSWORD', 'Reset password')}</Link>}
                             useLoginByCellphone
                           />
                         )
                         : (
-                        orderStatus?.options?.user_id && !orderStatus?.loading ? (
-                          orderStatus.options?.address?.location
+                          userCustomer?.id && userCustomer?.address
                             ? <Redirect to='/search' />
                             : <Redirect to='/' />
-                        ) : (
-                          <SpinnerLoader />
-                        )
                         )
                     }
                   </Route>
@@ -192,30 +174,30 @@ export const App = () => {
                   </Route>
                   <Route exact path='/password/reset' component={ResetPassword} />
                   <Route exact path='/profile'>
-                    {auth
-                      ? (<Profile userId={user.id} accessToken={user?.session?.access_token} useValidationFields />)
-                      : <Redirect to='/login' />}
-                  </Route>
-                  <Route exact path='/profile/orders'>
-                    {auth
-                      ? (<MyOrders />)
-                      : <Redirect to='/login' />}
+                    {auth ? (
+                      <Profile
+                        userId={user.id}
+                        accessToken={user.session.access_token}
+                        useValidationFields
+                        isCustomerMode
+                      />
+                    ) : <Redirect to='/login' />}
                   </Route>
                   <Route exact path='/search'>
-                    {orderStatus.loading && !orderStatus.options?.address?.location ? (
-                      <SpinnerLoader />
-                    ) : (
-                      orderStatus.options?.address?.location
-                        ? <BusinessesList />
-                        : <Redirect to='/' />
-                    )}
+                    {userCustomer?.id && userCustomer?.address
+                      ? <BusinessesList />
+                      : <Redirect to='/' />}
                   </Route>
                   <Route exact path='/store/:store'>
-                    <BusinessProductsList />
+                    {userCustomer?.id && userCustomer?.address
+                      ? <BusinessProductsList />
+                      : <Redirect to='/' />}
                   </Route>
                   <Route path='/checkout/:cartUuid?'>
                     {auth
-                      ? <CheckoutPage />
+                      ? userCustomer?.id && userCustomer?.address
+                          ? <CheckoutPage />
+                          : <Redirect to='/' />
                       : (
                         <Redirect to={{
                           pathname: '/login',
@@ -250,7 +232,7 @@ export const App = () => {
                 </Switch>
               </ScrollToTop>
             )}
-            <Footer />
+            {/*<Footer />*/}
             <Alert
               title={t('INFORMATION', 'Information')}
               content={alertState.content}

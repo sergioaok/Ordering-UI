@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components'
 
 export const HomeContainer = styled.div`
-  background-color: ${props => props.theme.colors.backgroundPage};
+  background-color: #F8F8F8;
   display: flex;
   flex-direction: column;
 `
@@ -12,7 +12,6 @@ export const HomeSection = styled.div`
   background: #FFF;
 
   flex-direction: column;
-  padding: 0px 10px 20px;
   &.reverse {
     flex-direction: column-reverse;
   }
@@ -41,7 +40,6 @@ export const HomeSection = styled.div`
   `}
 
   @media (min-width: 943px) {
-    padding: 0px 50px 20px;
     flex-direction: ${({ column }) => column ? 'column' : 'row'};
     &.reverse {
       flex-direction: row-reverse;

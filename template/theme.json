@@ -10,13 +10,13 @@
     }
   },
   "colors": {
-    "primary": "#D83520",
+    "primary": "#3070EE",
     "primaryContrast": "#FFF",
     "secundary": "#EFEFEF",
     "secundaryContrast": "#000",
     "disabled": "#CBCBCB",
     "disabledContrast": "#000",
-    "backgroundPage": "#F8F8F8",
+    "backgroundPage": "#FFF",
     "colorPage": "#333"
   }
 }
