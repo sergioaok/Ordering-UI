@@ -63,7 +63,7 @@ export const BusinessBasicContent = styled.div`
   padding: 10px;
   border-radius: 10px;
   margin: 20px;
-  max-height: 75px;
+  max-height: 90px;
   width: 340px;
   z-index: 1;
 `
@@ -126,7 +126,6 @@ export const BusinessInfoItem = styled.div`
       margin: 0px;
       text-transform: capitalize;
       overflow: hidden;
-      white-space: nowrap;
       text-overflow: ellipsis;
       font-weight: 300;
       svg {

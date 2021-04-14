@@ -37,7 +37,7 @@ export const BusinessContent = styled.div`
   padding: 10px;
   border-radius: 10px;
   margin: 10px;
-  max-height: 75px;
+  max-height: 90px;
   width: 340px;
 
   @media (min-width: 426px) {
@@ -109,7 +109,7 @@ export const BusinessInfoItem = styled.div`
       align-items: center;
       margin: 0px;
       overflow: hidden;
-      white-space: nowrap;
+      /* white-space: nowrap; */
       text-overflow: ellipsis;
 
       svg {

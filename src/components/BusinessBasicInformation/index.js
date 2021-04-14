@@ -40,13 +40,12 @@ export const BusinessBasicInformation = (props) => {
   const [{ parsePrice, parseDistance, optimizeImage }] = useUtils()
 
   const getBusinessType = () => {
-    if (Object.keys(business).length <= 0) return 'none'
-    const typeObj = types.map(t => {
-      return { [t]: business[t] }
-    }).reduce((r, c) => ({ ...r, ...c }), {})
-    const businessType = Object.entries(typeObj).reduce((a, [k, v]) => v !== false ? [...a, [k, v]] : a, [])?.[0]
-
-    return t(`BUSINESS_TYPE_${businessType?.[0].replace(/\s/g, '_').toUpperCase()}`, businessType?.[0])
+    if (Object.keys(business).length <= 0) return t('GENERAL', 'General')
+    const _types = []
+    types.forEach(type => business[type] && _types.push(
+      t(`BUSINESS_TYPE_${type?.replace(/\s/g, '_')?.toUpperCase()}`, type)
+    ))
+    return _types.join(', ')
   }
 
   return (

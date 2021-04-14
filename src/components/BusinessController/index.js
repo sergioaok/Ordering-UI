@@ -42,10 +42,12 @@ const BusinessControllerUI = (props) => {
 
   const types = ['food', 'alcohol', 'groceries', 'laundry']
 
-  const getBusinessType = () => {
+  const businessType = () => {
     if (Object.keys(business).length <= 0) return t('GENERAL', 'General')
     const _types = []
-    types.forEach(type => business[type] && _types.push(type))
+    types.forEach(type => business[type] && _types.push(
+      t(`BUSINESS_TYPE_${type?.replace(/\s/g, '_')?.toUpperCase()}`, type)
+    ))
     return _types.join(', ')
   }
 
@@ -106,7 +108,7 @@ const BusinessControllerUI = (props) => {
                 <Categories>
                   {
                     Object.keys(business).length > 0 ? (
-                      t(`BUSINESS_TYPE_${getBusinessType()?.replace(/\s/g, '_')?.toUpperCase()}`, getBusinessType())
+                      businessType()
                     ) : (
                       <Skeleton width={100} />
                     )
