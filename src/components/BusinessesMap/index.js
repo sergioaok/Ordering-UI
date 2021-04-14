@@ -31,31 +31,27 @@ const BusinessesMapUI = (props) => {
       {props.beforeElements?.map((BeforeElement, i) => (
         <React.Fragment key={i}>
           {BeforeElement}
-        </React.Fragment>))
-      }
+        </React.Fragment>))}
       {props.beforeComponents?.map((BeforeComponent, i) => (
-        <BeforeComponent key={i} {...props} />))
-      }
+        <BeforeComponent key={i} {...props} />))}
       <WrapperMap disabled={orderState.loading}>
         <GoogleMapsMap
           apiKey={configState?.configs?.google_maps_api_key?.value}
           location={userLocation}
           locations={businessLocations}
           mapControls={googleMapsControls}
-          maxLimitLocation={configState?.configs?.meters_to_change_address?.value}
+          maxLimitLocation={parseInt(configState?.configs?.meters_to_change_address?.value)}
           businessMap
           onBusinessClick={onBusinessClick}
           setErrors={setErrors}
         />
       </WrapperMap>
       {props.afterComponents?.map((AfterComponent, i) => (
-        <AfterComponent key={i} {...props} />))
-      }
+        <AfterComponent key={i} {...props} />))}
       {props.afterElements?.map((AfterElement, i) => (
         <React.Fragment key={i}>
           {AfterElement}
-        </React.Fragment>))
-      }
+        </React.Fragment>))}
     </>
   )
 }

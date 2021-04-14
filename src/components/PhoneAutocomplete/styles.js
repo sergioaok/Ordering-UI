@@ -48,6 +48,8 @@ export const PhoneContainer = styled.div`
     top: 100%;
     left: 0;
     right: 0;
+    overflow: auto;
+    max-height: 200px
   }
   .autocomplete-items div {
     padding: 10px;
@@ -202,6 +204,11 @@ export const WrapInput = styled.div`
 
 export const AutoComplete = styled.div`
   width: 45%; 
+  button {
+    position: absolute;
+    left: 100%;
+    transform: translate(-90%, -165%)
+  }
 `
 
 export const UserEdit = styled.div`

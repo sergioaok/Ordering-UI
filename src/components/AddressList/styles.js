@@ -159,3 +159,15 @@ export const FormActions = styled.div`
     }
   }
 `
+
+export const ContinueButton = styled.div`
+  width: 100%;
+  position: sticky;
+  bottom: 1px;
+  
+  button {
+    width: 100%;
+    white-space: nowrap;
+    height: 50px;
+  }
+`

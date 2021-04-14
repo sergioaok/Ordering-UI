@@ -17,7 +17,8 @@ import {
   AddressItem,
   AddressItemActions,
   WrappNotAddresses,
-  FormActions
+  FormActions,
+  ContinueButton
 } from './styles'
 
 import { NotFoundSource } from '../NotFoundSource'
@@ -41,7 +42,8 @@ const AddressListUI = (props) => {
     onCancel,
     onAccept,
     userId,
-    userCustomerSetup
+    userCustomerSetup,
+    isEnableContinueButton
   } = props
 
   const [, t] = useLanguage()
@@ -86,11 +88,14 @@ const AddressListUI = (props) => {
       ...addressList,
       addresses
     })
+    if (userCustomerSetup) {
+      handleSetAddress(address)
+      return
+    }
     setAddressOpen(false)
   }
 
   const handleSetAddress = (address) => {
-    if (address.id === orderState?.options?.address_id) return
     setAddressOpen(false)
     handleSetDefault(address, userCustomerSetup)
   }
@@ -107,10 +112,11 @@ const AddressListUI = (props) => {
   }
 
   const checkAddress = (address) => {
-    if (!orderState?.options?.address) return true
-
     const props = ['address', 'address_notes', 'zipcode', 'location', 'internal_number']
     const values = []
+    if (userCustomerSetup) {
+      return address.default
+    }
     props.forEach(prop => {
       if (address[prop]) {
         if (prop === 'location') {
@@ -149,7 +155,7 @@ const AddressListUI = (props) => {
           (!isPopover || !addressOpen) && (
             <Button
               className='add'
-              color='primary'
+              color={isEnableContinueButton && addressList?.addresses?.length > 0 ? 'secondary' : 'primary'}
               onClick={() => openAddress({})}
               disabled={orderState?.loading || actionStatus.loading}
             >
@@ -219,6 +225,13 @@ const AddressListUI = (props) => {
                     </a>
                   </AddressItemActions>
                 </AddressItem>
+              ))}
+              {isEnableContinueButton && uniqueAddressesList.map(address => address.default && (
+                <ContinueButton>
+                  <Button color='primary' onClick={() => handleSetAddress(address)}>
+                    {t('CONTINUE_WITH', 'Continue with')}: {address.address}
+                  </Button>
+                </ContinueButton>
               ))}
             </AddressListUl>
           )

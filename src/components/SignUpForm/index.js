@@ -44,7 +44,8 @@ const SignUpFormUI = (props) => {
     handleSuccessSignup,
     isPopup,
     externalPhoneNumber,
-    saveCustomerUser
+    saveCustomerUser,
+    fieldsNotValid
   } = props
   const [, t] = useLanguage()
   const [{ configs }] = useConfig()
@@ -178,8 +179,8 @@ const SignUpFormUI = (props) => {
             {
               !(useChekoutFileds && validationFields?.loading) ? (
                 <>
-                  {
-                  validationFields?.fields?.checkout && Object.values(validationFields?.fields?.checkout).map(field => !notValidationFields.includes(field.code) && (
+                  {validationFields?.fields?.checkout &&
+                    Object.values(validationFields?.fields?.checkout).map(field => !notValidationFields.includes(field.code) && (
                       showField && showField(field.code) && (
                         <Input
                           key={field.id}
@@ -219,22 +220,25 @@ const SignUpFormUI = (props) => {
                     />
                   )}
 
-                  <Input
-                    type='password'
-                    name='password'
-                    aria-label='password'
-                    className='form'
-                    placeholder={t('PASSWORD', 'Password')}
-                    onChange={handleChangeInput}
-                    required
-                    ref={register({
-                      required: isRequiredField('password') ? t('VALIDATION_ERROR_PASSWORD_REQUIRED', 'The field Password is required').replace('_attribute_', t('PASSWORD', 'password')) : null,
-                      minLength: {
-                        value: 8,
-                        message: t('VALIDATION_ERROR_PASSWORD_MIN_STRING', 'The Password must be at least 8 characters.').replace('_attribute_', t('PASSWORD', 'Password')).replace('_min_', 8)
-                      }
-                    })}
-                  />
+                  {(!fieldsNotValid || (fieldsNotValid && !fieldsNotValid.includes('password'))) && (
+                    <Input
+                      type='password'
+                      name='password'
+                      aria-label='password'
+                      className='form'
+                      placeholder={t('PASSWORD', 'Password')}
+                      onChange={handleChangeInput}
+                      required
+                      ref={register({
+                        required: isRequiredField('password') ? t('VALIDATION_ERROR_PASSWORD_REQUIRED', 'The field Password is required').replace('_attribute_', t('PASSWORD', 'password')) : null,
+                        minLength: {
+                          value: 8,
+                          message: t('VALIDATION_ERROR_PASSWORD_MIN_STRING', 'The Password must be at least 8 characters.').replace('_attribute_', t('PASSWORD', 'Password')).replace('_min_', 8)
+                        }
+                      })}
+                    />
+                  )}
+
                   {props.afterMidElements?.map((MidElement, i) => (
                     <React.Fragment key={i}>
                       {MidElement}
@@ -244,7 +248,7 @@ const SignUpFormUI = (props) => {
                 </>
               ) : (
                 <>
-                  {[...Array(5)].map((item, i) => (
+                  {[...Array(5)].map((_, i) => (
                     <SkeletonWrapper key={i}>
                       <Skeleton height={43} />
                     </SkeletonWrapper>

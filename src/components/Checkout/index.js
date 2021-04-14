@@ -105,23 +105,24 @@ const CheckoutUI = (props) => {
     setUserErrors([])
     const errors = []
     const notFields = ['coupon', 'driver_tip', 'mobile_phone', 'address', 'zipcode', 'address_notes']
+    const userSelected = isCustomerMode ? customerState.user : user
 
     Object.values(validationFields?.fields?.checkout).map(field => {
       if (field?.required && !notFields.includes(field.code)) {
-        if (!user[field?.code]) {
+        if (!userSelected[field?.code]) {
           errors.push(t(`VALIDATION_ERROR_${field.code.toUpperCase()}_REQUIRED`, `The field ${field?.name} is required`))
         }
       }
     })
 
-    if (!user?.cellphone && validationFields?.fields?.checkout?.cellphone?.required) {
+    if (!userSelected?.cellphone && validationFields?.fields?.checkout?.cellphone?.required) {
       errors.push(t('VALIDATION_ERROR_MOBILE_PHONE_REQUIRED', 'The field Phone number is required'))
     }
 
-    if (user?.cellphone) {
-      if (user?.country_phone_code) {
+    if (userSelected?.cellphone) {
+      if (userSelected?.country_phone_code) {
         let phone = null
-        phone = `+${user?.country_phone_code}${user?.cellphone}`
+        phone = `+${userSelected?.country_phone_code}${userSelected?.cellphone}`
         const phoneNumber = parsePhoneNumber(phone)
         if (!phoneNumber?.isValid()) {
           errors.push(t('VALIDATION_ERROR_MOBILE_PHONE_REQUIRED', 'The field Phone number is invalid.'))

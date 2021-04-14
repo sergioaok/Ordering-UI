@@ -81,8 +81,8 @@ const PhoneAutocompleteUI = (props) => {
         <BeforeComponent key={i} {...props} />))}
       <PhoneContainer bgimage={theme.images?.general?.homeHero}>
         <ContentWrapper>
-          <Title>{t('TITLE_HOME', 'All We need is Food.')}</Title>
-          <Slogan>{t('SUBTITLE_HOME', 'Let\'s start to order food now')}</Slogan>
+          <Title>{t('TITLE_HOME_CALLCENTER', 'Welcome to your Ordering Call Center.')}</Title>
+          <Slogan>{t('SUBTITLE_HOME_CALLCENTER', 'Start First by adding the customers\' phone number')}</Slogan>
           <AutoComplete className='autocomplete'>
             <Input
               name='phone-input'
@@ -97,6 +97,9 @@ const PhoneAutocompleteUI = (props) => {
               autoComplete='off'
               disabled={customersPhones?.loading}
             />
+            <Button name='phone-button' id='phone-button' className='phone-button'>
+              {t('SEE_PHONES', 'See phones')}
+            </Button>
             {customersPhones?.loading && (
               <SpinnerLoader
                 style={{
@@ -134,6 +137,7 @@ const PhoneAutocompleteUI = (props) => {
         <SignUpForm
           externalPhoneNumber={phone}
           saveCustomerUser={saveCustomerUser}
+          fieldsNotValid={props.fieldsNotValid}
         />
       </Modal>
       <Modal
@@ -157,6 +161,7 @@ const PhoneAutocompleteUI = (props) => {
                   ...customerState?.result,
                   phone
                 }}
+                isEnableContinueButton
               />
             </>
           )}
