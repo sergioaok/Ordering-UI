@@ -12,6 +12,7 @@ export const HomePage = (props) => {
 
   const phoneProps = {
     ...props,
+    fieldsNotValid: ['password'],
     onRedirectPage: (page) => {
       events.emit('go_to_page', { page })
     }
