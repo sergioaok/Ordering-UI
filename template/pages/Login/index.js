@@ -10,7 +10,7 @@ export const Login = (props) => {
     ...props,
     urlToRedirect: location?.state?.from || null,
     isDisableButtons: true,
-    allowedLevels: [0, 2]
+    allowedLevels: [0]
   }
   return (
     <>
