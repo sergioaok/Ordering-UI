@@ -247,14 +247,18 @@ const AddressListUI = (props) => {
           )
         }
 
-        {!addressList.loading && !addressList.error && addressList?.addresses?.length === 0 && !isProductForm && (
+        {!(addressList.loading || actionStatus.loading || orderState.loading) &&
+          !addressList.error &&
+          addressList?.addresses?.length === 0 &&
+          !isProductForm &&
+        (
           <WrappNotAddresses>
             <img src={theme.images?.general?.notFound} alt='Not Found' width='200px' height='112px' loading='lazy' />
             <h1>{t('NOT_FOUND_ADDRESS.', 'Sorry, You don\'t seem to have any addresses.')}</h1>
           </WrappNotAddresses>
         )}
 
-        {!addressList.loading && addressList.error && (
+        {!(addressList.loading || actionStatus.loading || orderState.loading) && addressList.error && (
           addressList.error.length > 0 && (
             <NotFoundSource
               content={addressList.error[0]?.message || addressList.error[0]}
@@ -262,7 +266,7 @@ const AddressListUI = (props) => {
           )
         )}
 
-        {!addressList.loading && (typeof orderState.options?.address !== 'object') && !addressList.error && (
+        {!(addressList.loading || actionStatus.loading || orderState.loading) && (typeof orderState.options?.address !== 'object') && !addressList.error && (
           <NotFoundSource
             content={t('NETWORK_ERROR', 'Network error, please reload the page')}
           />

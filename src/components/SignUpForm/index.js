@@ -66,6 +66,8 @@ const SignUpFormUI = (props) => {
   const [isValidPhoneNumber, setIsValidPhoneNumber] = useState(null)
   const [passwordSee, setPasswordSee] = useState(false)
 
+  const showInputPhoneNumber = validationFields?.fields?.checkout?.cellphone?.enabled ?? false
+
   const handleSuccessFacebook = (user) => {
     login({
       user,
@@ -86,7 +88,7 @@ const SignUpFormUI = (props) => {
 
   const onSubmit = () => {
     const isPhoneNumberValid = userPhoneNumber ? isValidPhoneNumber : true
-    if (!userPhoneNumber && validationFields?.fields?.checkout?.cellphone?.required && !externalPhoneNumber) {
+    if (!userPhoneNumber && validationFields?.fields?.checkout?.cellphone?.required) {
       setAlertState({
         open: true,
         content: [t('VALIDATION_ERROR_MOBILE_PHONE_REQUIRED', 'The field Mobile phone is required.')]
@@ -188,7 +190,11 @@ const SignUpFormUI = (props) => {
     })
   }, [signupData])
 
-  const showInputPhoneNumber = validationFields?.fields?.checkout?.cellphone?.enabled ?? false
+  useEffect(() => {
+    if (externalPhoneNumber) {
+      setUserPhoneNumber(externalPhoneNumber)
+    }
+  }, [externalPhoneNumber])
 
   return (
     <>
@@ -255,20 +261,11 @@ const SignUpFormUI = (props) => {
                         </React.Fragment>
                       )
                     )}
-                  {!!showInputPhoneNumber && !externalPhoneNumber && (
+                  {!!showInputPhoneNumber && (
                     <InputPhoneNumber
                       value={userPhoneNumber}
                       setValue={handleChangePhoneNumber}
                       handleIsValid={setIsValidPhoneNumber}
-                    />
-                  )}
-
-                  {externalPhoneNumber && (
-                    <Input
-                      value={externalPhoneNumber}
-                      className='form'
-                      readOnly
-                      name='cellphone'
                     />
                   )}
 
