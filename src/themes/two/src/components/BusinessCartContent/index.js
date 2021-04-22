@@ -76,7 +76,7 @@ export const BusinessCartContent = (props) => {
                       <>
                         <PickupOrderCartHeader>
                           <p>{t('THIS_IS_A_PICKUP_ORDER', 'This is a Pickup order')}</p>
-                          <p>{t('You’ll need to go to')} {cart?.business?.name} {t('to pick up this order.')}</p>
+                          <p>{t('YOU_WILL_NEED_TO_GO_TO', 'You’ll need to go to')} {cart?.business?.name} {t('TO_PICK_UP_THIS_ORDER', 'to pick up this order.')}</p>
                         </PickupOrderCartHeader>
                         <WrapBusinessMap>
                           <BusinessAddress>

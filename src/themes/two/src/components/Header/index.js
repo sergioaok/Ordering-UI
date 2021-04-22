@@ -23,8 +23,8 @@ import {
   MenuLink,
   ToText,
   WrapMomentAndAddress,
-  WrapDeliveryAndPickupLink,
-  MenuLinkTab
+  HeaderMobileViewBottom,
+  HeaderMobileViewInnerBottom
 } from './styles'
 import { capitalize } from '../../../../../utils'
 import { useWindowSize } from '../../../../../hooks/useWindowSize'
@@ -42,7 +42,6 @@ export const Header = (props) => {
   const [configState] = useConfig()
   const [modalIsOpen, setModalIsOpen] = useState(false)
   const [modalSelected, setModalSelected] = useState(null)
-  const orderType = orderState?.options?.type || 1
 
   const isBusinessListingPage = location.pathname === '/delivery' || location.pathname === '/pickup' || location.pathname === '/eatin' || location.pathname === '/curbside' || location.pathname === '/drivethru'
   const isAuthPage = location.pathname === '/signin' || location.pathname === '/login' || location.pathname === '/signup'
@@ -87,19 +86,19 @@ export const Header = (props) => {
 
   const handleChangePage = (orderType) => {
     switch (orderType) {
-      case 1: 
+      case 1:
         handleGoToPage({ page: 'delivery' })
         break
-      case 2: 
+      case 2:
         handleGoToPage({ page: 'pickup' })
         break
-      case 3: 
+      case 3:
         handleGoToPage({ page: 'eatin' })
         break
-      case 4: 
+      case 4:
         handleGoToPage({ page: 'curbside' })
         break
-      case 5: 
+      case 5:
         handleGoToPage({ page: 'drivethru' })
         break
     }
@@ -114,7 +113,7 @@ export const Header = (props) => {
               auth={auth}
               configTypes={configTypes}
             />
-            {!configState?.loading && configTypes.length > 0 && isBusinessListingPage && (
+            {!configState?.loading && configTypes.length > 0 && isBusinessListingPage && windowSize.width > 992 && (
               <OrderTypeSelectorHeader
                 dropDownStyle
                 configTypes={configTypes}
@@ -222,23 +221,34 @@ export const Header = (props) => {
       </HeaderContainer>
       {onlineStatus && isBusinessListingPage && (
         windowSize.width <= 992 && (
-          <WrapMomentAndAddress>
-            <HeaderOption
-              variant='moment'
-              momentState={orderState?.options?.moment}
-              onClick={configState?.configs?.max_days_preorder?.value === -1 || configState?.configs?.max_days_preorder?.value === 0
-                ? null
-                : (variant) => openModal(variant)}
-              isHome={isHome}
-            />
-            <ToText>{t('TO', 'to')}</ToText>
-            <HeaderOption
-              variant='address'
-              addressState={orderState?.options?.address?.address?.split(',')?.[0]}
-              onClick={(variant) => openModal(variant)}
-              isHome={isHome}
-            />
-          </WrapMomentAndAddress>
+          <HeaderMobileViewBottom>
+            <HeaderMobileViewInnerBottom>
+              {!configState?.loading && configTypes.length > 0 && isBusinessListingPage && (
+                <OrderTypeSelectorHeader
+                  dropDownStyle
+                  configTypes={configTypes}
+                  handleChangePage={handleChangePage}
+                />
+              )}
+              <WrapMomentAndAddress>
+                <HeaderOption
+                  variant='moment'
+                  momentState={orderState?.options?.moment}
+                  onClick={configState?.configs?.max_days_preorder?.value === -1 || configState?.configs?.max_days_preorder?.value === 0
+                    ? null
+                    : (variant) => openModal(variant)}
+                  isHome={isHome}
+                />
+                <ToText>{t('TO', 'to')}</ToText>
+                <HeaderOption
+                  variant='address'
+                  addressState={orderState?.options?.address?.address?.split(',')?.[0]}
+                  onClick={(variant) => openModal(variant)}
+                  isHome={isHome}
+                />
+              </WrapMomentAndAddress>
+            </HeaderMobileViewInnerBottom>
+          </HeaderMobileViewBottom>
         )
       )}
     </>

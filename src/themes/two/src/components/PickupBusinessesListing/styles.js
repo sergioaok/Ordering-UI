@@ -14,6 +14,10 @@ export const InnerContainer = styled.div`
   width: 91%;
   padding: 20px 0;
   display: flex;
+  
+  @media (max-width: 992px) {
+    flex-direction: column;
+  }
 `
 export const WrapperBusinessMap = styled.div`
   width: 100%;
@@ -61,10 +65,6 @@ export const WrapperBusinesses = styled.div`
       padding-bottom: 50px;
     }
   }
-
-  @media (max-width: 992px) {
-    display: none;
-  }
 `
 export const LeftContent = styled.div`
   width: 100%;
@@ -100,7 +100,7 @@ export const PickupBusinessList = styled.div`
       }
 
       &:not(:first-child) {
-        width: calc(50% - 10px);
+        width: 100%;
       }
     }
   }

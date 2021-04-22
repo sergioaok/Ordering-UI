@@ -471,7 +471,7 @@ const CheckoutUI = (props) => {
                     <span>{t('AMOUNT_DUE', 'Amount Due')}</span>
                     <span>{parsePrice(cart?.total)}</span>
                   </div>
-                  {cart?.minimum > 0 && (
+                  {cart?.total < cart?.minimum && (
                     <div>
                       <span>{t('MINIMUM_ORDER_LIMIT', 'Minimum order limit: ')}</span>
                       <span>{parsePrice(cart?.minimum)}</span>

@@ -8,9 +8,10 @@ import {
   Logo,
   Card,
   Map,
-  Reorder
+  Reorder,
+  BusinessInformation
 } from './styles'
-import { OrdersContainer, BusinessInformation } from '../OrdersOption/styles'
+import { OrdersContainer } from '../OrdersOption/styles'
 
 import { AutoScroll } from '../AutoScroll'
 import { Tabs } from '../../styles/Tabs'

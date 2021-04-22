@@ -123,6 +123,12 @@ export const Header = (props) => {
     return () => events.off('cart_product_added', handleAddProduct)
   }, [])
 
+  useEffect(() => {
+    if (isCustomerMode) {
+      setCustomerModalOpen(false)
+    }
+  }, [customerState?.user?.address])
+
   return (
     <>
       {props.beforeElements?.map((BeforeElement, i) => (
@@ -160,7 +166,7 @@ export const Header = (props) => {
                       style={styles.headCustomer}
                       ref={clearCustomer}
                     >
-                      <MdClose style={styles.clearCustomer}  />
+                      <MdClose style={styles.clearCustomer} />
                     </span>
                   </CustomerInfo>
                 )}
@@ -241,7 +247,7 @@ export const Header = (props) => {
           )}
         </InnerHeader>
         {onlineStatus && isShowOrderOptions && (
-          windowSize.width <= 820 && windowSize.width > 768 ? (
+          windowSize.width > 768 && windowSize.width <= 820 ? (
             <SubMenu>
               <AddressesPopover
                 auth={auth}
@@ -334,6 +340,7 @@ export const Header = (props) => {
                     userId={customerState?.user?.id}
                     changeOrderAddressWithDefault
                     userCustomerSetup={customerState.user}
+                    setCustomerModalOpen={setCustomerModalOpen}
                   />
                 </>
               )}

@@ -45,7 +45,7 @@ const UserProfileFormUI = (props) => {
           </Header>
           <WrapperForm>
             <p>
-              Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et. <span>Learn More</span>
+              Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et. <span>{t('LEARN_MORE', 'Learn More')}</span>
             </p>
           </WrapperForm>
         </PrivacyContainer>

@@ -31,8 +31,6 @@ import {
   LeftInnerContainer
 } from './styles'
 
-const PIXELS_TO_SCROLL = 700
-
 const FilterBusinessesListingUI = (props) => {
   const {
     onFilterBusinessRedirect,
@@ -51,6 +49,7 @@ const FilterBusinessesListingUI = (props) => {
   const [orderState] = useOrder()
   const [events] = useEvent()
   const [{ auth }] = useSession()
+  const PIXELS_TO_SCROLL = document.getElementById('footer')?.offsetHeight + 100 || 700
 
   const [modals, setModals] = useState({ listOpen: false, formOpen: false })
   const userCustomer = parseInt(window.localStorage.getItem('user-customer'))
@@ -128,7 +127,7 @@ const FilterBusinessesListingUI = (props) => {
                   handleCustomClick={() => setIsGoBackClicked(true)}
                 />
                 <Title>
-                  {businessTypeSelected === null ? t('ALL_BUSINESS', 'All Business') : businessTypeSelected}
+                  {(businessTypeSelected === null || businessTypeSelected === 'null') ? t('ALL_BUSINESS', 'All Business') : businessTypeSelected}
                 </Title>
                 <AllStoreNumber>
                   {!businessesList.loading ? (

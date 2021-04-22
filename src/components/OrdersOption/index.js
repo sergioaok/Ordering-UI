@@ -31,7 +31,8 @@ const OrdersOptionUI = (props) => {
     loadMoreOrders,
     titleContent,
     customArray,
-    onRedirectPage
+    onRedirectPage,
+    businessesIds
   } = props
 
   const [, t] = useLanguage()
@@ -44,9 +45,11 @@ const OrdersOptionUI = (props) => {
     : theme.images?.general?.emptyPastOrders
 
   const orders = customArray || values
+  const isShowTitles = businessesIds
+    ? orders && orders.length > 0 && !orders.map(order => businessesIds && businessesIds.includes(order.business_id)).every(i => !i)
+    : orders.length > 0
 
   const [ordersSorted, setOrdersSorted] = useState([])
-
   const [reorderLoading, setReorderLoading] = useState(false)
 
   const handleReorder = async (orderId) => {
@@ -104,7 +107,7 @@ const OrdersOptionUI = (props) => {
       {props.beforeComponents?.map((BeforeComponent, i) => (
         <BeforeComponent key={i} {...props} />))
       }
-      {(orders.length > 0 || !isBusinessesPage) && (
+      {(isShowTitles || !isBusinessesPage) && (
         <>
           <OptionTitle isBusinessesPage={isBusinessesPage}>
             <h1>
@@ -180,6 +183,7 @@ const OrdersOptionUI = (props) => {
       {!loading && !error && orders.length > 0 && (
         horizontal ? (
           <HorizontalOrdersLayout
+            businessesIds={businessesIds}
             orders={ordersSorted}
             pagination={pagination}
             onRedirectPage={onRedirectPage}

@@ -22,7 +22,7 @@ export const Footer = () => {
   const isHomePage = location.pathname === '/home' || location.pathname === '/'
 
   return (
-    <FooterContainer isHomePage={isHomePage}>
+    <FooterContainer id='footer' isHomePage={isHomePage}>
       <FooterTopContent>
         <div>
           <h1>{t('TOP_CITIES', 'Top Cities')}</h1>

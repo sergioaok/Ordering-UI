@@ -13,8 +13,6 @@ import {
   BackView
 } from './styles'
 
-// const PIXELS_TO_SCROLL = 700
-
 const FeaturedBusinessListingUI = (props) => {
   const {
     twoColumnView,
@@ -22,7 +20,6 @@ const FeaturedBusinessListingUI = (props) => {
     defaultShowNumber,
     businessesList,
     paginationProps,
-    // getBusinesses,
     handleBusinessClick,
     searchValue,
     handleChangeSearch
@@ -30,19 +27,6 @@ const FeaturedBusinessListingUI = (props) => {
   const [, t] = useLanguage()
   const [orderState] = useOrder()
   const [events] = useEvent()
-  // const handleScroll = useCallback(() => {
-  //   const innerHeightScrolltop = window.innerHeight + document.documentElement?.scrollTop + PIXELS_TO_SCROLL
-  //   const badScrollPosition = innerHeightScrolltop < document.documentElement.offsetHeight
-  //   const hasMore = !(paginationProps.totalPages === paginationProps.currentPage)
-  //   if (badScrollPosition || businessesList.loading || !hasMore) return
-  //   getBusinesses()
-  // }, [businessesList, paginationProps])
-
-  // useEffect(() => {
-  //   window.addEventListener('scroll', handleScroll)
-  //   return () => window.removeEventListener('scroll', handleScroll)
-  // }, [handleScroll])
-
   const handleGoToPage = (data) => {
     events.emit('go_to_page', data)
   }

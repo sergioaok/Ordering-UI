@@ -1,5 +1,5 @@
 import React from 'react'
-import { useUtils, useLanguage } from 'ordering-components'
+import { useUtils, useLanguage, useConfig } from 'ordering-components'
 import IosBasket from '@meronex/icons/ios/IosBasket'
 import FaMapMarkerAlt from '@meronex/icons/fa/FaMapMarkerAlt'
 import FaRegClock from '@meronex/icons/fa/FaRegClock'
@@ -16,6 +16,7 @@ export const HeaderOption = (props) => {
     totalCarts
   } = props
 
+  const [{ configs }] = useConfig()
   const [{ parseDate }] = useUtils()
   const [, t] = useLanguage()
   return (
@@ -49,7 +50,7 @@ export const HeaderOption = (props) => {
           <>
             <FaRegClock id='icon' />
             {momentState
-              ? parseDate(momentState, { outputFormat: 'MM/DD hh:mma' })
+              ? parseDate(momentState, { outputFormat: configs?.dates_moment_format?.value })
               : t('ASAP_ABBREVIATION', 'ASAP')}
           </>
         )}

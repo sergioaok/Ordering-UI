@@ -20,6 +20,7 @@ export const WrappperButtonGroup = styled.div`
   display: flex;
   width: 100%;
   column-gap: 40px;
+  padding-top: 40px;
 
   button {
     font-weight: 500;
@@ -43,6 +44,7 @@ export const HeroContainerStyled = styled.div`
     object-fit: cover;
     background-position: center;
     border-radius: 10px;
+    box-sizing: border-box;
   `}
 
   p {

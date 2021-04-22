@@ -98,7 +98,7 @@ import { VerticalOrdersLayout } from './components/VerticalOrdersLayout'
 
 import { ThemeContext, ThemeProvider, useTheme } from '../../../contexts/ThemeContext'
 import { Button } from './styles/Buttons'
-import {Input, InputGroup, InputPrimary, InputGroupLeft, InputGroupPrimary, InputGroupRight, InputSecundary, TextArea } from './styles/Inputs'
+import { Input, InputGroup, InputPrimary, InputGroupLeft, InputGroupPrimary, InputGroupRight, InputSecundary, TextArea } from './styles/Inputs'
 import { Select } from './styles/Select'
 import { Tab, Tabs } from './styles/Tabs'
 
@@ -223,5 +223,5 @@ export {
   TextArea,
   // Hooks
   useOnlineStatus,
-  useWindowSize,
+  useWindowSize
 }

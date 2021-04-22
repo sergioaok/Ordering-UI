@@ -56,7 +56,8 @@ export const BusinessBasicInformation = (props) => {
         </React.Fragment>))}
       {props.beforeComponents?.map((BeforeComponent, i) => (
         <BeforeComponent key={i} {...props} />))}
-      <BusinessContainer bgimage={business?.header} isSkeleton={isSkeleton} id='container'>
+      <BusinessContainer bgimage={business?.header} isSkeleton={isSkeleton} id='container' isClosed={!business?.open}>
+        {!business?.open && <h1>{t('CLOSED', 'Closed')}</h1>}
         <BusinessContent>
           <WrapperBusinessLogo>
             {!loading ? (

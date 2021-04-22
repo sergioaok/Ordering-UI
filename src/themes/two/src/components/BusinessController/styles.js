@@ -8,7 +8,10 @@ export const ContainerCard = styled.div`
   background: #fff;
   padding: 20px;
   box-shadow: 0px 3px 6px #00000029;
-  max-height: 400px;
+  max-height: 345px;
+  box-sizing: border-box;
+  max-height: 345px;
+  box-sizing: border-box;
   ${({ twoColumnView }) => !twoColumnView && css`
     &:hover {
       box-shadow: rgb(0 0 0 / 24%) 0px 2px 26px, rgb(0 0 0 / 8%) 0px 2px 8px;

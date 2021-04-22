@@ -73,7 +73,7 @@ export const PopularBusinesssList = styled.div`
       margin: 10px 5px;
 
       &:not(:first-child) {
-        width: calc(50% - 10px);
+        width: 100%;
       }
     }
   }

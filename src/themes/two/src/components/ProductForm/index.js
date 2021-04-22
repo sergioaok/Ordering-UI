@@ -213,7 +213,7 @@ const ProductOptionsUI = (props) => {
                 </SectionDescription>
                 <TextArea
                   rows={4}
-                  placeholder={t('e.g. allergies, extra spicy, etc.')}
+                  placeholder={t('E_G_ALLERGIES_EXTRA_SPICY_ETC', 'e.g. allergies, extra spicy, etc.')}
                   defaultValue={productCart.comment}
                   onChange={handleChangeCommentState}
                   disabled={!(productCart && !isSoldOut && maxProductQuantity)}

@@ -120,7 +120,7 @@ const BusinessControllerUI = (props) => {
           </MetaContent>
           <WrapperReview>
             {business?.reviews?.total > 0 ? (
-              <span>{parseNumber(business?.reviews?.total)}</span>
+              <span>{business?.reviews?.total}</span>
             ) : (
               business?.reviews?.total !== 0 && <Skeleton width={25} />
             )}

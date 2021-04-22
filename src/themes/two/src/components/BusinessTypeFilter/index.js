@@ -93,7 +93,7 @@ const BusinessTypeFilterUI = (props) => {
                   </React.Fragment>
                 )
                 )}
-                {t(`BUSINESS_TYPE_${type.value ? type.value.toUpperCase() : 'ALL'}`, type.key)}
+                <p>{t(`BUSINESS_TYPE_${type.value ? type.value.toUpperCase() : 'ALL'}`, type.key)}</p>
               </Tab>
             ))}
           </>

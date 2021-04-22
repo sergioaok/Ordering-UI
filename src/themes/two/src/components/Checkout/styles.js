@@ -20,6 +20,7 @@ export const WrappContainer = styled.div`
 export const LeftContainer = styled.div`
   width: 70%;
   padding: 10px;
+  box-sizing: border-box;
 
   @media (max-width: 992px) {
     width: 100%;
@@ -318,6 +319,7 @@ export const WrapFloatingButton = styled.div`
     bottom: 0px;
     left: 0px;
     background: #fff;
+    box-sizing: border-box;
     width: 100vw;
     z-index: 100;
     border-top: 1px solid ${props => props.theme.colors.secondary};

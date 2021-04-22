@@ -16,14 +16,12 @@ const AddressDetailsUI = (props) => {
   const {
     isCartView,
     addressToShow,
-    isCartPending,
     googleMapsUrl
   } = props
 
   const [orderState] = useOrder()
   const [, t] = useLanguage()
   const [openChangeAddressModal, setOpenChangeAddressModal] = useState(false)
-  const [openEditAddressModal, setOpenEditAddressModal] = useState(false)
   const [alertState, setAlertState] = useState({ open: false, content: [] })
 
   const handleFindBusinesses = () => {
@@ -53,12 +51,6 @@ const AddressDetailsUI = (props) => {
         {!isCartView && (
           <Text>
             <h4>{addressToShow || orderState?.options?.address?.address}</h4>
-            {orderState?.options?.type === 1 && !isCartPending &&
-              <h4>
-                <span onClick={() => setOpenEditAddressModal(true)}>
-                  {t('ADD/EDIT', 'Add/Edit')}
-                </span>
-              </h4>}
           </Text>
         )}
       </WrappMap>
@@ -74,20 +66,6 @@ const AddressDetailsUI = (props) => {
           changeOrderAddressWithDefault
           onCancel={() => setOpenChangeAddressModal(false)}
           onAccept={() => handleFindBusinesses()}
-        />
-      </Modal>
-
-      <Modal
-        title={t(orderState?.options?.address?.address)}
-        open={openEditAddressModal}
-        width='70%'
-        onClose={() => setOpenEditAddressModal(false)}
-      >
-        <AddressList
-          isAddAndEdit
-          EditAddress={orderState?.options?.address}
-          changeOrderAddressWithDefault
-          onCancel={() => setOpenEditAddressModal(false)}
         />
       </Modal>
 

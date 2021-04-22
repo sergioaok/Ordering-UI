@@ -87,7 +87,7 @@ const PhoneAutocompleteUI = (props) => {
             <Input
               name='phone-input'
               id='phone-input'
-              placeholder='Phone'
+              placeholder={t('PHONE', 'Phone')}
               type='text'
               pattern='[0-9]*'
               onInput={onChangeNumber}
@@ -97,9 +97,11 @@ const PhoneAutocompleteUI = (props) => {
               autoComplete='off'
               disabled={customersPhones?.loading}
             />
-            <Button name='phone-button' id='phone-button' className='phone-button'>
-              {t('SEE_PHONES', 'See phones')}
-            </Button>
+            {phone && (
+              <Button name='phone-button' id='phone-button' className='phone-button'>
+                {t('SEE_PHONES', 'See phones')}
+              </Button>
+            )}
             {customersPhones?.loading && (
               <SpinnerLoader
                 style={{

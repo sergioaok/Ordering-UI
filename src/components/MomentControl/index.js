@@ -36,7 +36,7 @@ const MomentControlUI = (props) => {
       <Title>{t('SELECT_A_DELIVERY_DATE', 'Select a Delivery Date')}</Title>
       <Days name='days'>
         {
-          datesList.slice(0, 6).map(date => {
+          datesList.slice(0, Number(configs?.max_days_preorder?.value || 6, 10)).map(date => {
             const dateParts = date.split('-')
             const _date = new Date(dateParts[0], dateParts[1] - 1, dateParts[2])
             const dayName = t('DAY' + (_date.getDay() >= 1 ? _date.getDay() : 7)).substring(0, 3).toUpperCase()

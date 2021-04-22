@@ -23,7 +23,6 @@ export const Content = styled.div`
   align-items: center;
   border-radius: 16px;
   padding: 10px;
-
 `
 
 export const Price = styled.div`
@@ -65,7 +64,7 @@ export const Logo = styled.div`
 export const Card = styled.div`
   min-width: 300px;
   width: 300px;
-  margin: 10px;
+  margin: 10px 10px 20px 10px;
   display: inline-block;
   background: white;
   height: ${({ isBusinessList }) => isBusinessList && '300px'};
@@ -138,6 +137,26 @@ export const Reorder = styled.div`
   button{
     line-height: 0;
     height: 30px;
+    font-size: 14px;
+  }
+`
+export const BusinessInformation = styled.div`
+  h2 {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    font-size: 16px;
+    margin-block-end: 0;
+    margin-block-start: 0;
+  }
+  p {
+    margin-block-end: 0.1em;
+    margin-block-start: 0.1em;
+    color : #9A9A9A;    
+    width: 170px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     font-size: 14px;
   }
 `

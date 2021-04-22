@@ -54,6 +54,10 @@ const BusinessesListingUI = (props) => {
 
   const userCustomer = JSON.parse(window.localStorage.getItem('user-customer'))
 
+  const businessesIds = isCustomLayout &&
+    businessesList.businesses &&
+    businessesList.businesses?.map(business => business.id)
+
   const handleScroll = useCallback(() => {
     const innerHeightScrolltop = window.innerHeight + document.documentElement?.scrollTop + PIXELS_TO_SCROLL
     const badScrollPosition = innerHeightScrolltop < document.documentElement.offsetHeight
@@ -157,6 +161,7 @@ const BusinessesListingUI = (props) => {
               isBusinessesPage
               onRedirectPage={onRedirectPage}
               titleContent={t('CARTS', 'Carts')}
+              businessesIds={businessesIds}
               customArray={
                 getCustomArray(
                   orderState.carts)?.filter(cart => cart.products.length > 0
@@ -167,6 +172,7 @@ const BusinessesListingUI = (props) => {
               horizontal
               asDashboard
               isBusinessesPage
+              businessesIds={businessesIds}
               onRedirectPage={onRedirectPage}
               userCustomerId={userCustomer?.id}
             />

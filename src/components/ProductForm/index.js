@@ -322,7 +322,7 @@ const ProductOptionsUI = (props) => {
           </>
         )}
 
-        {modalIsOpen && (
+        {modalIsOpen && !auth && (
           <Modal
             open={modalIsOpen}
             onClose={() => closeModal()}

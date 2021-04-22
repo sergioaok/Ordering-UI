@@ -25,7 +25,8 @@ export const HorizontalOrdersLayout = (props) => {
     isBusinessesPage,
     handleReorder,
     customArray,
-    onRedirectPage
+    onRedirectPage,
+    businessesIds
   } = props
 
   const orders = customArray || props.orders
@@ -34,6 +35,10 @@ export const HorizontalOrdersLayout = (props) => {
   const [, t] = useLanguage()
   const [{ configs }] = useConfig()
   const [{ parsePrice, parseDate }] = useUtils()
+
+  const ordersToShow = businessesIds
+    ? orders.filter(order => businessesIds?.includes(order?.business_id))
+    : orders
 
   const handleClickCard = (uuid) => {
     if (customArray) {
@@ -54,7 +59,7 @@ export const HorizontalOrdersLayout = (props) => {
         {props.beforeComponents?.map((BeforeComponent, i) => (
           <BeforeComponent key={i} {...props} />))
         }
-        {orders.length > 0 && orders.map(order => (
+        {orders.length > 0 && ordersToShow.map(order => (
           <Card
             key={order.id || order.uuid}
             id='order-card'

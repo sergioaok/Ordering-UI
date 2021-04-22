@@ -151,7 +151,10 @@ const CheckoutUI = (props) => {
   }, [errors])
 
   useEffect(() => {
-    handlePaymethodChange(null)
+    const paymethods = businessDetails?.business?.paymethods || []
+    if (paymethods && paymethods.length > 1) {
+      handlePaymethodChange(null)
+    }
   }, [cart?.total])
 
   return (
@@ -202,6 +205,7 @@ const CheckoutUI = (props) => {
                 businessId={cart?.business_id}
                 apiKey={configs?.google_maps_api_key?.value}
                 mapConfigs={mapConfigs}
+                isCustomerMode={isCustomerMode}
               />
             )
           )}
@@ -216,7 +220,7 @@ const CheckoutUI = (props) => {
           {!props.isHideSectionTwo && (
             <UserDetailsContainer>
               <WrapperUserDetails>
-                {cartState.loading ? (
+                {cartState.loading || (isCustomerMode && !customerState?.user?.id) ? (
                   <div>
                     <Skeleton height={35} style={{ marginBottom: '10px' }} />
                     <Skeleton height={35} style={{ marginBottom: '10px' }} />
@@ -231,9 +235,10 @@ const CheckoutUI = (props) => {
                     businessId={cart?.business_id}
                     useValidationFields
                     useDefualtSessionManager
-                    useSessionUser
+                    useSessionUser={!isCustomerMode}
                     isCustomerMode={isCustomerMode}
                     userData={isCustomerMode && customerState.user}
+                    userId={isCustomerMode && customerState?.user?.id}
                   />
                 )}
               </WrapperUserDetails>
@@ -289,7 +294,32 @@ const CheckoutUI = (props) => {
           {props.beforeComponentsSectionFour?.map((BeforeComponent, i) => (
             <BeforeComponent key={i} {...props} />))}
 
-          {!props.isHideSectionFour && !cartState.loading && cart && (
+          {!props.isHideSectionFour &&
+            !cartState.loading &&
+            cart &&
+            cart?.business_id &&
+            options.type === 1 &&
+            cart?.status !== 2 &&
+            validationFields?.fields?.checkout?.driver_tip?.enabled &&
+            (
+              <DriverTipContainer>
+                <h1>{t('DRIVER_TIPS', 'Driver Tips')}</h1>
+                <DriverTips
+                  businessId={cart?.business_id}
+                  driverTipsOptions={DriverTipsOptions}
+                  useOrderContext
+                />
+              </DriverTipContainer>
+            )}
+
+          {props.beforeElementsSectionFive?.map((BeforeElement, i) => (
+            <React.Fragment key={i}>
+              {BeforeElement}
+            </React.Fragment>))}
+          {props.beforeComponentsSectionFive?.map((BeforeComponent, i) => (
+            <BeforeComponent key={i} {...props} />))}
+
+          {!props.isHideSectionFive && !cartState.loading && cart && (
             <PaymentMethodContainer>
               <h1>{t('PAYMENT_METHODS', 'Payment Methods')}</h1>
               <PaymentOptions
@@ -307,31 +337,6 @@ const CheckoutUI = (props) => {
               />
             </PaymentMethodContainer>
           )}
-
-          {props.beforeElementsSectionFive?.map((BeforeElement, i) => (
-            <React.Fragment key={i}>
-              {BeforeElement}
-            </React.Fragment>))}
-          {props.beforeComponentsSectionFive?.map((BeforeComponent, i) => (
-            <BeforeComponent key={i} {...props} />))}
-
-          {!props.isHideSectionFive &&
-            !cartState.loading &&
-            cart &&
-            cart?.business_id &&
-            options.type === 1 &&
-            cart?.status !== 2 &&
-            validationFields?.fields?.checkout?.driver_tip?.enabled &&
-            (
-              <DriverTipContainer>
-                <h1>{t('DRIVER_TIPS', 'Driver Tips')}</h1>
-                <DriverTips
-                  businessId={cart?.business_id}
-                  driverTipsOptions={DriverTipsOptions}
-                  useOrderContext
-                />
-              </DriverTipContainer>
-            )}
           {props.beforeElementsSectionSix?.map((BeforeElement, i) => (
             <React.Fragment key={i}>
               {BeforeElement}

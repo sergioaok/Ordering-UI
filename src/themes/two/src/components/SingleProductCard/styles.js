@@ -44,7 +44,7 @@ export const SoldOut = styled.span`
 export const CardInfo = styled.div`
   display: flex;
   flex-direction: column;
-  max-width: calc(100% - 90px);
+  max-width: calc(100% - 100px);
   > * {
     margin: 5px;
   }

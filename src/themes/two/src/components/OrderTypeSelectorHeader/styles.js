@@ -57,7 +57,12 @@ export const OrderTypeWrapper = styled.div`
   `}
   @media (max-width: 576px) {
     ${({ dropDownStyle }) => dropDownStyle && css`
-      display: none;
+      padding: 0;
+
+      #item {
+        padding-left: 5px;
+        padding-right: 5px;
+      }
     `}
   }
 `

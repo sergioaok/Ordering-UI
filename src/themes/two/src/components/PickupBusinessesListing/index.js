@@ -25,8 +25,6 @@ import {
   WrapPickupButton
 } from './styles'
 
-const PIXELS_TO_SCROLL = 700
-
 const PickupBusinessesListingUI = (props) => {
   const {
     initialOrderType,
@@ -42,6 +40,7 @@ const PickupBusinessesListingUI = (props) => {
   const [orderState] = useOrder()
   const [{ auth }] = useSession()
   const [configState] = useConfig()
+  const PIXELS_TO_SCROLL = document.getElementById('footer')?.offsetHeight + 100 || 700
 
   const [modals, setModals] = useState({ listOpen: false, formOpen: false })
   const userCustomer = parseInt(window.localStorage.getItem('user-customer'))

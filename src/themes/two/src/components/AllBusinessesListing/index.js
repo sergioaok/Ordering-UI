@@ -22,8 +22,6 @@ import {
   LeftInnerContainer
 } from './styles'
 
-const PIXELS_TO_SCROLL = 700
-
 const AllBusinessesListingUI = (props) => {
   const {
     businessesList,
@@ -37,6 +35,7 @@ const AllBusinessesListingUI = (props) => {
   const [, t] = useLanguage()
   const [orderState] = useOrder()
   const [{ auth }] = useSession()
+  const PIXELS_TO_SCROLL = document.getElementById('footer')?.offsetHeight + 100 || 700
 
   const [modals, setModals] = useState({ listOpen: false, formOpen: false })
 

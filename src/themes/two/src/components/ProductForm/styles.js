@@ -211,7 +211,7 @@ export const ProductActions = styled.div`
   }
 
   @media (min-width: 766px) {
-    position: sticky;
+    position: fixed;
     bottom: 0px;
     justify-content: center;
     flex-direction: row;

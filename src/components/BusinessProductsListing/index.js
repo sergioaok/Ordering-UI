@@ -57,7 +57,8 @@ const BusinessProductsListingUI = (props) => {
     handleSearchRedirect,
     featuredProducts,
     handleChangeSortBy,
-    isCartOnProductsList
+    isCartOnProductsList,
+    errorQuantityProducts
   } = props
 
   const { business, loading, error } = businessState
@@ -171,11 +172,9 @@ const BusinessProductsListingUI = (props) => {
       {props.beforeElements?.map((BeforeElement, i) => (
         <React.Fragment key={i}>
           {BeforeElement}
-        </React.Fragment>))
-      }
+        </React.Fragment>))}
       {props.beforeComponents?.map((BeforeComponent, i) => (
-        <BeforeComponent key={i} {...props} />))
-      }
+        <BeforeComponent key={i} {...props} />))}
       <ProductsContainer>
         {
           !loading && business?.id && (
@@ -188,7 +187,7 @@ const BusinessProductsListingUI = (props) => {
                   setOpenBusinessInformation={setOpenBusinessInformation}
                   openBusinessInformation={openBusinessInformation}
                 />
-                {(categoryState.products.length !== 0 || searchValue) && (
+                {(categoryState.products.length !== 0 || searchValue) && !errorQuantityProducts && (
                   <WrapperSearch>
                     <SearchBar
                       onSearch={handleChangeSearch}
@@ -232,6 +231,7 @@ const BusinessProductsListingUI = (props) => {
                     searchValue={searchValue}
                     isCartOnProductsList={isCartOnProductsList && currentCart?.products?.length > 0}
                     handleClearSearch={handleChangeSearch}
+                    errorQuantityProducts={errorQuantityProducts}
                   />
                 </WrapContent>
               </div>
@@ -268,6 +268,7 @@ const BusinessProductsListingUI = (props) => {
                 category={categorySelected}
                 categoryState={categoryState}
                 isBusinessLoading={loading}
+                errorQuantityProducts={errorQuantityProducts}
               />
             </WrapContent>
           </>
@@ -373,13 +374,11 @@ const BusinessProductsListingUI = (props) => {
         />
       )}
       {props.afterComponents?.map((AfterComponent, i) => (
-        <AfterComponent key={i} {...props} />))
-      }
+        <AfterComponent key={i} {...props} />))}
       {props.afterElements?.map((AfterElement, i) => (
         <React.Fragment key={i}>
           {AfterElement}
-        </React.Fragment>))
-      }
+        </React.Fragment>))}
     </>
   )
 }

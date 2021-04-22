@@ -146,3 +146,30 @@ export const getHourMin = (hour, min) => {
     return `${_hour} : ${_min} PM`
   }
 }
+/**
+ * List of fields with correct order
+ */
+ export const fieldsToSort = ['name', 'middle_name', 'lastname', 'second_lastname', 'email'];
+ /**
+  * Function to return a array sorted by certain fields
+  * @param fields Array with right order
+  * @param array Array to sort
+  */
+ export const sortInputFields = ({ fields, values }) => {
+   let fieldsBase = fields;
+   const fieldsSorted = [];
+   const fieldsArray = Array.isArray(values) ? values : Object.values(values);
+
+   if (!fieldsBase) {
+     fieldsBase = fieldsToSort
+   }
+
+   fieldsBase.forEach(f => {
+     fieldsArray.forEach(field => {
+       if (f === field.code) {
+         fieldsSorted.push(field)
+       }
+     })
+   });
+   return fieldsSorted;
+ };

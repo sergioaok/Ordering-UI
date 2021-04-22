@@ -40,4 +40,8 @@ export const TimeSelectContent = styled.div`
       margin: 0 20px;
     }    
   }
+
+  #list {
+    width: 100%;
+  }
 `

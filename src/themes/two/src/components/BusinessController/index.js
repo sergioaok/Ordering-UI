@@ -95,7 +95,7 @@ const BusinessControllerUI = (props) => {
                 {business?.reviews?.total > 0 ? (
                   <div className='reviews'>
                     <AiFillStar />
-                    <span>{parseNumber(business?.reviews?.total)}</span>
+                    <span>{business?.reviews?.total}</span>
                   </div>
                 ) : (
                   business?.reviews?.total !== 0 && <Skeleton width={50} />

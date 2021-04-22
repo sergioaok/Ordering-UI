@@ -8,7 +8,9 @@ import IosRadioButtonOff from '@meronex/icons/ios/IosRadioButtonOff'
 import {
   AddressList as AddressListController,
   useLanguage,
-  useOrder
+  useOrder,
+  useCustomer,
+  useEvent
 } from 'ordering-components'
 
 import {
@@ -43,16 +45,19 @@ const AddressListUI = (props) => {
     onAccept,
     userId,
     userCustomerSetup,
-    isEnableContinueButton
+    isEnableContinueButton,
+    setCustomerModalOpen
   } = props
 
   const [, t] = useLanguage()
   const [orderState] = useOrder()
+  const [events] = useEvent()
 
   const [curAddress, setCurAddress] = useState(false)
   const [addressOpen, setAddressOpen] = useState(false)
   const [confirm, setConfirm] = useState({ open: false, content: null, handleOnAccept: null })
   const theme = useTheme()
+  const [{ user }] = useCustomer()
 
   const uniqueAddressesList = (addressList.addresses && addressList.addresses.filter(
     (address, i, self) =>
@@ -96,6 +101,11 @@ const AddressListUI = (props) => {
   }
 
   const handleSetAddress = (address) => {
+    if (checkAddress(address) && userCustomerSetup?.id === user?.id) {
+      events.emit('go_to_page', { page: 'search' })
+      setCustomerModalOpen && setCustomerModalOpen(false)
+      return
+    }
     setAddressOpen(false)
     handleSetDefault(address, userCustomerSetup)
   }
@@ -227,7 +237,7 @@ const AddressListUI = (props) => {
                 </AddressItem>
               ))}
               {isEnableContinueButton && uniqueAddressesList.map(address => address.default && (
-                <ContinueButton>
+                <ContinueButton key={address.id}>
                   <Button color='primary' onClick={() => handleSetAddress(address)}>
                     {t('CONTINUE_WITH', 'Continue with')}: {address.address}
                   </Button>

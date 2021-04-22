@@ -22,9 +22,23 @@ export const BusinessContainer = styled.div`
     background-color: #F8F8F8;
   `}
 
-  ${props => props.bgimage && css`
+  ${props => props.bgimage && !props.isClosed && css`
     background-image: url(${props.bgimage});
   `}
+
+  ${props => props.bgimage && props.isClosed && css`
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${props.bgimage});
+  `}
+
+  h1 {
+    color: #FFF;
+    opacity: 0.5;
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0 10px;
+    padding: 0;
+  }
 
   @media (min-width: 490px) {
     justify-content: flex-start;

@@ -180,42 +180,19 @@ export const ToText = styled.p`
 export const WrapMomentAndAddress = styled.div`
   display: flex;
   align-items: center;
+`
+export const HeaderMobileViewBottom = styled.div`
+  background: #fff;
+  border-bottom: 1px solid ${props => props.theme.colors.secondary};
+  width: 100vw;
+  height: 60px;
+  margin-top: 60px;
+`
 
-  @media (max-width: 992px) {
-    background: #fff;
-    border-bottom: 1px solid ${props => props.theme.colors.secondary};
-    width: 100vw;
-    height: 60px;
-    justify-content: center;
-    margin-top: 60px;
-  }
-`
-export const WrapDeliveryAndPickupLink = styled.div`
+export const HeaderMobileViewInnerBottom = styled.div`
+  width: 91%;
+  margin: 0px auto;
   display: flex;
   align-items: center;
-  height: 100%;
-`
-export const MenuLinkTab = styled.div`
-  cursor: pointer;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  color: ${props => props.theme.colors.darkTextColor};
-  font-weight: 500;
-  padding: 0 8px;
-  position: relative;
-  ${({ active }) => active && css`
-    color: ${props => props.theme.colors.darkTextColor};
-    &::after {
-      content: "";
-      position: absolute;
-      width: 100%;
-      height: 4px;
-      background-color: ${props => props.theme.colors.primary};
-      left: 0px;
-      bottom: -1px;
-      border-top-left-radius: 4px;
-      border-top-right-radius: 4px;
-    }
-  `}
+  justify-content: space-between;
 `

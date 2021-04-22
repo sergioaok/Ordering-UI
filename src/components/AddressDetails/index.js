@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import TiPencil from '@meronex/icons/ti/TiPencil'
-import { AddressDetails as AddressDetailsController, useOrder, useLanguage } from 'ordering-components'
+import { AddressDetails as AddressDetailsController, useOrder, useLanguage, useCustomer } from 'ordering-components'
 
 import {
   AddressContainer,
@@ -18,7 +18,8 @@ const AddressDetailsUI = (props) => {
   const {
     addressToShow,
     isCartPending,
-    googleMapsUrl
+    googleMapsUrl,
+    isCustomerMode
   } = props
 
   const [orderState] = useOrder()
@@ -26,6 +27,7 @@ const AddressDetailsUI = (props) => {
   const [openModal, setOpenModal] = useState(false)
   const [alertState, setAlertState] = useState({ open: false, content: [] })
   const userCustomer = JSON.parse(window.localStorage.getItem('user-customer'))
+  const [{ user }] = useCustomer()
 
   const handleFindBusinesses = () => {
     if (!orderState?.options?.address?.location) {
@@ -44,11 +46,9 @@ const AddressDetailsUI = (props) => {
       {props.beforeElements?.map((BeforeElement, i) => (
         <React.Fragment key={i}>
           {BeforeElement}
-        </React.Fragment>))
-      }
+        </React.Fragment>))}
       {props.beforeComponents?.map((BeforeComponent, i) => (
-        <BeforeComponent key={i} {...props} />))
-      }
+        <BeforeComponent key={i} {...props} />))}
       <AddressContainer>
         <Header>
           <Text>
@@ -77,6 +77,7 @@ const AddressDetailsUI = (props) => {
             userId={isNaN(userCustomer?.id) ? null : userCustomer?.id}
             onCancel={() => setOpenModal(false)}
             onAccept={() => handleFindBusinesses()}
+            userCustomerSetup={isCustomerMode && user}
           />
         </Modal>
 
@@ -91,13 +92,11 @@ const AddressDetailsUI = (props) => {
         />
       </AddressContainer>
       {props.afterComponents?.map((AfterComponent, i) => (
-        <AfterComponent key={i} {...props} />))
-      }
+        <AfterComponent key={i} {...props} />))}
       {props.afterElements?.map((AfterElement, i) => (
         <React.Fragment key={i}>
           {AfterElement}
-        </React.Fragment>))
-      }
+        </React.Fragment>))}
     </>
   )
 }

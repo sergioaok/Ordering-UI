@@ -178,7 +178,7 @@ const PaymentOptionStripeUI = (props) => {
       )}
 
       <Modal
-        title='Add credit or debit card'
+        title={t('ADD_CREDIT_OR_DEBIT_CARD', 'Add credit or debit card')}
         className='modal-info'
         open={addCartOpen}
         onClose={() => setAddCardOpen(false)}
