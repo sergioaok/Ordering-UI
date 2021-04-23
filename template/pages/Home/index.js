@@ -2,6 +2,7 @@ import React from 'react'
 import { useEvent } from 'ordering-components'
 import { PhoneAutocomplete } from '../../../src/components/PhoneAutocomplete'
 import { HelmetTags } from '../../components/HelmetTags'
+import settings from '../../config.json'
 
 import {
   HomeContainer,
@@ -13,6 +14,7 @@ export const HomePage = (props) => {
   const phoneProps = {
     ...props,
     fieldsNotValid: ['password'],
+    countryCallingCode: settings.country_calling_code,
     onRedirectPage: (page) => {
       events.emit('go_to_page', { page })
     }
