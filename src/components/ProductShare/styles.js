@@ -31,22 +31,31 @@ export const IconShare = styled.div`
   @media(min-width: 769px){
     position: relative;
     left: 5px;
+    top: 0;
+
+    svg{
+      position: static;
+    }
+
     ${props => props.theme?.rtl && css`
       left: 0;
       right: 5px;
     `}
-    top: 0;
-    svg{
-      position: static;
-    }
   }
 
   @media (min-width: 1201px) {
     position: sticky;
-    left: calc(100% - 45px);
     width: 0;
+
+    &:nth-child(1) > svg {
+      background-color: white;
+      padding: 5px;
+      border-radius: 9px;
+      margin: 5px 0px;
+    }
+
     ${props => props.theme?.rtl && css`
-      right: calc(100% - 45px);
+      right: 0;
       left: initial;
     `}
   }
@@ -65,10 +74,8 @@ export const ShareButtons = styled.div`
   `}
 
   @media (min-width: 1201px) {
-    ${props => props.theme?.rtl ? css`
-      left: 0px;
-    ` : css`
-      right: 0px;
-    `}
+    top: 35px;
+    left: 0px;
+    right: 0px;
   }
 `

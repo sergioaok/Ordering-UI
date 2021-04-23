@@ -6,7 +6,8 @@ import {
   ModalActions,
   ModalTitle,
   ModalIcon,
-  ModalHeader
+  ModalHeader,
+  ModalBackHeader
 } from './styles'
 
 import { Button } from '../../styles/Buttons'
@@ -21,7 +22,8 @@ const ModalUI = (props) => {
     acceptText,
     cancelText,
     isTransparent,
-    hideCloseDefault
+    hideCloseDefault,
+    isProductForm
   } = props
   const [, t] = useLanguage()
 
@@ -47,6 +49,9 @@ const ModalUI = (props) => {
       padding={props.padding}
       isTransparent={isTransparent}
     >
+      {isProductForm && (
+        <ModalBackHeader />
+      )}
       {!hideCloseDefault && (
         <ModalIcon>
           <MdClose onClick={() => onClose()} />

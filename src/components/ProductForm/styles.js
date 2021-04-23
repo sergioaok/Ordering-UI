@@ -6,10 +6,14 @@ export const ProductContainer = styled.div`
   flex-wrap: wrap;
   max-height: 100vh;
   position: relative;
-  padding: 10px;
+  padding: 50px 10px 10px;
 
   @media (min-width: 768px) {
     height: 100%;
+  }
+
+  @media (min-width: 769px) {
+    padding: 10px;
   }
 
   @media (min-width: 1201px) {

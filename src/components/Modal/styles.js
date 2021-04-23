@@ -83,7 +83,7 @@ export const ModalIcon = styled.span`
   top: 6px;
   font-size: 30px;
   cursor: pointer;
-  z-index: 1;
+  z-index: 2;
   ${props => props.theme?.rtl && css`
     left: 5px;
     right: initial;
@@ -95,5 +95,17 @@ export const ModalIcon = styled.span`
 
   @media(min-width: 769px){
     position: absolute;
+  }
+`
+
+export const ModalBackHeader = styled.div`
+  height: 50px;
+  background-color: white;
+  width: 100%;
+  position: fixed;
+  z-index: 2;
+
+  @media (min-width: 769px) {
+    display: none;
   }
 `
