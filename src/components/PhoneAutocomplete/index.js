@@ -34,6 +34,7 @@ const PhoneAutocompleteUI = (props) => {
     setOpenModal,
     onChangeNumber,
     setCustomerState,
+    countryCallingCode,
     onRedirectPage
   } = props
   const [, t] = useLanguage()
@@ -137,7 +138,7 @@ const PhoneAutocompleteUI = (props) => {
         onClose={() => setOpenModal({ openModal, signup: false })}
       >
         <SignUpForm
-          externalPhoneNumber={phone}
+          externalPhoneNumber={`${countryCallingCode} ${phone}`}
           saveCustomerUser={saveCustomerUser}
           fieldsNotValid={props.fieldsNotValid}
         />
