@@ -213,7 +213,6 @@ const AddressListUI = (props) => {
           !addressList.error &&
           addressList?.addresses?.length > 0 &&
           typeof orderState.options?.address === 'object' &&
-          orderState?.options?.address &&
           ((!addressOpen && isPopover) || isModal) && (
             <AddressListUl id='list'>
               {uniqueAddressesList.map(address => (
