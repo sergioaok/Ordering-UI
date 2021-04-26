@@ -58,7 +58,9 @@ const OrdersOptionUI = (props) => {
       const { error, result } = await reorder(orderId)
       if (!error) {
         onRedirectPage && onRedirectPage({ page: 'checkout', params: { cartUuid: result.uuid } })
+        return
       }
+      setReorderLoading(false)
     } catch (err) {
       setReorderLoading(false)
     }
@@ -102,11 +104,9 @@ const OrdersOptionUI = (props) => {
       {props.beforeElements?.map((BeforeElement, i) => (
         <React.Fragment key={i}>
           {BeforeElement}
-        </React.Fragment>))
-      }
+        </React.Fragment>))}
       {props.beforeComponents?.map((BeforeComponent, i) => (
-        <BeforeComponent key={i} {...props} />))
-      }
+        <BeforeComponent key={i} {...props} />))}
       {(isShowTitles || !isBusinessesPage) && (
         <>
           <OptionTitle isBusinessesPage={isBusinessesPage}>
@@ -207,13 +207,11 @@ const OrdersOptionUI = (props) => {
         )
       )}
       {props.afterComponents?.map((AfterComponent, i) => (
-        <AfterComponent key={i} {...props} />))
-      }
+        <AfterComponent key={i} {...props} />))}
       {props.afterElements?.map((AfterElement, i) => (
         <React.Fragment key={i}>
           {AfterElement}
-        </React.Fragment>))
-      }
+        </React.Fragment>))}
     </>
   )
 }

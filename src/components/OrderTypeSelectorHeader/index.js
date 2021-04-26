@@ -17,7 +17,7 @@ const OrderTypeSelectorHeaderUI = (props) => {
     orderTypes
   } = props
 
-  const defaultType = configTypes?.includes(typeSelected) ? null : configTypes[0]
+  const defaultType = configTypes?.includes(typeSelected) ? null : configTypes?.[0]
 
   return (
     typeSelected !== undefined && (

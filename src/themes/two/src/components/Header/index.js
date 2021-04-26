@@ -43,7 +43,7 @@ export const Header = (props) => {
   const [modalIsOpen, setModalIsOpen] = useState(false)
   const [modalSelected, setModalSelected] = useState(null)
 
-  const isBusinessListingPage = location.pathname === '/delivery' || location.pathname === '/pickup' || location.pathname === '/eatin' || location.pathname === '/curbside' || location.pathname === '/drivethru'
+  const isBusinessListingPage = location.pathname === '/delivery' || location.pathname === '/pickup' || location.pathname === '/eatin' || location.pathname === '/curbside' || location.pathname === '/drivethru' || location.pathname.includes('/store')
   const isAuthPage = location.pathname === '/signin' || location.pathname === '/login' || location.pathname === '/signup'
 
   const windowSize = useWindowSize()
@@ -158,7 +158,7 @@ export const Header = (props) => {
                     </>
                   )
                 }
-                {!isHome && !isAuthPage && (
+                {!isHome && !isAuthPage && auth && (
                   windowSize.width > 768 ? (
                     <CartPopover
                       open={openPopover.cart}

@@ -128,15 +128,15 @@ const AddressListUI = (props) => {
       return address.default
     }
     props.forEach(prop => {
-      if (address[prop]) {
+      if (address?.[prop]) {
         if (prop === 'location') {
-          values.push(address[prop].lat === orderState?.options?.address[prop]?.lat &&
-            address[prop].lng === orderState?.options?.address[prop]?.lng)
+          values.push(address?.[prop].lat === orderState?.options?.address?.[prop]?.lat &&
+            address?.[prop].lng === orderState?.options?.address?.[prop]?.lng)
         } else {
-          values.push(address[prop] === orderState?.options?.address[prop])
+          values.push(address?.[prop] === orderState?.options?.address?.[prop])
         }
       } else {
-        values.push(orderState?.options?.address[prop] === null || orderState?.options?.address[prop] === '')
+        values.push(orderState?.options?.address?.[prop] === null || orderState?.options?.address?.[prop] === '')
       }
     })
     return values.every(value => value)
@@ -213,6 +213,7 @@ const AddressListUI = (props) => {
           !addressList.error &&
           addressList?.addresses?.length > 0 &&
           typeof orderState.options?.address === 'object' &&
+          orderState?.options?.address &&
           ((!addressOpen && isPopover) || isModal) && (
             <AddressListUl id='list'>
               {uniqueAddressesList.map(address => (

@@ -34,7 +34,12 @@ import {
 import { Button } from '../../styles/Buttons'
 import { Input, TextArea } from '../../styles/Inputs'
 
-const inputNames = [{ name: 'address', code: 'Address' }, { name: 'internal_number', code: 'Internal number' }, { name: 'zipcode', code: 'Zipcode' }, { name: 'address_notes', code: 'Address notes' }]
+const inputNames = [
+  { name: 'address', code: 'Address' },
+  { name: 'internal_number', code: 'Internal number' },
+  { name: 'zipcode', code: 'Zipcode' },
+  { name: 'address_notes', code: 'Address notes' }
+]
 
 const AddressFormUI = (props) => {
   const {
@@ -43,6 +48,7 @@ const AddressFormUI = (props) => {
     formState,
     addressState,
     isRequiredField,
+    showField,
     updateChanges,
     onCancel,
     handleChangeInput,
@@ -372,75 +378,75 @@ const AddressFormUI = (props) => {
               />
             </WrapperMap>
           )}
-          <AddressWrap className='google-control'>
-            <WrapAddressInput>
-              <HiOutlineLocationMarker />
-              <GoogleAutocompleteInput
-                className='input-autocomplete'
-                apiKey={googleMapsApiKey}
-                placeholder={t('ADDRESS', 'Address')}
-                onChangeAddress={(e) => {
-                  formMethods.setValue('address', e.address)
-                  handleChangeAddress(e)
-                }}
-                onChange={(e) => {
-                  handleChangeInput({ target: { name: 'address', value: e.target.value } })
-                  setAddressValue(e.target.value)
-                }}
-                value={addressValue}
-                autoComplete='new-field'
-                countryCode={configState?.configs?.country_autocomplete?.value || '*'}
-              />
-            </WrapAddressInput>
-            <GoogleGpsButton
-              className='gps-button'
-              apiKey={googleMapsApiKey}
-              onAddress={(e) => {
-                formMethods.setValue('address', e.address)
-                handleChangeAddress(e)
-              }}
-              onError={setMapErrors}
-              IconButton={BiCurrentLocation}
-              IconLoadingButton={CgSearchLoading}
-            />
-          </AddressWrap>
 
-          {(addressState?.address?.location || formState?.changes?.location) && !toggleMap && (
-            <ShowMap onClick={() => setToggleMap(!toggleMap)}>{t('VIEW_MAP', 'View map to modify the exact location')}</ShowMap>
-          )}
+          {inputNames.map(field => showField && showField(field.name) && (
+            field.name === 'address' ? (
+              <React.Fragment key={field.name}>
+                <AddressWrap className='google-control'>
+                  <WrapAddressInput>
+                    <HiOutlineLocationMarker />
+                    <GoogleAutocompleteInput
+                      className='input-autocomplete'
+                      apiKey={googleMapsApiKey}
+                      placeholder={t('ADDRESS', 'Address')}
+                      onChangeAddress={(e) => {
+                        formMethods.setValue('address', e.address)
+                        handleChangeAddress(e)
+                      }}
+                      onChange={(e) => {
+                        handleChangeInput({ target: { name: 'address', value: e.target.value } })
+                        setAddressValue(e.target.value)
+                      }}
+                      value={addressValue}
+                      autoComplete='new-field'
+                      countryCode={configState?.configs?.country_autocomplete?.value || '*'}
+                    />
+                  </WrapAddressInput>
+                  <GoogleGpsButton
+                    className='gps-button'
+                    apiKey={googleMapsApiKey}
+                    onAddress={(e) => {
+                      formMethods.setValue('address', e.address)
+                      handleChangeAddress(e)
+                    }}
+                    onError={setMapErrors}
+                    IconButton={BiCurrentLocation}
+                    IconLoadingButton={CgSearchLoading}
+                  />
+                </AddressWrap>
 
-          <Input
-            className='internal_number'
-            placeholder={t('INTERNAL_NUMBER', 'Internal number')}
-            value={formState.changes?.internal_number ?? addressState.address.internal_number ?? ''}
-            onChange={(e) => {
-              formMethods.setValue('internal_number', e.target.value)
-              handleChangeInput({ target: { name: 'internal_number', value: e.target.value } })
-            }}
-            autoComplete='new-field'
-          />
-
-          <Input
-            className='zipcode'
-            placeholder={t('ZIP_CODE', 'Zip code')}
-            value={formState.changes?.zipcode ?? addressState.address.zipcode ?? ''}
-            onChange={(e) => {
-              formMethods.setValue('zipcode', e.target.value)
-              handleChangeInput({ target: { name: 'zipcode', value: e.target.value } })
-            }}
-            autoComplete='new-field'
-          />
-
-          <TextArea
-            rows={4}
-            placeholder={t('ADDRESS_NOTES', 'Address Notes')}
-            value={formState.changes?.address_notes ?? addressState.address.address_notes ?? ''}
-            onChange={(e) => {
-              formMethods.setValue('address_notes', e.target.value)
-              handleChangeInput({ target: { name: 'address_notes', value: e.target.value } })
-            }}
-            autoComplete='new-field'
-          />
+                {(addressState?.address?.location || formState?.changes?.location) && !toggleMap && (
+                  <ShowMap onClick={() => setToggleMap(!toggleMap)}>{t('VIEW_MAP', 'View map to modify the exact location')}</ShowMap>
+                )}
+              </React.Fragment>
+            ) : (
+              <React.Fragment key={field.name}>
+                {field.name !== 'address_notes' ? (
+                  <Input
+                    className={field.name}
+                    placeholder={t(field.name.toUpperCase(), field.code)}
+                    value={formState.changes?.[field.name] ?? addressState.address?.[field.name] ?? ''}
+                    onChange={(e) => {
+                      formMethods.setValue(field.name, e.target.value)
+                      handleChangeInput({ target: { name: field.name, value: e.target.value } })
+                    }}
+                    autoComplete='new-field'
+                  />
+                ) : (
+                  <TextArea
+                    rows={4}
+                    placeholder={t('ADDRESS_NOTES', 'Address Notes')}
+                    value={formState.changes?.address_notes ?? addressState.address.address_notes ?? ''}
+                    onChange={(e) => {
+                      formMethods.setValue('address_notes', e.target.value)
+                      handleChangeInput({ target: { name: 'address_notes', value: e.target.value } })
+                    }}
+                    autoComplete='new-field'
+                  />
+                )}
+              </React.Fragment>
+            )
+          ))}
 
           {!formState.loading && formState.error && <p style={{ color: '#c10000' }}>{formState.error}</p>}
 

@@ -52,6 +52,7 @@ const LoginFormUI = (props) => {
   const theme = useTheme()
   const [passwordSee, setPasswordSee] = useState(false)
   const emailInput = useRef(null)
+  const cellphoneInput = useRef(null)
 
   const onSubmit = async () => {
     handleButtonLoginClick()
@@ -76,9 +77,9 @@ const LoginFormUI = (props) => {
   }
 
   const handleChangeInputEmail = (e) => {
-    handleChangeInput({ target: { name: 'email', value: e.target.value.toLowerCase().replace(/\s/gi, '') } })
-    formMethods.setValue('email', e.target.value.toLowerCase().replace(/\s/gi, ''))
-    emailInput.current.value = e.target.value.toLowerCase().replace(/\s/gi, '')
+    handleChangeInput({ target: { name: 'email', value: e.target.value.toLowerCase().replace(/[&,()%";:ç?<>{}\\[\]\s]/g, '') } })
+    formMethods.setValue('email', e.target.value.toLowerCase().replace(/[&,()%";:ç?<>{}\\[\]\s]/g, ''))
+    emailInput.current.value = e.target.value.toLowerCase().replace(/[&,()%";:ç?<>{}\\[\]\s]/g, '')
   }
 
   useEffect(() => {
@@ -101,11 +102,18 @@ const LoginFormUI = (props) => {
 
   useEffect(() => {
     formMethods.register('email', {
-      required: t('VALIDATION_ERROR_EMAIL_REQUIRED', 'The field Email is required').replace('_attribute_', t('EMAIL', 'Email')),
+      required: loginTab === 'email'
+        ? t('VALIDATION_ERROR_EMAIL_REQUIRED', 'The field Email is required').replace('_attribute_', t('EMAIL', 'Email'))
+        : null,
       pattern: {
         value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
         message: t('INVALID_ERROR_EMAIL', 'Invalid email address').replace('_attribute_', t('EMAIL', 'Email'))
       }
+    })
+    formMethods.register('cellphone', {
+      required: loginTab === 'cellphone'
+        ? t('VALIDATION_ERROR_MOBILE_PHONE_REQUIRED', 'The field Mobile phone is required').replace('_attribute_', t('CELLPHONE', 'Cellphone'))
+        : null
     })
   }, [formMethods])
 
@@ -172,9 +180,7 @@ const LoginFormUI = (props) => {
                   name='email'
                   aria-label='email'
                   placeholder={t('EMAIL', 'Email')}
-                  ref={(e) => {
-                    emailInput.current = e
-                  }}
+                  ref={(e) => emailInput.current = e}
                   onChange={handleChangeInputEmail}
                   autoComplete='off'
                 />
@@ -185,11 +191,7 @@ const LoginFormUI = (props) => {
                   name='cellphone'
                   aria-label='cellphone'
                   placeholder='Cellphone'
-                  ref={(el) => {
-                    formMethods.register({
-                      required: t('VALIDATION_ERROR_MOBILE_PHONE_REQUIRED', 'The field Mobile phone is required').replace('_attribute_', t('CELLPHONE', 'Cellphone'))
-                    })
-                  }}
+                  ref={(e) => cellphoneInput.current = e}
                   onChange={(e) => handleChangeInput(e)}
                   autoComplete='off'
                 />

@@ -60,7 +60,7 @@ const BusinessesListingUI = (props) => {
 
   const handleScroll = useCallback(() => {
     const innerHeightScrolltop = window.innerHeight + document.documentElement?.scrollTop + PIXELS_TO_SCROLL
-    const badScrollPosition = innerHeightScrolltop < document.documentElement.offsetHeight
+    const badScrollPosition = innerHeightScrolltop < document.documentElement?.offsetHeight
     const hasMore = !(paginationProps.totalPages === paginationProps.currentPage)
     if (badScrollPosition || businessesList.loading || !hasMore) return
     getBusinesses()
@@ -120,11 +120,9 @@ const BusinessesListingUI = (props) => {
       {props.beforeElements?.map((BeforeElement, i) => (
         <React.Fragment key={i}>
           {BeforeElement}
-        </React.Fragment>))
-      }
+        </React.Fragment>))}
       {props.beforeComponents?.map((BeforeComponent, i) => (
-        <BeforeComponent key={i} {...props} />))
-      }
+        <BeforeComponent key={i} {...props} />))}
       <BusinessContainer>
         <BusinessTypeFilter
           images={props.images}
@@ -270,13 +268,11 @@ const BusinessesListingUI = (props) => {
         />
       </BusinessContainer>
       {props.afterComponents?.map((AfterComponent, i) => (
-        <AfterComponent key={i} {...props} />))
-      }
+        <AfterComponent key={i} {...props} />))}
       {props.afterElements?.map((AfterElement, i) => (
         <React.Fragment key={i}>
           {AfterElement}
-        </React.Fragment>))
-      }
+        </React.Fragment>))}
     </>
   )
 }

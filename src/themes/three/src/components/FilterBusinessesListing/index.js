@@ -81,7 +81,7 @@ const FilterBusinessListingUI = (props) => {
 
   const handleScroll = useCallback(() => {
     const innerHeightScrolltop = window.innerHeight + document.documentElement?.scrollTop + PIXELS_TO_SCROLL
-    const badScrollPosition = innerHeightScrolltop < document.documentElement.offsetHeight
+    const badScrollPosition = innerHeightScrolltop < document.documentElement?.offsetHeight
     const hasMore = !(paginationProps.totalPages === paginationProps.currentPage)
     if (badScrollPosition || businessesList.loading || !hasMore) return
     getBusinesses()

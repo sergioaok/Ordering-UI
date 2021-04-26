@@ -30,7 +30,7 @@ const OrderTypeSelectorHeaderUI = (props) => {
   const [, t] = useLanguage()
   const [orderState] = useOrder()
   const [modalOpen, setModalOpen] = useState(false)
-  const defaultType = configTypes?.includes(typeSelected) ? null : configTypes[0]
+  const defaultType = configTypes?.includes(typeSelected) ? null : configTypes?.[0]
   const [orderType, setOrderType] = useState(null)
 
   const handleSelectOrderType = (_orderType) => {

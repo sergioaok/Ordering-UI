@@ -141,9 +141,9 @@ const SignUpFormUI = (props) => {
   }
 
   const handleChangeInputEmail = (e) => {
-    handleChangeInput({ target: { name: 'email', value: e.target.value.toLowerCase().replace(/\s/gi, '') } })
-    formMethods.setValue('email', e.target.value.toLowerCase().replace(/\s/gi, ''))
-    emailInput.current.value = e.target.value.toLowerCase().replace(/\s/gi, '')
+    handleChangeInput({ target: { name: 'email', value: e.target.value.toLowerCase().replace(/[&,()%";:ç?<>{}\\[\]\s]/g, '') } })
+    formMethods.setValue('email', e.target.value.toLowerCase().replace(/[&,()%";:ç?<>{}\\[\]\s]/g, ''))
+    emailInput.current.value = e.target.value.toLowerCase().replace(/[&,()%";:ç?<>{}\\[\]\s]/g, '')
   }
 
   useEffect(() => {
@@ -169,18 +169,24 @@ const SignUpFormUI = (props) => {
   useEffect(() => {
     if (!validationFields.loading) {
       Object.values(validationFields?.fields?.checkout).map(field => !notValidationFields.includes(field.code) && (
-        formMethods.register(field.code, {
-          required: isRequiredField(field.code) ? t(`VALIDATION_ERROR_${field.code.toUpperCase()}_REQUIRED`, `${field.name} is required`).replace('_attribute_', t(field.name, field.code)) : null
-        })
+        field.code === 'email' ? (
+          formMethods.register('email', {
+            required: isRequiredField(field.code)
+              ? t('VALIDATION_ERROR_EMAIL_REQUIRED', 'The field Email is required').replace('_attribute_', t('EMAIL', 'Email'))
+              : null,
+            pattern: {
+              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+              message: t('INVALID_ERROR_EMAIL', 'Invalid email address').replace('_attribute_', t('EMAIL', 'Email'))
+            }
+          })
+        ) : (
+          formMethods.register(field.code, {
+            required: isRequiredField(field.code)
+              ? t(`VALIDATION_ERROR_${field.code.toUpperCase()}_REQUIRED`, `${field.name} is required`).replace('_attribute_', t(field.name, field.code))
+              : null
+          })
+        )
       ))
-
-      formMethods.register('email', {
-        required: t('VALIDATION_ERROR_EMAIL_REQUIRED', 'The field Email is required').replace('_attribute_', t('EMAIL', 'Email')),
-        pattern: {
-          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-          message: t('INVALID_ERROR_EMAIL', 'Invalid email address').replace('_attribute_', t('EMAIL', 'Email'))
-        }
-      })
     }
   }, [formMethods])
 
@@ -234,7 +240,7 @@ const SignUpFormUI = (props) => {
                         <React.Fragment key={field.id}>
                           {field.code === 'email' ? (
                             <Input
-                              type={field.enabled && field.required ? field.type : 'hidden'}
+                              type={field.type}
                               name={field.code}
                               aria-label={field.code}
                               className='form'
@@ -243,12 +249,12 @@ const SignUpFormUI = (props) => {
                               ref={(e) => {
                                 emailInput.current = e
                               }}
-                              required={field.required}
+                              required={!!field.required}
                               autoComplete='off'
                             />
                           ) : (
                             <Input
-                              type={field.enabled && field.required ? field.type : 'hidden'}
+                              type={field.type}
                               name={field.code}
                               aria-label={field.code}
                               className='form'

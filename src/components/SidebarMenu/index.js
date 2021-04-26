@@ -65,11 +65,9 @@ export const SidebarMenu = (props) => {
       {props.beforeElements?.map((BeforeElement, i) => (
         <React.Fragment key={i}>
           {BeforeElement}
-        </React.Fragment>))
-      }
+        </React.Fragment>))}
       {props.beforeComponents?.map((BeforeComponent, i) => (
-        <BeforeComponent key={i} {...props} />))
-      }
+        <BeforeComponent key={i} {...props} />))}
       <Container auth={auth}>
         <IconContent
           isHome={isHome}
@@ -250,7 +248,7 @@ export const SidebarMenu = (props) => {
                         window.location.pathname === '/login'
                       }
                     >
-                      {t('SIGNIN', 'Sign in')}
+                      {t('SIGN_IN', 'Sign in')}
                     </TextInfo>
                   </MenuLinkText>
                   <MenuLinkSeparator>
@@ -297,13 +295,11 @@ export const SidebarMenu = (props) => {
         </SidebarContent>
       </Container>
       {props.afterComponents?.map((AfterComponent, i) => (
-        <AfterComponent key={i} {...props} />))
-      }
+        <AfterComponent key={i} {...props} />))}
       {props.afterElements?.map((AfterElement, i) => (
         <React.Fragment key={i}>
           {AfterElement}
-        </React.Fragment>))
-      }
+        </React.Fragment>))}
     </>
   )
 }

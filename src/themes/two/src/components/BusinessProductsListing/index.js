@@ -119,7 +119,7 @@ const BusinessProductsListingUI = (props) => {
 
   const handleScroll = useCallback(() => {
     const innerHeightScrolltop = window.innerHeight + document.documentElement?.scrollTop + PIXELS_TO_SCROLL
-    const badScrollPosition = innerHeightScrolltop < document.documentElement.offsetHeight
+    const badScrollPosition = innerHeightScrolltop < document.documentElement?.offsetHeight
     const hasMore = !(categoryState.pagination.totalPages === categoryState.pagination.currentPage)
     if (badScrollPosition || categoryState.loading || !hasMore) return
     getNextProducts()
