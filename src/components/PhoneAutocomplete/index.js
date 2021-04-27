@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import {
   PhoneAutocomplete as PhoneAutocompleteController,
-  useLanguage
+  useLanguage,
+  useOrder
 } from 'ordering-components'
 import { useTheme } from 'styled-components'
 
@@ -37,6 +38,7 @@ const PhoneAutocompleteUI = (props) => {
     countryCallingCode,
     onRedirectPage
   } = props
+  const [orderState] = useOrder()
   const [, t] = useLanguage()
   const theme = useTheme()
   const [alertState, setAlertState] = useState({ open: false, content: [] })
@@ -59,7 +61,7 @@ const PhoneAutocompleteUI = (props) => {
   }
 
   const handleFindClick = () => {
-    if (userCustomer?.id && userCustomer?.address) {
+    if (userCustomer?.id && orderState?.options?.address?.address) {
       onRedirectPage && onRedirectPage('search')
     } else {
       setAlertState({ open: true, content: t('SELECT_ADDRESS_CUSTOMER', 'Please select an address for the selected customer') })
