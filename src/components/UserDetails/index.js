@@ -70,10 +70,14 @@ const UserDetailsUI = (props) => {
 
           {!isEdit ? (
             <UserData>
-              <p>
-                <strong>{t('NAME', 'Name')}:</strong> {userData?.name} {userData?.middle_name} {userData?.lastname} {userData?.second_lastname}
-              </p>
-              <p><strong>{t('EMAIL', 'Email')}:</strong> {userData?.email}</p>
+              {(userData?.name || userData?.middle_name || userData?.lastname || userData?.second_lastname) && (
+                <p>
+                  <strong>{t('NAME', 'Name')}:</strong> {userData?.name} {userData?.middle_name} {userData?.lastname} {userData?.second_lastname}
+                </p>
+              )}
+              {userData?.email && (
+                <p><strong>{t('EMAIL', 'Email')}:</strong> {userData?.email}</p>
+              )}
               {(userData?.cellphone || user?.cellphone) && (
                 <p>
                   <strong>{t('CELLPHONE', 'Cellphone')}:</strong>

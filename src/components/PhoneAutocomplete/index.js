@@ -143,6 +143,7 @@ const PhoneAutocompleteUI = (props) => {
           externalPhoneNumber={`${countryCallingCode} ${phone}`}
           saveCustomerUser={saveCustomerUser}
           fieldsNotValid={props.fieldsNotValid}
+          useChekoutFileds
         />
       </Modal>
       <Modal

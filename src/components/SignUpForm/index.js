@@ -199,6 +199,7 @@ const SignUpFormUI = (props) => {
   useEffect(() => {
     if (externalPhoneNumber) {
       setUserPhoneNumber(externalPhoneNumber)
+      handleChangePhoneNumber(externalPhoneNumber, true)
     }
   }, [externalPhoneNumber])
 
