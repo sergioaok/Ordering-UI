@@ -140,7 +140,7 @@ export const App = () => {
                           />
                         )
                         : (
-                          userCustomer?.id && userCustomer?.address
+                          userCustomer?.id && orderStatus?.options?.address?.address
                             ? <Redirect to='/search' />
                             : <Redirect to='/' />
                         )
@@ -156,7 +156,7 @@ export const App = () => {
                           />
                         )
                         : (
-                          userCustomer?.id && userCustomer?.address
+                          userCustomer?.id && orderStatus?.options?.address?.address
                             ? <Redirect to='/search' />
                             : <Redirect to='/' />
                         )
@@ -184,18 +184,18 @@ export const App = () => {
                     ) : <Redirect to='/login' />}
                   </Route>
                   <Route exact path='/search'>
-                    {userCustomer?.id && userCustomer?.address
+                    {userCustomer?.id && orderStatus?.options?.address?.address
                       ? <BusinessesList />
                       : <Redirect to='/' />}
                   </Route>
                   <Route exact path='/store/:store'>
-                    {userCustomer?.id && userCustomer?.address
+                    {userCustomer?.id && orderStatus?.options?.address?.address
                       ? <BusinessProductsList />
                       : <Redirect to='/' />}
                   </Route>
                   <Route path='/checkout/:cartUuid?'>
                     {auth
-                      ? userCustomer?.id && userCustomer?.address
+                      ? userCustomer?.id && orderStatus?.options?.address?.address
                           ? <CheckoutPage />
                           : <Redirect to='/' />
                       : (
