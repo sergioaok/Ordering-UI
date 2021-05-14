@@ -155,24 +155,6 @@ const LoginFormUI = (props) => {
         cellphone: cellphone,
         country_phone_code: countryPhoneCode
       })
-        .then(() => {
-          if (verifyPhoneState?.result?.error) {
-
-            setAlertState({
-              open: true,
-              content: verifyPhoneState?.result?.result || [t('ERROR', 'Error')]
-            })
-
-          } else {
-            resetOtpLeftTime()
-          }
-        })
-        .catch(() => {
-          setAlertState({
-            open: true,
-            content: verifyPhoneState.result?.error || [t('ERROR', 'Error')]
-          })
-        })
     }
   }
 
@@ -248,6 +230,10 @@ const LoginFormUI = (props) => {
         open: true,
         content: verifyPhoneState?.result?.result || [t('ERROR', 'Error')]
       })
+    
+    else
+      resetOtpLeftTime()
+      
   }, [verifyPhoneState])
 
   return (
@@ -452,7 +438,9 @@ const LoginFormUI = (props) => {
                 />
               )}
               
-              {useLoginByCellphone && loginTab === 'cellphone' && (
+              {useLoginByCellphone && loginTab === 'cellphone' &&
+               configs && Object.keys(configs).length > 0 && (configs?.twilio_service_enabled?.value === 'true' ||
+                configs?.twilio_service_enabled?.value === '1')  && (
                 <SmsLoginButton
                   handleSmsLogin={() => {setLoginWithOtpState(true)}}
                 />

@@ -70,7 +70,7 @@ const BusinessTypeFilterUI = (props) => {
               ))}
             </AutoScroll>
           ) : (
-            <div style={{ display: 'flex', flexDirection: 'row' }}>
+            <>
               {types.map((type, i) => (
                 <Tab
                   key={type.id}
@@ -94,7 +94,7 @@ const BusinessTypeFilterUI = (props) => {
                   {t(`BUSINESS_TYPE_${type.name.replace(/\s/g, '_').toUpperCase()}`, type.name)}
                 </Tab>
               ))}
-            </div>
+            </>
           )}
         </Tabs>
       )}
@@ -106,7 +106,11 @@ const styles = {
   wrapperSkeleton: {
     display: 'flex',
     justifyContent: 'space-between',
+<<<<<<< HEAD
+    flexDirection: 'row'
+=======
     flexDirection: 'row',
+>>>>>>> 5163b547c3c6c1ae3f36c23608d243f1cc4ceda8
   }
 }
 

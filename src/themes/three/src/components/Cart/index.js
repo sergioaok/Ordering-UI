@@ -185,7 +185,7 @@ const CartUI = (props) => {
                         {t('DRIVER_TIP', 'Driver tip')}
                         {cart?.driver_tip_rate > 0 &&
                           parseInt(configs?.driver_tip_type?.value, 10) === 2 &&
-                          !!!parseInt(configs?.driver_tip_use_custom?.value, 10) &&
+                          !parseInt(configs?.driver_tip_use_custom?.value, 10) &&
                         (
                           <span>{`(${parseNumber(cart?.driver_tip_rate)}%)`}</span>
                         )}
@@ -274,7 +274,7 @@ const CartUI = (props) => {
             isCartProduct
             productCart={curProduct}
             businessSlug={cart?.business?.slug}
-            businessId={curProduct?.business_id}
+            businessId={cart?.business_id}
             categoryId={curProduct?.category_id}
             productId={curProduct?.id}
             onSave={handlerProductAction}

@@ -75,14 +75,14 @@ const BusinessControllerUI = (props) => {
               )}
             </BusinessInfoRow>
             <BusinessInfoRow>
-              {Object.keys(business).length > 0 ? (
+              {business && Object.keys(business).length > 0 ? (
                 <span>
                   {getBusinessType()}
                 </span>
               ) : (
                 <Skeleton width={50} />
               )}
-              {Object.keys(business).length > 0 ? (
+              {business && Object.keys(business).length > 0 ? (
                 <span className='bullet'>
                   {convertHoursToMinutes(orderState?.options?.type === 1 ? business?.delivery_time : business?.pickup_time) || <Skeleton width={100} />}
                 </span>

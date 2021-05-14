@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components'
+import { darken } from 'polished'
 
 export const LoginContainer = styled.div`
   width: 100%;
@@ -182,6 +183,19 @@ export const WrapperPassword = styled.div`
     }
   }
 `
+
+export const WrapperInputPhoneNumber = styled.div`
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+  margin: 20px 0;
+  label {
+    color: ${props => props.theme.colors.darkTextColor};
+    font-weight: 500;
+    font-size: 18px;
+  }
+`
+
 export const LoginWithEmail = styled.div`
   display: flex;
   align-items: center;
@@ -217,4 +231,86 @@ export const FormTitle = styled.h1`
   @media (max-width: 992px) {
     font-size: 32px;
   }
+`
+
+export const LoginWith = styled.div`
+  font-size: 14px;
+
+  @media (min-width: 425px) {
+    font-size: 18px;
+  }
+
+  @media (min-width: 768px) {
+    font-size: 14px;
+  }
+
+  @media (min-width: 992px) {
+    font-size: ${({ isPopup }) => isPopup ? '13px' : '18px'};
+  }
+
+  @media (min-width: 1200px) {
+    ${({ isPopup }) => isPopup && css`
+      font-size: 17px;
+    `};
+  }
+`
+
+export const OtpWrapper = styled.div`
+  .otp-container{
+    display: flex;
+    justify-content: space-evenly;
+    margin: 20px;
+    
+    .otp-input{
+      width: 30px;
+      height: 30px;
+      padding: 12px 20px;
+      border: 2px solid #CCC;
+      border-radius: 16px;
+      background-color: #FFF;
+      outline: none;
+      font-size: 20px;
+      font-weight: bold; 
+
+      &:focus{
+        border-color: ${() => darken(0.07, '#CCC')} !important;
+      }
+
+      &::placeholder,
+      &::-webkit-input-placeholder {
+        color: #DBDCDB;
+      }
+      &:-ms-input-placeholder {
+        color: #DBDCDB;
+      }
+    }
+  }
+`
+
+export const CountdownTimer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  margin: 20px;
+  
+  span {
+    &:first-child {
+      font-size: 30px;
+      font-weight: bold;
+      color: ${props => props.theme.colors.primary}
+    }
+    &:last-child {
+      font-size: 24px;
+      color: #DBDCDB;
+      cursor: pointer;
+      :hover {
+        color: ${() => darken(0.07, '#DBDCDB')} !important;
+      }
+      :active {
+        color: ${() => darken(0.09, '#DBDCDB')} !important;
+      }
+    }
+  }
+
 `
