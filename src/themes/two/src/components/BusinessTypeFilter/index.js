@@ -106,11 +106,7 @@ const styles = {
   wrapperSkeleton: {
     display: 'flex',
     justifyContent: 'space-between',
-<<<<<<< HEAD
-    flexDirection: 'row'
-=======
     flexDirection: 'row',
->>>>>>> 5163b547c3c6c1ae3f36c23608d243f1cc4ceda8
   }
 }
 

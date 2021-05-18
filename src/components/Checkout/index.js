@@ -511,7 +511,7 @@ export const Checkout = (props) => {
       if (result.status === 1 && result.order?.uuid) {
         handleOrderRedirect(result.order.uuid)
         setCartState({ ...cartState, loading: false })
-      } else if (result.status === 2 && result.paymethod_data?.gateway === 'stripe_redirect' && query.get('payment_intent')) {
+      } else if (result.status === 2) {
         try {
           const confirmCartRes = await confirmCart(cartUuid)
           if (confirmCartRes.error) {

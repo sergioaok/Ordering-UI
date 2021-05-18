@@ -117,7 +117,8 @@ export const getTraduction = key => {
     DELIVERY_DATETIME: 'Delivery datetime',
     ERROR_MISSING_PAYMETHOD_HOOK: 'Missing payment method hook',
     INVALID_CODE: 'Invalid verify code',
-    ERROR_YOU_HAVE_NOT_CART: 'Cart not found'
+    ERROR_YOU_HAVE_NOT_CART: 'Cart not found',
+    ERROR_PLACE_PAY_WITH_REDIRECT: 'An error occurred while trying to pay by redirect'
   }
 
   return keyList[key] ? t(key, keyList[key]) : t(key)

@@ -102,7 +102,8 @@ const BusinessesListingUI = (props) => {
 export const BusinessesListing = (props) => {
   const BusinessesListingProps = {
     ...props,
-    UIComponent: BusinessesListingUI
+    UIComponent: BusinessesListingUI,
+    windowPathname: window.location.pathname
   }
   return <BusinessListController {...BusinessesListingProps} />
 }
