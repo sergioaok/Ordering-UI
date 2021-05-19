@@ -9,7 +9,7 @@ exports.Select = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _orderingComponents = require("ordering-components");
+var _contexts = require("ordering-components/_modules/contexts");
 
 var _BsChevronDown = _interopRequireDefault(require("@meronex/icons/bs/BsChevronDown"));
 
@@ -63,7 +63,7 @@ var Select = function Select(props) {
 
   var dropdownReference = (0, _react.useRef)();
 
-  var _useOrder = (0, _orderingComponents.useOrder)(),
+  var _useOrder = (0, _contexts.useOrder)(),
       _useOrder2 = _slicedToArray(_useOrder, 1),
       orderState = _useOrder2[0];
 
