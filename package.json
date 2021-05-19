@@ -4,7 +4,7 @@
   "description": "Ordering UI Components",
   "main": "./_modules/index.js",
   "exports": {
-    "./": "./_modules/index.js",
+    ".": "./_modules/index.js",
     "./components": "./_modules/components/",
     "./theme_two": "./_modules/themes/two/index.js",
     "./theme_three": "./_modules/themes/three/index.js",
