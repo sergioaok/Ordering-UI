@@ -3,13 +3,6 @@
   "version": "0.0.1",
   "description": "Ordering UI Components",
   "main": "./_modules/index.js",
-  "exports": {
-    ".": "./_modules/index.js",
-    "./components": "./_modules/components/",
-    "./theme_two": "./_modules/themes/two/index.js",
-    "./theme_three": "./_modules/themes/three/index.js",
-    "./theme_wow": "./_modules/themes/wow/index.js"
-  },
   "scripts": {
     "clean": "shx rm -rf _bundles _modules",
     "build": "npm run clean && babel ./src --out-dir ./_modules && babel ./src/themes --out-dir ./_modules/themes && webpack --config webpack.prod.js",
