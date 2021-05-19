@@ -16,8 +16,13 @@ module.exports = {
   optimization: {
     minimizer: [
       new TerserPlugin()
-    ]
+    ],
+    splitChunks: {
+      chunks: 'all',
+      maxSize: 250000
+    }
   },
+
   resolve: {
     alias: {
       react: path.resolve(__dirname, './node_modules/react'),
