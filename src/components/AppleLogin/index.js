@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
-import { AppleLogin as AppleLoginController, useLanguage, useConfig } from 'ordering-components'
+import { AppleLogin as AppleLoginController } from 'ordering-components/_modules/components'
+import { useLanguage, useConfig } from 'ordering-components/_modules/contexts'
 import { AppleButton } from './styles'
 import FaApple from '@meronex/icons/fa/FaApple'
 

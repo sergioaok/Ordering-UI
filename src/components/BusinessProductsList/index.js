@@ -1,5 +1,6 @@
 import React from 'react'
-import { ProductsList, useLanguage } from 'ordering-components'
+import { ProductsList } from 'ordering-components/_modules/components'
+import { useLanguage } from 'ordering-components/_modules/contexts'
 
 import { SingleProductCard } from '../SingleProductCard'
 import { NotFoundSource } from '../NotFoundSource'

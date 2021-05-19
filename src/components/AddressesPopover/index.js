@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react'
-import { useOrder, useLanguage, useEvent } from 'ordering-components'
+import { useOrder, useLanguage, useEvent } from 'ordering-components/_modules/contexts'
 import { usePopper } from 'react-popper'
 import { HeaderItem, PopoverBody, PopoverArrow, Container, Title } from './styles'
 import FaMapMarkerAlt from '@meronex/icons/fa/FaMapMarkerAlt'

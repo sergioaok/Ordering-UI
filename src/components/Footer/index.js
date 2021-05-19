@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useApi } from 'ordering-components'
+import { useApi } from 'ordering-components/_modules/contexts'
 
 export const Footer = () => {
   const [footerState, setfooterState] = useState({ body: null, loading: false, error: null })

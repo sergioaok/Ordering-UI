@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
-import { useEvent, useLanguage } from 'ordering-components'
-import { useTheme } from '../../../src/contexts/ThemeContext'
+import { useEvent/* , useLanguage */ } from 'ordering-components'
+// import { useTheme } from '../../../src/contexts/ThemeContext'
 
 export const ListenPageChanges = ({ children }) => {
   const history = useHistory()
   const [events] = useEvent()
-  const [languageState] = useLanguage()
-  const [theme, { merge }] = useTheme()
+/*   const [languageState] = useLanguage()
+  const [theme, { merge }] = useTheme() */
 
   const routes = {
     home: '/',
@@ -84,13 +84,13 @@ export const ListenPageChanges = ({ children }) => {
     }
   }, [])
 
-  useEffect(() => {
+/*   useEffect(() => {
     if (theme.rtl !== languageState?.language?.rtl) {
       merge({
         rtl: languageState?.language?.rtl
       })
     }
-  }, [languageState?.language?.rtl])
+  }, [languageState?.language?.rtl]) */
 
   return (
     <>

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import MdClose from '@meronex/icons/md/MdClose'
-import { Popup, useLanguage } from 'ordering-components'
+import { Popup } from 'ordering-components/_modules/components'
+import { useLanguage } from 'ordering-components/_modules/contexts'
 import {
   PopupDialog,
   PopupActions,

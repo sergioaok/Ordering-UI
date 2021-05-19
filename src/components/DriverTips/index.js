@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { DriverTips as DriverTipsController, useUtils, useLanguage, useConfig } from 'ordering-components'
+import { DriverTips as DriverTipsController } from 'ordering-components/_modules/components'
+import { useUtils, useLanguage, useConfig } from 'ordering-components/_modules/contexts'
 
 import {
   DriverTipContainer,

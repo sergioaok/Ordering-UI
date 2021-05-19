@@ -23,11 +23,14 @@ import { OrdersOption } from '../OrdersOption'
 import { BusinessesMap } from '../BusinessesMap'
 
 import {
+  BusinessList as BusinessListController
+} from 'ordering-components/_modules/components'
+
+import {
   useOrder,
   useSession,
   useLanguage,
-  BusinessList as BusinessListController
-} from 'ordering-components'
+} from 'ordering-components/_modules/contexts'
 
 const PIXELS_TO_SCROLL = 300
 

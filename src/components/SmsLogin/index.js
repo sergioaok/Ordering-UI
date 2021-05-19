@@ -1,8 +1,6 @@
 import React from 'react'
-import {
-  LoginForm as LoginFormController,
-  useLanguage
-} from 'ordering-components'
+import { LoginForm as LoginFormController } from 'ordering-components/_modules/components'
+import { useLanguage } from 'ordering-components/_modules/contexts'
 import MdSms from '@meronex/icons/md/MdSms'
 import { SMSButton } from './styles'
 

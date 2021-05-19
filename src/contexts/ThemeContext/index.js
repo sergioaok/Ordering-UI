@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react'
+import React, { createContext, useContext, useEffect, useState, useCallback } from 'react'
 import { createGlobalStyle, css, ThemeProvider as ThemeProviderStyled } from 'styled-components'
 
 /**
@@ -14,14 +14,14 @@ export const ThemeContext = createContext()
 export const ThemeProvider = ({ children, ...props }) => {
   const [theme, setTheme] = useState(props.theme)
 
-  const getThemeColor = () => {
+  const getThemeColor = useCallback(() => {
     switch (props.themeType) {
       case 'two':
         return theme.colors.darkTextColor
       default:
         return theme.colors.colorPage
     }
-  }
+  }, [props.themeType])
 
   const GlobalStyle = createGlobalStyle`
     @media (min-width: 578px) {
@@ -95,16 +95,16 @@ export const ThemeProvider = ({ children, ...props }) => {
     })
   }, [])
 
-  const update = (theme) => {
+  const update = useCallback((theme) => {
     setTheme(theme)
-  }
+  }, [theme])
 
-  const merge = (partTheme) => {
+  const merge = useCallback((partTheme) => {
     setTheme({
       ...theme,
       ...partTheme
     })
-  }
+  }, [theme])
 
   return (
     <ThemeContext.Provider value={[theme, { update, merge }]}>

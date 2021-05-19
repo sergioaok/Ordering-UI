@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import { Cart as CartController, useOrder, useLanguage, useEvent, useUtils, useValidationFields, useConfig } from 'ordering-components'
+import { Cart as CartController } from 'ordering-components/_modules/components'
+import {
+  useOrder,
+  useLanguage,
+  useEvent,
+  useUtils,
+  useValidationFields,
+  useConfig
+} from 'ordering-components/_modules/contexts'
 import { Button } from '../../styles/Buttons'
 import { ProductItemAccordion } from '../ProductItemAccordion'
 import { BusinessItemAccordion } from '../BusinessItemAccordion'

@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react'
-import { useOrder, useLanguage, useUtils, useConfig } from 'ordering-components'
+import { useOrder, useLanguage, useUtils, useConfig } from 'ordering-components/_modules/contexts'
 import { usePopper } from 'react-popper'
 import { HeaderItem, PopoverBody, PopoverArrow } from './styles'
 import { MomentContent } from '../MomentContent'

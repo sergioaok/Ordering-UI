@@ -1,5 +1,5 @@
 import React from 'react'
-import { useOrder, useConfig } from 'ordering-components'
+import { useOrder, useConfig } from 'ordering-components/_modules/contexts'
 
 import { Container, Layer } from './styles'
 

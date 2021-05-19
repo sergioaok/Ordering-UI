@@ -1,11 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useTheme } from 'styled-components'
-import {
-  Messages as MessagesController,
-  useUtils,
-  useLanguage,
-  useSession
-} from 'ordering-components'
+import { Messages as MessagesController } from 'ordering-components/_modules/components'
+import { useUtils, useLanguage, useSession } from 'ordering-components/_modules/contexts'
 import { useForm } from 'react-hook-form'
 import Skeleton from 'react-loading-skeleton'
 import {

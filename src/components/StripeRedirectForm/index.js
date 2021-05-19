@@ -1,6 +1,7 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { StripeRedirectForm as StripeRedirectFormController, useSession, useLanguage } from 'ordering-components'
+import { StripeRedirectForm as StripeRedirectFormController } from 'ordering-components/_modules/components'
+import { useSession, useLanguage } from 'ordering-components/_modules/contexts'
 
 import {
   FormRedirect,

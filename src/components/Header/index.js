@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { useSession, useLanguage, useOrder, useEvent, useConfig, useCustomer } from 'ordering-components'
+import { useSession, useLanguage, useOrder, useEvent, useConfig, useCustomer } from 'ordering-components/_modules/contexts'
 import { useTheme } from 'styled-components'
 import FaUserCircle from '@meronex/icons/fa/FaUserCircle'
 import MdClose from '@meronex/icons/md/MdClose'

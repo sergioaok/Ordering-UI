@@ -3,12 +3,14 @@ import { formatUrlVideo, convertHoursToMinutes } from '../../utils'
 import { useTheme } from 'styled-components'
 import {
   BusinessInformation as BusinessInformationController,
-  GoogleMapsMap,
+  GoogleMapsMap
+} from 'ordering-components/_modules/components'
+import {
   useOrder,
   useLanguage,
   useUtils,
   useConfig
-} from 'ordering-components'
+} from 'ordering-components/_modules/contexts'
 import { BusinessReviews } from '../BusinessReviews'
 import { Modal } from '../Modal'
 import {

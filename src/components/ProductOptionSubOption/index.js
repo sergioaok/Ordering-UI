@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
+import { ProductOptionSuboption as ProductSubOptionController } from 'ordering-components/_modules/components'
 import {
-  ProductOptionSuboption as ProductSubOptionController,
   useUtils,
   useLanguage
-} from 'ordering-components'
+} from 'ordering-components/_modules/contexts'
 import BsCircleFill from '@meronex/icons/bs/BsCircleFill'
 import BsCircleHalf from '@meronex/icons/bs/BsCircleHalf'
 import BsDashCircle from '@meronex/icons/bs/BsDashCircle'

@@ -1,10 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { Alert } from '../Confirm'
-import {
-  ForgotPasswordForm as ForgotPasswordController,
-  useLanguage
-} from 'ordering-components'
+import { ForgotPasswordForm as ForgotPasswordController } from 'ordering-components/_modules/components'
+import { useLanguage } from 'ordering-components/_modules/contexts'
+
 import {
   ForgotPasswordContainer,
   FormSide,

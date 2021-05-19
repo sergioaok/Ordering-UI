@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import Skeleton from 'react-loading-skeleton'
 import { useLocation } from 'react-router-dom'
+import { BusinessAndProductList } from 'ordering-components/_modules/components'
 import {
-  BusinessAndProductList,
   useEvent,
   useLanguage,
   useOrder,
   useSession,
   useUtils
-} from 'ordering-components'
+} from 'ordering-components/_modules/contexts'
 
 import {
   ProductsContainer,

@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from 'react'
-import { useLanguage, useSession, LogoutAction as LogoutActionController, useEvent, useCustomer } from 'ordering-components'
+import { LogoutAction as LogoutActionController } from 'ordering-components/_modules/components'
+import { useLanguage, useSession, useEvent, useCustomer } from 'ordering-components/_modules/contexts'
 import { usePopper } from 'react-popper'
 import { HeaderItem, PopoverBody, PopoverArrow, PopoverList, PopoverListItem, PopoverListLink } from './styles'
 import { DropDownCircleImage } from '../Dropdown/style'

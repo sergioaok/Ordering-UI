@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import FiShare2 from '@meronex/icons/fi/FiShare2'
-import { ProductShare as ProductShareController } from 'ordering-components'
+import { ProductShare as ProductShareController } from 'ordering-components/_modules/components'
 
 import {
   IconShare,

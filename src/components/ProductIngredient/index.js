@@ -1,5 +1,5 @@
 import React from 'react'
-import { ProductIngredient as ProductIngredientController } from 'ordering-components'
+import { ProductIngredient as ProductIngredientController } from 'ordering-components/_modules/components'
 
 import { Container } from './styles'
 import MdCheckBox from '@meronex/icons/md/MdCheckBox'

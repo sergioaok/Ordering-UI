@@ -1,5 +1,5 @@
 import React from 'react'
-import { LanguageSelector as LanguageSelectorController } from 'ordering-components'
+import { LanguageSelector as LanguageSelectorController } from 'ordering-components/_modules/components'
 import { Select } from '../../styles/Select'
 
 const LanguageSelectorUI = (props) => {

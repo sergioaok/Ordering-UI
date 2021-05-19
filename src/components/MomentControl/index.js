@@ -1,6 +1,12 @@
 import React from 'react'
 import moment from 'moment'
-import { MomentOption, useLanguage, useUtils, useConfig, useOrder } from 'ordering-components'
+import { MomentOption } from 'ordering-components/_modules/components'
+import {
+  useLanguage,
+  useUtils,
+  useConfig,
+  useOrder
+} from 'ordering-components/_modules/contexts'
 
 import { Days, Day, DayName, DayNumber, ContentDay, Hours, Hour, Title, MiddleLine } from './styles'
 import { useWindowSize } from '../../hooks/useWindowSize'

@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import Skeleton from 'react-loading-skeleton'
+import { PaymentOptionStripe as PaymentOptionStripeController } from 'ordering-components/_modules/components'
 import {
-  PaymentOptionStripe as PaymentOptionStripeController,
   useSession,
   useLanguage
-} from 'ordering-components'
+} from 'ordering-components/_modules/contexts'
 
 import IosRadioButtonOn from '@meronex/icons/ios/IosRadioButtonOn'
 import IosRadioButtonOff from '@meronex/icons/ios/IosRadioButtonOff'

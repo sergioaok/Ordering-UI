@@ -3,7 +3,7 @@ import IosArrowDown from '@meronex/icons/ios/IosArrowDown'
 import FiClock from '@meronex/icons/fi/FiClock'
 import BiStoreAlt from '@meronex/icons/bi/BiStoreAlt'
 import VscTrash from '@meronex/icons/vsc/VscTrash'
-import { useOrder, useLanguage, useUtils, useEvent } from 'ordering-components'
+import { useOrder, useLanguage, useUtils, useEvent } from 'ordering-components/_modules/contexts'
 import { useTheme } from 'styled-components'
 import { convertHoursToMinutes } from '../../utils'
 

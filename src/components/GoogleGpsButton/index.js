@@ -1,5 +1,5 @@
 import React from 'react'
-import { GoogleGpsButton as GpsButton } from 'ordering-components'
+import { GoogleGpsButton as GpsButton } from 'ordering-components/_modules/components'
 import { GpsButtonStyle } from './styles'
 
 const GoogleGpsButtonUI = (props) => {

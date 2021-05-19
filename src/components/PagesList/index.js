@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useApi, useLanguage } from 'ordering-components'
+import { useApi, useLanguage } from 'ordering-components/_modules/contexts'
 import { PagesListContainer } from './styles'
 
 export const PagesList = ({ routes }) => {

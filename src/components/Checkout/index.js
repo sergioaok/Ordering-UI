@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react'
 import VscWarning from '@meronex/icons/vsc/VscWarning'
 import Skeleton from 'react-loading-skeleton'
 import { useTheme } from 'styled-components'
+import { Checkout as CheckoutController } from 'ordering-components/_modules/components'
 import {
-  Checkout as CheckoutController,
   useOrder,
   useSession,
   useApi,
@@ -12,7 +12,7 @@ import {
   useValidationFields,
   useConfig,
   useCustomer
-} from 'ordering-components'
+} from 'ordering-components/_modules/contexts'
 import { UpsellingPage } from '../UpsellingPage'
 import parsePhoneNumber from 'libphonenumber-js'
 

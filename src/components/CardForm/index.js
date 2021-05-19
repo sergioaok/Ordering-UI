@@ -1,6 +1,7 @@
 import React from 'react'
 import { CardElement } from '@stripe/react-stripe-js'
-import { CardForm as CardFormController, useLanguage } from 'ordering-components'
+import { CardForm as CardFormController } from 'ordering-components/_modules/components'
+import { useLanguage } from 'ordering-components/_modules/contexts'
 
 import {
   FormStripe,

@@ -11,12 +11,14 @@ import { useForm } from 'react-hook-form'
 import {
   AddressForm as AddressFormController,
   GoogleAutocompleteInput,
+  GoogleMapsMap
+} from 'ordering-components/_modules/components'
+import {
   useLanguage,
-  GoogleMapsMap,
   useSession,
   useOrder,
   useConfig
-} from 'ordering-components'
+} from 'ordering-components/_modules/contexts'
 import { Alert } from '../Confirm'
 import { GoogleGpsButton } from '../GoogleGpsButton'
 

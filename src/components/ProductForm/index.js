@@ -3,13 +3,13 @@ import Skeleton from 'react-loading-skeleton'
 import FiMinusCircle from '@meronex/icons/fi/FiMinusCircle'
 import FiPlusCircle from '@meronex/icons/fi/FiPlusCircle'
 
+import { ProductForm as ProductOptions } from 'ordering-components/_modules/components'
 import {
-  ProductForm as ProductOptions,
   useSession,
   useLanguage,
   useOrder,
   useUtils
-} from 'ordering-components'
+} from 'ordering-components/_modules/contexts'
 
 import { scrollTo } from '../../utils'
 import { useWindowSize } from '../../hooks/useWindowSize'

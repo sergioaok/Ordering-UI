@@ -9,7 +9,7 @@ import AiOutlineHome from '@meronex/icons/ai/AiOutlineHome'
 import BiStore from '@meronex/icons/bi/BiStore'
 import FaUserCircle from '@meronex/icons/fa/FaUserCircle'
 
-import { useEvent, useLanguage, useOrder } from 'ordering-components'
+import { useEvent, useLanguage, useOrder } from 'ordering-components/_modules/contexts'
 
 import { useWindowSize } from '../../hooks/useWindowSize'
 import { LogoutButton } from '../LogoutButton'

@@ -1,6 +1,7 @@
 import React from 'react'
 import Skeleton from 'react-loading-skeleton'
-import { BusinessReviews as BusinessReviewController, useLanguage } from 'ordering-components'
+import { BusinessReviews as BusinessReviewController } from 'ordering-components/_modules/components'
+import { useLanguage } from 'ordering-components/_modules/contexts'
 
 import { BusinessReviewsContainer, ReviewOf, WrapperSelect, WrapperStars, Content, Review, ReviewContainer, Comments, ReviewsNotFound, Comment, ScoresContainer, Scores, ScoreDiv, SkeletonContainer } from './styles'
 import { Select } from '../../styles/Select'

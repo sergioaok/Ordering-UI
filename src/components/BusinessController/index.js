@@ -1,5 +1,7 @@
 import React from 'react'
-import { BusinessController as BusinessSingleCard, useLanguage, useUtils } from 'ordering-components'
+import { BusinessController as BusinessSingleCard } from 'ordering-components/_modules/components'
+import { useLanguage, useUtils } from 'ordering-components/_modules/contexts'
+
 import Skeleton from 'react-loading-skeleton'
 import { useTheme } from 'styled-components'
 

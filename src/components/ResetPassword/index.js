@@ -1,11 +1,11 @@
 import React, { useRef, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Alert } from '../Confirm'
+import { ResetPassword as ResetPasswordController } from 'ordering-components/_modules/components'
 import {
   useLanguage,
-  ResetPassword as ResetPasswordController,
   useSession
-} from 'ordering-components'
+} from 'ordering-components/_modules/contexts'
 import {
   ResetPasswordContainer,
   FormSide,

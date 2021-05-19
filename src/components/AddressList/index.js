@@ -10,12 +10,15 @@ import IosRadioButtonOn from '@meronex/icons/ios/IosRadioButtonOn'
 import IosRadioButtonOff from '@meronex/icons/ios/IosRadioButtonOff'
 
 import {
-  AddressList as AddressListController,
+  AddressList as AddressListController
+} from 'ordering-components/_modules/components'
+
+import {
   useLanguage,
   useOrder,
   useCustomer,
   useEvent
-} from 'ordering-components'
+} from 'ordering-components/_modules/contexts'
 
 import {
   AddressListContainer,

@@ -1,6 +1,6 @@
 import React from 'react'
 import Skeleton from 'react-loading-skeleton'
-import { useLanguage, useConfig, useOrder, useUtils } from 'ordering-components'
+import { useLanguage, useConfig, useOrder, useUtils } from 'ordering-components/_modules/contexts'
 
 import {
   CardContainer,

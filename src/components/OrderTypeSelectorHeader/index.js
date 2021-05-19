@@ -1,5 +1,6 @@
 import React from 'react'
-import { OrderTypeControl, useLanguage } from 'ordering-components'
+import { OrderTypeControl } from 'ordering-components/_modules/components'
+import { useLanguage } from 'ordering-components/_modules/contexts'
 import { Select } from '../../styles/Select'
 import FaCarSide from '@meronex/icons/fa/FaCarSide'
 import FaTruckPickup from '@meronex/icons/fa/FaTruckPickup'
@@ -8,7 +9,7 @@ import AiFillShop from '@meronex/icons/ai/AiFillShop'
 import GiFoodTruck from '@meronex/icons/gi/GiFoodTruck'
 import { Option, OrderTypeWrapper, SelectedOption, ContentOption } from './styles'
 
-const OrderTypeSelectorHeaderUI = (props) => {
+const OrderTypeSelectorHeaderUI = React.memo((props) => {
   const {
     handleChangeOrderType,
     typeSelected,
@@ -30,9 +31,9 @@ const OrderTypeSelectorHeaderUI = (props) => {
       </OrderTypeWrapper>
     )
   )
-}
+})
 
-export const OrderTypeSelectorHeader = (props) => {
+export const OrderTypeSelectorHeader = React.memo((props) => {
   const [, t] = useLanguage()
 
   const orderTypeProps = {
@@ -68,4 +69,4 @@ export const OrderTypeSelectorHeader = (props) => {
   }
 
   return <OrderTypeControl {...orderTypeProps} />
-}
+})

@@ -4,11 +4,11 @@ import TiPencil from '@meronex/icons/ti/TiPencil'
 import Skeleton from 'react-loading-skeleton'
 import { Container, Header, SideForm, UserData } from './styles'
 
+import { UserFormDetails as UserFormController } from 'ordering-components/_modules/components'
 import {
-  UserFormDetails as UserFormController,
   useLanguage,
   useSession
-} from 'ordering-components'
+} from 'ordering-components/_modules/contexts'
 
 import { UserFormDetailsUI } from '../UserFormDetails'
 

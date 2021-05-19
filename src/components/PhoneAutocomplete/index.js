@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
+import { PhoneAutocomplete as PhoneAutocompleteController } from 'ordering-components/_modules/components'
 import {
-  PhoneAutocomplete as PhoneAutocompleteController,
   useLanguage,
   useOrder
-} from 'ordering-components'
+} from 'ordering-components/_modules/contexts'
 import { useTheme } from 'styled-components'
 
 import { Modal } from '../Modal'

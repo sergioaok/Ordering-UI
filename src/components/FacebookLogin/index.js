@@ -1,8 +1,6 @@
 import React from 'react'
-import {
-  FacebookLoginButton as FacebookLoginController,
-  useLanguage
-} from 'ordering-components'
+import { FacebookLoginButton as FacebookLoginController } from 'ordering-components/_modules/components'
+import { useLanguage } from 'ordering-components/_modules/contexts'
 import FaFacebook from '@meronex/icons/fa/FaFacebook'
 import { FacebookButton } from './styles'
 

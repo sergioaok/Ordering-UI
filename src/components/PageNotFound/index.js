@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { PageNotFoundContainer, PageNotFoundText, PageNotFoundImage } from './styles'
-import { useLanguage } from 'ordering-components'
+import { useLanguage } from 'ordering-components/_modules/contexts'
 import { useTheme } from 'styled-components'
 import { useWindowSize } from '../../hooks/useWindowSize'
 

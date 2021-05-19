@@ -1,5 +1,6 @@
 import React from 'react'
-import { ProductOption as ProductOptionController, useLanguage } from 'ordering-components'
+import { ProductOption as ProductOptionController } from 'ordering-components/_modules/components'
+import { useLanguage } from 'ordering-components/_modules/contexts'
 
 import {
   Container,

@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import Skeleton from 'react-loading-skeleton'
 import {
-  useLanguage,
   OrderDetails as OrderDetailsController,
+  GoogleMapsMap
+} from 'ordering-components/_modules/components'
+import {
+  useLanguage,
   useEvent,
   useUtils,
-  useConfig,
-  GoogleMapsMap
-} from 'ordering-components'
+  useConfig
+} from 'ordering-components/_modules/contexts'
 import FiPhone from '@meronex/icons/fi/FiPhone'
 import FaUserCircle from '@meronex/icons/fa/FaUserCircle'
 import HiOutlineChat from '@meronex/icons/hi/HiOutlineChat'

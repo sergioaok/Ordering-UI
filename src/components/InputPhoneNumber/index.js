@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import parsePhoneNumber from 'libphonenumber-js'
 import PhoneInput from 'react-phone-number-input'
-import { useLanguage, useConfig, useSession } from 'ordering-components'
+import { useLanguage, useConfig, useSession } from 'ordering-components/_modules/contexts'
 
 import { Container, ErrorMsg } from './styles'
 

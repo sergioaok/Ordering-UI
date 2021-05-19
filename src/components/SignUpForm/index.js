@@ -5,12 +5,12 @@ import { Alert } from '../Confirm'
 import { InputPhoneNumber } from '../InputPhoneNumber'
 import parsePhoneNumber from 'libphonenumber-js'
 
+import { SignupForm as SignUpController } from 'ordering-components/_modules/components'
 import {
-  SignupForm as SignUpController,
   useLanguage,
   useConfig,
   useSession
-} from 'ordering-components'
+} from 'ordering-components/_modules/contexts'
 import {
   SignUpContainer,
   FormSide,

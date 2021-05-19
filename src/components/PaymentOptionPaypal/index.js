@@ -1,5 +1,5 @@
 import React from 'react'
-import { PaymentOptionPaypal as PaymentPaypalController } from 'ordering-components'
+import { PaymentOptionPaypal as PaymentPaypalController } from 'ordering-components/_modules/components'
 import Skeleton from 'react-loading-skeleton'
 
 import { Container } from './styles'

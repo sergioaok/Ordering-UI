@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import Skeleton from 'react-loading-skeleton'
-import { BusinessTypeFilter as BusinessTypeFilterController, useLanguage } from 'ordering-components'
+import { BusinessTypeFilter as BusinessTypeFilterController } from 'ordering-components/_modules/components'
+import { useLanguage } from 'ordering-components/_modules/contexts'
 
 import { Tabs, Tab } from '../../styles/Tabs'
 
