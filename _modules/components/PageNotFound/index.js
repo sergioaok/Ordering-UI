@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.PageNotFound = void 0;
+exports.default = exports.PageNotFound = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
@@ -77,3 +77,5 @@ var PageNotFound = function PageNotFound(props) {
 };
 
 exports.PageNotFound = PageNotFound;
+var _default = PageNotFound;
+exports.default = _default;

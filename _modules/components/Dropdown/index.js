@@ -5,7 +5,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.DropdownItem = exports.DropDownMenu = exports.DropdownToggle = exports.Dropdown = void 0;
+exports.default = exports.DropdownItem = exports.DropDownMenu = exports.DropdownToggle = exports.Dropdown = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
@@ -167,3 +167,5 @@ var DropdownItem = function DropdownItem(props) {
 
 exports.DropdownItem = DropdownItem;
 DropDownMenu.DropdownItem = 'DropdownItem';
+var _default = Dropdown;
+exports.default = _default;

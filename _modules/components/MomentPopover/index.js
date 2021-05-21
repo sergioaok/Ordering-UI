@@ -5,7 +5,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.MomentPopover = void 0;
+exports.default = exports.MomentPopover = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
@@ -168,3 +168,5 @@ var MomentPopover = function MomentPopover(props) {
 };
 
 exports.MomentPopover = MomentPopover;
+var _default = MomentPopover;
+exports.default = _default;

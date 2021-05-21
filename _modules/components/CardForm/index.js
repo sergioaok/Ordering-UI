@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.CardForm = void 0;
+exports.default = exports.CardForm = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
@@ -111,3 +111,5 @@ var CardForm = function CardForm(props) {
 };
 
 exports.CardForm = CardForm;
+var _default = CardForm;
+exports.default = _default;

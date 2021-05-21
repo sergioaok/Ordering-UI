@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.FacebookLoginButton = void 0;
+exports.default = exports.FacebookLoginButton = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
@@ -59,3 +59,5 @@ var FacebookLoginButton = function FacebookLoginButton(props) {
 };
 
 exports.FacebookLoginButton = FacebookLoginButton;
+var _default = FacebookLoginButton;
+exports.default = _default;

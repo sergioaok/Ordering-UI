@@ -5,7 +5,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.PaymentOptionCash = void 0;
+exports.default = exports.PaymentOptionCash = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
@@ -96,3 +96,5 @@ var PaymentOptionCash = function PaymentOptionCash(props) {
 };
 
 exports.PaymentOptionCash = PaymentOptionCash;
+var _default = PaymentOptionCash;
+exports.default = _default;

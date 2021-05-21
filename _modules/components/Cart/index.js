@@ -5,7 +5,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Cart = void 0;
+exports.default = exports.Cart = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
@@ -326,3 +326,5 @@ var Cart = function Cart(props) {
 };
 
 exports.Cart = Cart;
+var _default = Cart;
+exports.default = _default;

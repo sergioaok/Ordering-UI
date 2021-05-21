@@ -5,7 +5,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Image = void 0;
+exports.default = exports.Image = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
@@ -79,3 +79,5 @@ var Image = /*#__PURE__*/_react.default.forwardRef(function (props, ref) {
 });
 
 exports.Image = Image;
+var _default = Image;
+exports.default = _default;

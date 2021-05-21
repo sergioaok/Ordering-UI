@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.MyOrders = void 0;
+exports.default = exports.MyOrders = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
@@ -45,3 +45,5 @@ var MyOrders = function MyOrders(props) {
 };
 
 exports.MyOrders = MyOrders;
+var _default = MyOrders;
+exports.default = _default;

@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.HorizontalOrdersLayout = void 0;
+exports.default = exports.HorizontalOrdersLayout = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
@@ -181,3 +181,5 @@ var HorizontalOrdersLayout = function HorizontalOrdersLayout(props) {
 };
 
 exports.HorizontalOrdersLayout = HorizontalOrdersLayout;
+var _default = HorizontalOrdersLayout;
+exports.default = _default;

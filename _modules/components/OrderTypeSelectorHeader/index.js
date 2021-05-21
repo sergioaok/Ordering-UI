@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.OrderTypeSelectorHeader = void 0;
+exports.default = exports.OrderTypeSelectorHeader = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
@@ -97,3 +97,5 @@ var OrderTypeSelectorHeader = /*#__PURE__*/_react.default.memo(function (props) 
 });
 
 exports.OrderTypeSelectorHeader = OrderTypeSelectorHeader;
+var _default = OrderTypeSelectorHeader;
+exports.default = _default;

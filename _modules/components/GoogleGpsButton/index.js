@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.GoogleGpsButton = void 0;
+exports.default = exports.GoogleGpsButton = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
@@ -43,3 +43,5 @@ var GoogleGpsButton = function GoogleGpsButton(props) {
 };
 
 exports.GoogleGpsButton = GoogleGpsButton;
+var _default = GoogleGpsButton;
+exports.default = _default;

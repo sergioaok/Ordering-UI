@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.HeaderOption = void 0;
+exports.default = exports.HeaderOption = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
@@ -87,3 +87,5 @@ var HeaderOption = function HeaderOption(props) {
 };
 
 exports.HeaderOption = HeaderOption;
+var _default = HeaderOption;
+exports.default = _default;

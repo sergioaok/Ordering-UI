@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.MomentControl = void 0;
+exports.default = exports.MomentControl = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
@@ -142,3 +142,5 @@ var MomentControl = function MomentControl(props) {
 };
 
 exports.MomentControl = MomentControl;
+var _default = MomentControl;
+exports.default = _default;

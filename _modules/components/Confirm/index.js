@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Alert = exports.Confirm = void 0;
+exports.default = exports.Alert = exports.Confirm = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
@@ -130,3 +130,5 @@ var Confirm = function Confirm(props) {
 exports.Confirm = Confirm;
 var Alert = Confirm;
 exports.Alert = Alert;
+var _default = Alert;
+exports.default = _default;

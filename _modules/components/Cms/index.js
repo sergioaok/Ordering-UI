@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Cms = void 0;
+exports.default = exports.Cms = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
@@ -107,3 +107,5 @@ var Cms = function Cms(props) {
 };
 
 exports.Cms = Cms;
+var _default = Cms;
+exports.default = _default;

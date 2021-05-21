@@ -5,7 +5,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.ResetPassword = void 0;
+exports.default = exports.ResetPassword = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
@@ -276,3 +276,5 @@ var ResetPassword = function ResetPassword(props) {
 };
 
 exports.ResetPassword = ResetPassword;
+var _default = ResetPassword;
+exports.default = _default;

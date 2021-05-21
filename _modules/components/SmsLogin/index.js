@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.SmsLoginButton = void 0;
+exports.default = exports.SmsLoginButton = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
@@ -59,3 +59,5 @@ var SmsLoginButton = function SmsLoginButton(props) {
 };
 
 exports.SmsLoginButton = SmsLoginButton;
+var _default = SmsLoginButton;
+exports.default = _default;

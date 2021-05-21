@@ -5,7 +5,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Footer = void 0;
+exports.default = exports.Footer = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -138,3 +138,5 @@ var Footer = function Footer() {
 };
 
 exports.Footer = Footer;
+var _default = Footer;
+exports.default = _default;

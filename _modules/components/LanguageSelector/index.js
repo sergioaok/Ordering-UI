@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.LanguageSelector = void 0;
+exports.default = exports.LanguageSelector = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
@@ -56,3 +56,5 @@ var LanguageSelector = function LanguageSelector(props) {
 };
 
 exports.LanguageSelector = LanguageSelector;
+var _default = LanguageSelector;
+exports.default = _default;

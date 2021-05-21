@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.BusinessesMap = void 0;
+exports.default = exports.BusinessesMap = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
@@ -103,3 +103,5 @@ var BusinessesMap = function BusinessesMap(props) {
 };
 
 exports.BusinessesMap = BusinessesMap;
+var _default = BusinessesMap;
+exports.default = _default;

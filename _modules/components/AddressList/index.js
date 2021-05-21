@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.AddressList = void 0;
+exports.default = exports.AddressList = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
@@ -387,3 +387,5 @@ var AddressList = function AddressList(props) {
 };
 
 exports.AddressList = AddressList;
+var _default = AddressList;
+exports.default = _default;

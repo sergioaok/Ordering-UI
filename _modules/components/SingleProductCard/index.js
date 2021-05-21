@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.SingleProductCard = void 0;
+exports.default = exports.SingleProductCard = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
@@ -115,3 +115,5 @@ var SingleProductCard = function SingleProductCard(props) {
 };
 
 exports.SingleProductCard = SingleProductCard;
+var _default = SingleProductCard;
+exports.default = _default;

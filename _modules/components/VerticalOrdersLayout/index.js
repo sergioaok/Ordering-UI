@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.VerticalOrdersLayout = void 0;
+exports.default = exports.VerticalOrdersLayout = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
@@ -112,3 +112,5 @@ var VerticalOrdersLayout = function VerticalOrdersLayout(props) {
 };
 
 exports.VerticalOrdersLayout = VerticalOrdersLayout;
+var _default = VerticalOrdersLayout;
+exports.default = _default;

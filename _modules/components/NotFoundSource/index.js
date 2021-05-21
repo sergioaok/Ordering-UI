@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.NotFoundSource = void 0;
+exports.default = exports.NotFoundSource = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
@@ -61,3 +61,5 @@ var NotFoundSource = function NotFoundSource(props) {
 };
 
 exports.NotFoundSource = NotFoundSource;
+var _default = NotFoundSource;
+exports.default = _default;

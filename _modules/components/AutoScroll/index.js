@@ -5,7 +5,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.AutoScroll = void 0;
+exports.default = exports.AutoScroll = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
@@ -143,3 +143,5 @@ var AutoScroll = function AutoScroll(_ref) {
 };
 
 exports.AutoScroll = AutoScroll;
+var _default = AutoScroll;
+exports.default = _default;

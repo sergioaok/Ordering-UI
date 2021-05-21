@@ -5,7 +5,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.UpsellingPage = void 0;
+exports.default = exports.UpsellingPage = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
@@ -195,3 +195,5 @@ var UpsellingPage = function UpsellingPage(props) {
 };
 
 exports.UpsellingPage = UpsellingPage;
+var _default = UpsellingPage;
+exports.default = _default;

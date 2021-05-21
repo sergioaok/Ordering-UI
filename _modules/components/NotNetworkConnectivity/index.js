@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.NotNetworkConnectivity = void 0;
+exports.default = exports.NotNetworkConnectivity = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
@@ -52,3 +52,5 @@ var NotNetworkConnectivity = function NotNetworkConnectivity(props) {
 };
 
 exports.NotNetworkConnectivity = NotNetworkConnectivity;
+var _default = NotNetworkConnectivity;
+exports.default = _default;

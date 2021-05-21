@@ -5,7 +5,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.PhoneAutocomplete = void 0;
+exports.default = exports.PhoneAutocomplete = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
@@ -249,3 +249,5 @@ var PhoneAutocomplete = function PhoneAutocomplete(props) {
 };
 
 exports.PhoneAutocomplete = PhoneAutocomplete;
+var _default = PhoneAutocomplete;
+exports.default = _default;

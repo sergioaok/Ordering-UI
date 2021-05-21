@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.BusinessReviews = exports.BusinessReviewsUI = void 0;
+exports.default = exports.BusinessReviews = exports.BusinessReviewsUI = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
@@ -196,3 +196,5 @@ var BusinessReviews = function BusinessReviews(props) {
 };
 
 exports.BusinessReviews = BusinessReviews;
+var _default = BusinessReviews;
+exports.default = _default;

@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.FloatingButton = void 0;
+exports.default = exports.FloatingButton = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
@@ -63,3 +63,5 @@ var FloatingButton = function FloatingButton(props) {
 };
 
 exports.FloatingButton = FloatingButton;
+var _default = FloatingButton;
+exports.default = _default;

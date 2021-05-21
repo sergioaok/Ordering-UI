@@ -5,7 +5,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.AppleLogin = void 0;
+exports.default = exports.AppleLogin = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
@@ -94,3 +94,5 @@ var AppleLogin = function AppleLogin(props) {
 };
 
 exports.AppleLogin = AppleLogin;
+var _default = AppleLogin;
+exports.default = _default;

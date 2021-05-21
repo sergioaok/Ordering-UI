@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.BusinessBasicInformation = void 0;
+exports.default = exports.BusinessBasicInformation = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
@@ -153,3 +153,5 @@ var BusinessBasicInformation = function BusinessBasicInformation(props) {
 };
 
 exports.BusinessBasicInformation = BusinessBasicInformation;
+var _default = BusinessBasicInformation;
+exports.default = _default;

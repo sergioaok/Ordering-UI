@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.ProductIngredient = void 0;
+exports.default = exports.ProductIngredient = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
@@ -65,3 +65,5 @@ var ProductIngredient = function ProductIngredient(props) {
 };
 
 exports.ProductIngredient = ProductIngredient;
+var _default = ProductIngredient;
+exports.default = _default;

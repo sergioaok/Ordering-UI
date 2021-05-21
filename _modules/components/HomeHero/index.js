@@ -5,7 +5,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.HomeHero = void 0;
+exports.default = exports.HomeHero = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
@@ -197,3 +197,5 @@ var HomeHero = function HomeHero(props) {
 };
 
 exports.HomeHero = HomeHero;
+var _default = HomeHero;
+exports.default = _default;

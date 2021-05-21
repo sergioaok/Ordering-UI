@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.StripeRedirectForm = void 0;
+exports.default = exports.StripeRedirectForm = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
@@ -124,3 +124,5 @@ var StripeRedirectForm = function StripeRedirectForm(props) {
 };
 
 exports.StripeRedirectForm = StripeRedirectForm;
+var _default = StripeRedirectForm;
+exports.default = _default;

@@ -5,7 +5,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.UserPopover = void 0;
+exports.default = exports.UserPopover = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
@@ -250,3 +250,6 @@ var PopoverListItemLogout = function PopoverListItemLogout(props) {
   };
   return /*#__PURE__*/_react.default.createElement(_components.LogoutAction, logoutActionProps);
 };
+
+var _default = UserPopover;
+exports.default = _default;

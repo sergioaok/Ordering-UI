@@ -5,7 +5,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.AddressesPopover = void 0;
+exports.default = exports.AddressesPopover = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
@@ -198,3 +198,5 @@ var AddressesPopover = function AddressesPopover(props) {
 };
 
 exports.AddressesPopover = AddressesPopover;
+var _default = AddressesPopover;
+exports.default = _default;

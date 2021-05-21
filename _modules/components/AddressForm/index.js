@@ -5,7 +5,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.AddressForm = void 0;
+exports.default = exports.AddressForm = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -733,3 +733,5 @@ var AddressForm = function AddressForm(props) {
 };
 
 exports.AddressForm = AddressForm;
+var _default = AddressFormUI;
+exports.default = _default;

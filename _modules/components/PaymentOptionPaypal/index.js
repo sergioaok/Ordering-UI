@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.PaymentOptionPaypal = void 0;
+exports.default = exports.PaymentOptionPaypal = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
@@ -61,3 +61,5 @@ var PaymentOptionPaypal = function PaymentOptionPaypal(props) {
 };
 
 exports.PaymentOptionPaypal = PaymentOptionPaypal;
+var _default = PaymentOptionPaypal;
+exports.default = _default;

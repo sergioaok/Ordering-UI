@@ -5,7 +5,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.SearchBar = void 0;
+exports.default = exports.SearchBar = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
@@ -120,3 +120,5 @@ var SearchBar = function SearchBar(props) {
 };
 
 exports.SearchBar = SearchBar;
+var _default = SearchBar;
+exports.default = _default;

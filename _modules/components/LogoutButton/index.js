@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.LogoutButton = void 0;
+exports.default = exports.LogoutButton = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
@@ -73,3 +73,5 @@ var LogoutButton = function LogoutButton(props) {
 };
 
 exports.LogoutButton = LogoutButton;
+var _default = LogoutButton;
+exports.default = _default;

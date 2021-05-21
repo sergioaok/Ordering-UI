@@ -5,7 +5,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.InputPhoneNumber = void 0;
+exports.default = exports.InputPhoneNumber = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
@@ -102,3 +102,5 @@ var InputPhoneNumber = function InputPhoneNumber(props) {
 };
 
 exports.InputPhoneNumber = InputPhoneNumber;
+var _default = InputPhoneNumber;
+exports.default = _default;

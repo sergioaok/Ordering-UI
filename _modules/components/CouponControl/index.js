@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.CouponControl = void 0;
+exports.default = exports.CouponControl = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
@@ -139,3 +139,5 @@ var CouponControl = function CouponControl(props) {
 };
 
 exports.CouponControl = CouponControl;
+var _default = CouponControl;
+exports.default = _default;

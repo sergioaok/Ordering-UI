@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.SpinnerLoader = void 0;
+exports.default = exports.SpinnerLoader = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
@@ -31,3 +31,5 @@ var SpinnerLoader = function SpinnerLoader(props) {
 };
 
 exports.SpinnerLoader = SpinnerLoader;
+var _default = SpinnerLoader;
+exports.default = _default;
