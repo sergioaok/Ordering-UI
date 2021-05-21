@@ -186,3 +186,5 @@ export const PaymentOptionStripe = (props) => {
     <PaymentOptionStripeController {...paymentOptionStripeProps} />
   )
 }
+
+export default PaymentOptionStripe

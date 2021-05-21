@@ -174,3 +174,5 @@ export const BusinessProductsList = (props) => {
     <ProductsList {...businessProductsListProps} />
   )
 }
+
+export default BusinessProductsList

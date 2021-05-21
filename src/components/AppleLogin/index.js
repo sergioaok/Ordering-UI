@@ -47,3 +47,6 @@ export const AppleLogin = (props) => {
   }
   return <AppleLoginController {...propss} />
 }
+
+
+export default AppleLogin

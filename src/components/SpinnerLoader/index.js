@@ -32,3 +32,5 @@ export const SpinnerLoader = (props) => {
     </Container>
   )
 }
+
+export default SpinnerLoader

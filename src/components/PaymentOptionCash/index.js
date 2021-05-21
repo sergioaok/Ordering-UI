@@ -73,3 +73,5 @@ export const PaymentOptionCash = (props) => {
     </>
   )
 }
+
+export default PaymentOptionCash

@@ -31,3 +31,5 @@ export const PagesList = ({ routes }) => {
     </PagesListContainer>
   )
 }
+
+export default PagesList

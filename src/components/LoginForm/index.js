@@ -480,3 +480,5 @@ export const LoginForm = (props) => {
   }
   return <LoginFormController {...loginControllerProps} />
 }
+
+export default LoginForm

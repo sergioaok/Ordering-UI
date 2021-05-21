@@ -110,3 +110,5 @@ export const UserDetails = (props) => {
 
   return <UserFormController {...userDetailsProps} />
 }
+
+export default UserDetails

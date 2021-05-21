@@ -395,3 +395,5 @@ export const SignUpForm = (props) => {
   }
   return <SignUpController {...loginControllerProps} />
 }
+
+export default SignUpForm

@@ -60,3 +60,5 @@ export const StripeElementsForm = (props) => {
   }
   return <StripeElementsFormController {...stripeElementsFormProps} />
 }
+
+export default StripeElementsForm

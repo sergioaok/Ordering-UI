@@ -82,3 +82,5 @@ export const CartContent = (props) => {
     </>
   )
 }
+
+export default CartContent

@@ -185,3 +185,5 @@ export const ForgotPasswordForm = (props) => {
   }
   return <ForgotPasswordController {...ForgotPasswordProps} />
 }
+
+export default ForgotPasswordForm

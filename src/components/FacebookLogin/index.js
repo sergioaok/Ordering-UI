@@ -26,3 +26,5 @@ export const FacebookLoginButton = (props) => {
   }
   return <FacebookLoginController {...facebookLoginProps} />
 }
+
+export default FacebookLoginButton 

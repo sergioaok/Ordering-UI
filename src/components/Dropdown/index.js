@@ -109,3 +109,5 @@ export const DropdownItem = (props) => {
 }
 
 DropDownMenu.DropdownItem = 'DropdownItem'
+
+export default Dropdown

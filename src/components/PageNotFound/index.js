@@ -43,3 +43,5 @@ export const PageNotFound = (props) => {
     </>
   )
 }
+
+export default PageNotFound

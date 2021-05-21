@@ -410,3 +410,5 @@ export const ProductForm = (props) => {
     <ProductOptions {...productOptionsProps} />
   )
 }
+
+export default ProductForm

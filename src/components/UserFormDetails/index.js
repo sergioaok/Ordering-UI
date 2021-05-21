@@ -365,3 +365,5 @@ export const UserFormDetailsUI = (props) => {
     </>
   )
 }
+
+export default UserFormDetailsUI

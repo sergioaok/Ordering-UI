@@ -157,3 +157,5 @@ export const ProductOptionSubOption = (props) => {
     <ProductSubOptionController {...productOptionSubOptionProps} />
   )
 }
+
+export default ProductOptionSubOption

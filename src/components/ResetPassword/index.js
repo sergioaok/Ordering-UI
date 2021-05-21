@@ -247,3 +247,5 @@ export const ResetPassword = (props) => {
 
   return <ResetPasswordController {...resetPasswordProps} />
 }
+
+export default ResetPassword

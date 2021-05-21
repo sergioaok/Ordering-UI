@@ -123,3 +123,5 @@ export const HomeHero = (props) => {
     </>
   )
 }
+
+export default HomeHero

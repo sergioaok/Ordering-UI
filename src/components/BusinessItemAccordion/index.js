@@ -214,3 +214,5 @@ export const BusinessItemAccordion = (props) => {
     </>
   )
 }
+
+export default BusinessItemAccordion

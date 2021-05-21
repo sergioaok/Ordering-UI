@@ -292,3 +292,5 @@ export const ProductItemAccordion = (props) => {
     </>
   )
 }
+
+export default ProductItemAccordion

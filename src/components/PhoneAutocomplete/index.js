@@ -198,3 +198,5 @@ export const PhoneAutocomplete = (props) => {
 
   return <PhoneAutocompleteController {...phoneProps} />
 }
+
+export default PhoneAutocomplete

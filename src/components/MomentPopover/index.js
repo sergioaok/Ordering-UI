@@ -96,3 +96,5 @@ export const MomentPopover = (props) => {
     </div>
   )
 }
+
+export default MomentPopover

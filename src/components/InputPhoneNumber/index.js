@@ -68,3 +68,5 @@ export const InputPhoneNumber = (props) => {
     </Container>
   )
 }
+
+export default InputPhoneNumber

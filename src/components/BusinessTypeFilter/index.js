@@ -106,3 +106,5 @@ export const BusinessTypeFilter = (props) => {
     <BusinessTypeFilterController {...businessTypeFilterProps} />
   )
 }
+
+export default BusinessTypeFilter

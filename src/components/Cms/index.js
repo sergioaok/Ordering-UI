@@ -79,3 +79,5 @@ export const Cms = (props) => {
   }
   return <CmsContent {...CmsProps} />
 }
+
+export default Cms

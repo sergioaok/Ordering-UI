@@ -64,3 +64,5 @@ export const MomentContent = (props) => {
     </>
   )
 }
+
+export default MomentContent

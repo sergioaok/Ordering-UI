@@ -108,3 +108,5 @@ export const CartPopover = (props) => {
     </>
   )
 }
+
+export default CartPopover

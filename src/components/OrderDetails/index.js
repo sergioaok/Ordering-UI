@@ -537,3 +537,5 @@ export const OrderDetails = (props) => {
     <OrderDetailsController {...orderDetailsProps} />
   )
 }
+
+export default OrderDetails

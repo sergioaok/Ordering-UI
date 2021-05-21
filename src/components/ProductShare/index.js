@@ -96,3 +96,5 @@ export const ProductShare = (props) => {
     <ProductShareController {...productShareProps} />
   )
 }
+
+export default ProductShare

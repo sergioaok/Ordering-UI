@@ -111,3 +111,5 @@ export const AddressDetails = (props) => {
     <AddressDetailsController {...addressDetailsProps} />
   )
 }
+
+export default AddressDetails

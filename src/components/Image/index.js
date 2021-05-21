@@ -39,3 +39,5 @@ export const Image = React.forwardRef((props, ref) => {
     </>
   )
 })
+
+export default Image

@@ -64,3 +64,5 @@ export const BusinessesMap = (props) => {
   }
   return <BusinessesMapController {...businessMapController} />
 }
+
+export default BusinessesMap

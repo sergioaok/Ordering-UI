@@ -288,3 +288,5 @@ export const BusinessesListing = (props) => {
 
   return <BusinessListController {...businessListingProps} />
 }
+
+export default BusinessesListing

@@ -120,3 +120,5 @@ export const DriverTips = (props) => {
 
   return <DriverTipsController {...driverTipsProps} />
 }
+
+export default DriverTips

@@ -234,3 +234,5 @@ export const OrdersOption = (props) => {
     <OrderList {...orderListProps} />
   )
 }
+
+export default OrdersOption

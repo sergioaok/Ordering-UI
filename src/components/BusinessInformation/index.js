@@ -360,3 +360,5 @@ export const BusinessInformation = (props) => {
   }
   return <BusinessInformationController {...BusinessInformationProps} />
 }
+
+export default BusinessInformation

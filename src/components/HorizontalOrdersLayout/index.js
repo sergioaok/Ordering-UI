@@ -175,3 +175,5 @@ export const HorizontalOrdersLayout = (props) => {
     </OrdersContainer>
   )
 }
+
+export default HorizontalOrdersLayout

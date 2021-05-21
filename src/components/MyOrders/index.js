@@ -31,3 +31,5 @@ export const MyOrders = (props) => {
     </>
   )
 }
+
+export default MyOrders

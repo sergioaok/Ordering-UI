@@ -70,3 +70,5 @@ export const OrderTypeSelectorHeader = React.memo((props) => {
 
   return <OrderTypeControl {...orderTypeProps} />
 })
+
+export default OrderTypeSelectorHeader

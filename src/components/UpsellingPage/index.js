@@ -149,3 +149,5 @@ export const UpsellingPage = (props) => {
 
   return <UpsellingPageController {...UpsellingPageProps} />
 }
+
+export default UpsellingPage

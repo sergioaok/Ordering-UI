@@ -341,3 +341,5 @@ export const AddressList = (props) => {
 
   return <AddressListController {...addressListProps} />
 }
+
+export default AddressList

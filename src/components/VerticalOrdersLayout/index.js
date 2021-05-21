@@ -98,3 +98,5 @@ export const VerticalOrdersLayout = (props) => {
     </>
   )
 }
+
+export default VerticalOrdersLayout

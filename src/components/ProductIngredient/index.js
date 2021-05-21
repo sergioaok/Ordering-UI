@@ -56,3 +56,5 @@ export const ProductIngredient = (props) => {
     <ProductIngredientController {...productIngredientProps} />
   )
 }
+
+export default ProductIngredient

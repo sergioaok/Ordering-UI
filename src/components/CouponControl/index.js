@@ -107,3 +107,5 @@ export const CouponControl = (props) => {
     <CouponController {...couponProp} />
   )
 }
+
+export default CouponControl

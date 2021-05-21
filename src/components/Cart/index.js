@@ -322,3 +322,5 @@ export const Cart = (props) => {
     <CartController {...cartProps} />
   )
 }
+
+export default Cart

@@ -171,3 +171,5 @@ export const BusinessController = (props) => {
     <BusinessSingleCard {...businessControllerProps} />
   )
 }
+
+export default BusinessController

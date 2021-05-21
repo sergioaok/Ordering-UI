@@ -66,3 +66,5 @@ export const HeaderOption = (props) => {
     </>
   )
 }
+
+export default HeaderOption

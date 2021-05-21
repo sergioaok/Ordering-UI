@@ -211,3 +211,5 @@ export const UserProfileForm = (props) => {
     <UserProfileController {...UserProfileProps} />
   )
 }
+
+export default UserProfileForm

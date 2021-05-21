@@ -548,3 +548,5 @@ export const AddressForm = (props) => {
 
   return <AddressFormController {...addressFormProps} />
 }
+
+export default AddressFormUI

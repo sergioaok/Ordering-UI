@@ -293,3 +293,5 @@ export const PaymentOptions = (props) => {
     <PaymentOptionsController {...paymentOptions} />
   )
 }
+
+export default PaymentOptions

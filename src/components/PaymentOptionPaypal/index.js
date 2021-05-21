@@ -56,3 +56,5 @@ export const PaymentOptionPaypal = (props) => {
     <PaymentPaypalController {...paymentPaypalProps} />
   )
 }
+
+export default PaymentOptionPaypal

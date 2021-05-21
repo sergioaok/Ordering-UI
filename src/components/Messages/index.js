@@ -488,3 +488,5 @@ export const Messages = (props) => {
   }
   return <MessagesController {...MessagesProps} />
 }
+
+export default Messages

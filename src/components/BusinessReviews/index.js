@@ -141,3 +141,5 @@ export const BusinessReviews = (props) => {
   }
   return <BusinessReviewController {...BusinessReviewProps} />
 }
+
+export default BusinessReviews

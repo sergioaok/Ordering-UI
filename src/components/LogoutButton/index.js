@@ -60,3 +60,5 @@ export const LogoutButton = (props) => {
     <LogoutAction {...logoutButtonProps} />
   )
 }
+
+export default LogoutButton

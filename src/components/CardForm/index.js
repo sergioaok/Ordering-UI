@@ -88,3 +88,5 @@ export const CardForm = (props) => {
   }
   return <CardFormController {...cardFormProps} />
 }
+
+export default CardForm

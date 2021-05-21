@@ -102,3 +102,5 @@ export const Confirm = (props) => {
 }
 
 export const Alert = Confirm
+
+export default Alert

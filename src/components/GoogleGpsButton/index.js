@@ -37,3 +37,5 @@ export const GoogleGpsButton = (props) => {
     <GpsButton {...gpsButtonProps} />
   )
 }
+
+export default GoogleGpsButton

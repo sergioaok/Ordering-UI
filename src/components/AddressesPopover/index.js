@@ -133,3 +133,6 @@ export const AddressesPopover = (props) => {
     </div>
   )
 }
+
+
+export default AddressesPopover

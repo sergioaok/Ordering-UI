@@ -60,3 +60,5 @@ export const FloatingButton = (props) => {
     <FloatingButtonController {...floatingButtonProps} />
   )
 }
+
+export default FloatingButton

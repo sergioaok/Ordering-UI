@@ -177,3 +177,5 @@ const PopoverListItemLogout = (props) => {
     <LogoutActionController {...logoutActionProps} />
   )
 }
+
+export default UserPopover

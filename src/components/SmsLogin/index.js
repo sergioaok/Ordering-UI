@@ -26,3 +26,5 @@ export const SmsLoginButton = (props) => {
   }
   return <LoginFormController {...smsLoginProps} />
 }
+
+export default SmsLoginButton

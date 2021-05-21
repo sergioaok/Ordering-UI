@@ -86,3 +86,5 @@ export const SingleProductCard = (props) => {
     </>
   )
 }
+
+export default SingleProductCard

@@ -88,3 +88,5 @@ export const AutoScroll = ({ children, modal, special }) => {
 
   )
 }
+
+export default AutoScroll

@@ -168,3 +168,5 @@ export const BusinessBasicInformation = (props) => {
     </>
   )
 }
+
+export default BusinessBasicInformation

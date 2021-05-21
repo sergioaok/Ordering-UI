@@ -64,3 +64,5 @@ export const NotFoundSource = (props) => {
     </>
   )
 }
+
+export default NotFoundSource

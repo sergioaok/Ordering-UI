@@ -86,3 +86,5 @@ export const BusinessProductsCategories = (props) => {
     <ProductsCategories {...businessProductsCategoriesProps} />
   )
 }
+
+export default BusinessProductsCategories

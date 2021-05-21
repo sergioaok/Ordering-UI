@@ -110,3 +110,5 @@ export const MomentControl = (props) => {
   }
   return <MomentOption {...momentProps} />
 }
+
+export default MomentControl

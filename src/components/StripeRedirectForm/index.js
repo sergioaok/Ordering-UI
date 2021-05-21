@@ -109,3 +109,5 @@ export const StripeRedirectForm = (props) => {
   }
   return <StripeRedirectFormController {...stripeRedirectFormProps} />
 }
+
+export default StripeRedirectForm
