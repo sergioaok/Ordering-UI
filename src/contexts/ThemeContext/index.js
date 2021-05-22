@@ -123,3 +123,5 @@ export const useTheme = () => {
   const themeManager = useContext(ThemeContext)
   return themeManager || [{}]
 }
+
+export default ThemeContext
