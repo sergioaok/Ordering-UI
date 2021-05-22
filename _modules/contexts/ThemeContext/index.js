@@ -120,5 +120,5 @@ var useTheme = function useTheme() {
 };
 
 exports.useTheme = useTheme;
-var _default = ThemeContext;
+var _default = ThemeProvider;
 exports.default = _default;
