@@ -5,7 +5,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.useTheme = exports.ThemeProvider = exports.ThemeContext = void 0;
+exports.default = exports.useTheme = exports.ThemeProvider = exports.ThemeContext = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
@@ -120,3 +120,5 @@ var useTheme = function useTheme() {
 };
 
 exports.useTheme = useTheme;
+var _default = ThemeContext;
+exports.default = _default;
