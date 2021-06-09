@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 export const HeaderItem = styled.div`
   cursor: pointer;
-  color: ${props => props.theme.colors.primary};
+  color: ${props => props.isHome && props.auth ? '#FFF' : props.theme.colors.primary};
   display: flex;
   align-items: center;
   font-weight: 500;
@@ -20,8 +20,8 @@ export const PopoverBody = styled.div`
 `
 
 export const PopoverArrow = styled.div`
-  width: 0; 
-  height: 0; 
+  width: 0;
+  height: 0;
   border-left: 7px solid transparent;
   border-right: 7px solid transparent;
   border-bottom: 8px solid #FFF;

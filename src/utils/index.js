@@ -16,8 +16,6 @@ export const getIconCard = (brand = '') => {
   }
 }
 
-export const DriverTipsOptions = [0, 10, 15, 20, 25]
-
 /**
  * Function to calculate time to scroll element
  * @param {*} t = current time
@@ -88,7 +86,9 @@ export const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1)
  * Function to return a static google maps image based in location
  * @param {object} param object with latitude and logitude
  */
-export const getGoogleMapImage = ({ lat, lng }, apiKey) => {
+export const getGoogleMapImage = (location, apiKey) => {
+  const lat = location?.lat
+  const lng = location?.lng
   return `https://maps.googleapis.com/maps/api/staticmap?size=500x190&center=${lat},${lng}&zoom=17&scale=2&maptype=roadmap&&markers=icon:https://res.cloudinary.com/ditpjbrmz/image/upload/f_auto,q_auto,w_45,q_auto:best,q_auto:best/v1564675872/marker-customer_kvxric.png%7Ccolor:white%7C${lat},${lng}&key=${apiKey}`
 }
 
@@ -115,7 +115,10 @@ export const getTraduction = key => {
     INTERNAL_ERROR: 'Server Error, please wait, we are working to fix it',
     PREPARED_IN: 'Preparation time',
     DELIVERY_DATETIME: 'Delivery datetime',
-    ERROR_MISSING_PAYMETHOD_HOOK: 'Missing payment method hook'
+    ERROR_MISSING_PAYMETHOD_HOOK: 'Missing payment method hook',
+    INVALID_CODE: 'Invalid verify code',
+    ERROR_YOU_HAVE_NOT_CART: 'Cart not found',
+    ERROR_PLACE_PAY_WITH_REDIRECT: 'An error occurred while trying to pay by redirect'
   }
 
   return keyList[key] ? t(key, keyList[key]) : t(key)
@@ -149,27 +152,60 @@ export const getHourMin = (hour, min) => {
 /**
  * List of fields with correct order
  */
- export const fieldsToSort = ['name', 'middle_name', 'lastname', 'second_lastname', 'email'];
- /**
+export const fieldsToSort = ['name', 'middle_name', 'lastname', 'second_lastname', 'email']
+/**
   * Function to return a array sorted by certain fields
   * @param fields Array with right order
   * @param array Array to sort
   */
- export const sortInputFields = ({ fields, values }) => {
-   let fieldsBase = fields;
-   const fieldsSorted = [];
-   const fieldsArray = Array.isArray(values) ? values : Object.values(values);
+export const sortInputFields = ({ fields, values }) => {
+  let fieldsBase = fields
+  const fieldsSorted = []
+  const fieldsArray = Array.isArray(values) ? values : Object.values(values)
 
-   if (!fieldsBase) {
-     fieldsBase = fieldsToSort
-   }
+  if (!fieldsBase) {
+    fieldsBase = fieldsToSort
+  }
 
-   fieldsBase.forEach(f => {
-     fieldsArray.forEach(field => {
-       if (f === field.code) {
-         fieldsSorted.push(field)
-       }
-     })
-   });
-   return fieldsSorted;
- };
+  fieldsBase.forEach(f => {
+    fieldsArray.forEach(field => {
+      if (f === field.code) {
+        fieldsSorted.push(field)
+      }
+    })
+  })
+  return fieldsSorted
+}
+
+/**
+ * Function to check if a number is decimal or not
+ * @param {*} value number to check if decimal or not
+ * @param {*} parser function fallback when is decimal
+ * @returns string
+ */
+export const verifyDecimals = (value, parser) => {
+  if (value % 1 === 0) {
+    return value
+  } else {
+    return parser(value)
+  }
+}
+/**
+ * Format seconds to hh:mm:ss
+ * @param {number} seconds
+ */
+export const formatSeconds = (seconds) => {   
+ // Hours, minutes and seconds
+ var hrs = ~~(seconds / 3600);
+ var mins = ~~((seconds % 3600) / 60);
+ var secs = ~~seconds % 60;
+
+ // Output like "1:01" or "4:03:59" or "123:03:59"
+ var ret = "";
+ if (hrs > 0) {
+     ret += "" + hrs + ":" + (mins < 10 ? "0" : "");
+ }
+ ret += "" + mins + ":" + (secs < 10 ? "0" : "");
+ ret += "" + secs;
+ return ret;
+}

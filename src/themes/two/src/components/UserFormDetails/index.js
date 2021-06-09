@@ -32,7 +32,8 @@ export const UserFormDetailsUI = (props) => {
     handleChangeInput,
     handleButtonUpdateClick,
     isCheckout,
-    externalUserData
+    externalUserData,
+    closeModal
   } = props
 
   const { handleSubmit, register, errors } = useForm()
@@ -108,6 +109,7 @@ export const UserFormDetailsUI = (props) => {
           cellphone: ''
         }
       }
+      closeModal && closeModal()
       handleButtonUpdateClick(changes)
     }
   }
@@ -207,42 +209,39 @@ export const UserFormDetailsUI = (props) => {
       <FormInput onSubmit={handleSubmit(onSubmit)} isCheckout={isCheckout}>
         {!validationFields?.loading ? (
           <>
-            {!isCheckout && (
-              <>
-                {validationFieldsSorted.map(field => !notValidationFields.includes(field.code) && (
-                  showField && showField(field.code) && (
-                    <React.Fragment key={field.id}>
-                      {((field.id >= 1 && field.id < 6) || field.id >= 55) && (
-                        <InputGroup key={field.id}>
-                          <label>{t(field.code.toUpperCase(), field?.name)}</label>
-                          <Input
-                            type={(field.id >= 1 && field.id < 6) || field.id >= 55 ? field.type : 'hidden'}
-                            name={field.code}
-                            className='form'
-                            defaultValue={
+
+            {validationFieldsSorted.map(field => !notValidationFields.includes(field.code) && (
+              showField && showField(field.code) && (
+                <React.Fragment key={field.id}>
+                  {((field.id >= 1 && field.id < 6) || field.id >= 55) && (
+                    <InputGroup key={field.id}>
+                      <label>{t(field.code.toUpperCase(), field?.name)}</label>
+                      <Input
+                        type={(field.id >= 1 && field.id < 6) || field.id >= 55 ? field.type : 'hidden'}
+                        name={field.code}
+                        className='form'
+                        defaultValue={
                               formState?.result?.result
                                 ? formState?.result?.result[field.code]
                                 : formState?.changes[field.code] ?? (user && user[field.code]) ?? ''
-                            }
-                            onChange={handleChangeInput}
-                            ref={register({
-                              required: isRequiredField(field.code)
-                                ? t(`VALIDATION_ERROR_${field.code.toUpperCase()}_REQUIRED`, `${field?.name} is required`).replace('_attribute_', t(field?.name, field.code))
-                                : null,
-                              pattern: {
-                                value: field.code === 'email' ? /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i : null,
-                                message: field.code === 'email' ? t('INVALID_ERROR_EMAIL', 'Invalid email address').replace('_attribute_', t('EMAIL', 'Email')) : null
-                              }
-                            })}
-                            autoComplete='off'
-                          />
-                        </InputGroup>
-                      )}
-                    </React.Fragment>
-                  )
-                ))}
-              </>
-            )}
+                        }
+                        onChange={handleChangeInput}
+                        ref={register({
+                          required: isRequiredField(field.code)
+                            ? t(`VALIDATION_ERROR_${field.code.toUpperCase()}_REQUIRED`, `${field?.name} is required`).replace('_attribute_', t(field?.name, field.code))
+                            : null,
+                          pattern: {
+                            value: field.code === 'email' ? /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i : null,
+                            message: field.code === 'email' ? t('INVALID_ERROR_EMAIL', 'Invalid email address').replace('_attribute_', t('EMAIL', 'Email')) : null
+                          }
+                        })}
+                        autoComplete='off'
+                      />
+                    </InputGroup>
+                  )}
+                </React.Fragment>
+              )
+            ))}
 
             {!!showInputPhoneNumber && !externalUserData && (
               <InputPhoneNumber

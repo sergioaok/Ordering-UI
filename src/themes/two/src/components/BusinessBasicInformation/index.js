@@ -60,14 +60,6 @@ export const BusinessBasicInformation = (props) => {
           <BusinessDetail>
             {!loading ? (
               <>
-                <p>{t('ORDER_PASS', 'OrderPass')}</p>
-                <BsDot />
-              </>
-            ) : (
-              <Skeleton width={150} />
-            )}
-            {!loading ? (
-              <>
                 {orderState?.options.type === 1 && (
                   <>
                     <p>{parsePrice(business?.delivery_price || 0)} {t('DELIVERY', 'delivery')}</p>

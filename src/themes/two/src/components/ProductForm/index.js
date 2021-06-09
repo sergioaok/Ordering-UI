@@ -160,33 +160,33 @@ const ProductOptionsUI = (props) => {
               <WrapperIngredients isProductSoldout={isSoldOut || maxProductQuantity <= 0}>
                 {product?.ingredients.map(ingredient => (
                   <ProductIngredient
-                    key={ingredient.id}
+                    key={ingredient?.id}
                     ingredient={ingredient}
-                    state={productCart.ingredients[`id:${ingredient.id}`]}
+                    state={productCart.ingredients[`id:${ingredient?.id}`]}
                     onChange={handleChangeIngredientState}
                   />
                 ))}
               </WrapperIngredients>
               {
                 product?.extras.map(extra => extra.options.map(option => {
-                  const currentState = productCart.options[`id:${option.id}`] || {}
+                  const currentState = productCart.options[`id:${option?.id}`] || {}
                   return (
-                    <div key={option.id}>
+                    <div key={option?.id}>
                       {
                         showOption(option) && (
                           <ProductOption
                             option={option}
                             currentState={currentState}
-                            error={errors[`id:${option.id}`]}
+                            error={errors[`id:${option?.id}`]}
                           >
-                            <WrapperSubOption className={isError(option.id)}>
+                            <WrapperSubOption className={isError(option?.id)}>
                               {
                                 option.suboptions.map(suboption => {
-                                  const currentState = productCart.options[`id:${option.id}`]?.suboptions[`id:${suboption.id}`] || {}
-                                  const balance = productCart.options[`id:${option.id}`]?.balance || 0
+                                  const currentState = productCart.options[`id:${option?.id}`]?.suboptions[`id:${suboption?.id}`] || {}
+                                  const balance = productCart.options[`id:${option?.id}`]?.balance || 0
                                   return (
                                     <ProductOptionSubOption
-                                      key={suboption.id}
+                                      key={suboption?.id}
                                       onChange={handleChangeSuboptionState}
                                       balance={balance}
                                       option={option}

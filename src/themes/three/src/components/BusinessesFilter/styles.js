@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 export const Container = styled.div`
   min-width: 220px;
 `
@@ -24,46 +24,6 @@ export const SortItem = styled.div`
 
   span {
     white-space: nowrap;
-  }
-`
-export const MaxDeliveryFeeContainer = styled.div`
-`
-export const WrapStep = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-`
-export const Line = styled.div`
-  height: 3px;
-  background: ${props => props.theme.colors.primary};
-  flex: 1;
-  border-radius: 3px;
-  margin-top: 10px;
-
-  ${({ deActive }) => deActive && css`
-    background: ${props => props.theme.colors.secundary};
-  `}
-`
-export const StepValue = styled.div`
-  display: flex;
-  flex-direction: column;
-  row-gap: 15px;
-  align-items: center;
-  svg {
-    color: ${props => props.theme.colors.primary};
-    cursor: pointer;
-    font-size: 24px;
-    ${({ active }) => active && css`
-      transform: scale(2.5);
-    `}
-
-    &:hover {
-      transform: scale(2.5);
-    }
-  }
-  span {
-    font-size: 12px;
-    color: ${props => props.theme.colors?.darkTextColor};
   }
 `
 export const WrapFilterSectionTitle = styled.div`

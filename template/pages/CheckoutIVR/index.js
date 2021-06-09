@@ -1,0 +1,746 @@
+import React, { useEffect, useState } from 'react'
+import VscWarning from '@meronex/icons/vsc/VscWarning'
+import Skeleton from 'react-loading-skeleton'
+import { useTheme } from 'styled-components'
+import { useParams, useLocation } from 'react-router-dom'
+import { HelmetTags } from '../../components/HelmetTags'
+
+import {
+  Checkout as CheckoutController,
+  useOrder,
+  useSession,
+  useApi,
+  useLanguage,
+  useUtils,
+  useValidationFields,
+  useConfig,
+  useCustomer,
+  useEvent,
+} from 'ordering-components'
+import {
+  UpsellingPage,
+  AddressDetails,
+  UserDetails,
+  DriverTips,
+  Cart,
+  Alert,
+  CartContent,
+  Button,
+  NotFoundSource
+} from 'ordering-ui'
+import parsePhoneNumber from 'libphonenumber-js'
+import {PaymentOptions} from './PaymentOptions'
+
+import {
+  Container,
+  WrappContainer,
+  UserDetailsContainer,
+  BusinessDetailsContainer,
+  PaymentMethodContainer,
+  DriverTipContainer,
+  CartContainer,
+  WrapperPlaceOrderButton,
+  WarningMessage,
+  CartsList,
+  WarningText,
+  WrapperUserDetails
+} from './styles'
+
+const mapConfigs = {
+  mapZoom: 16,
+  mapSize: {
+    width: 640,
+    height: 190
+  }
+}
+
+const CheckoutUI = (props) => {
+  const {
+    cart,
+    errors,
+    placing,
+    cartState,
+    businessDetails,
+    paymethodSelected,
+    handlePaymethodChange,
+    handlerClickPlaceOrder,
+    handleOrderRedirect,
+    isCustomerMode,
+  } = props
+
+  const theme = useTheme()
+  const [validationFields] = useValidationFields()
+  const [{ options }] = useOrder()
+  const [, t] = useLanguage()
+  const [{ parsePrice }] = useUtils()
+  const [{ user }] = useSession()
+  const [{ configs }] = useConfig()
+  const [customerState] = useCustomer()
+
+  const [errorCash, setErrorCash] = useState(false)
+  const [userErrors, setUserErrors] = useState([])
+  const [alertState, setAlertState] = useState({ open: false, content: [] })
+  const [isUserDetailsEdit, setIsUserDetailsEdit] = useState(false)
+  const [isOpenIvrModal, setIsOpenIvrModal] = useState(false)
+
+  const driverTipsOptions = typeof configs?.driver_tip_options?.value === 'string'
+    ? JSON.parse(configs?.driver_tip_options?.value) || []
+    : configs?.driver_tip_options?.value || []
+
+  const handlePlaceOrder = () => {
+    if (!userErrors.length) {
+      handlerClickPlaceOrder && handlerClickPlaceOrder()
+      return
+    }
+    setAlertState({
+      open: true,
+      content: Object.values(userErrors).map(error => error)
+    })
+    setIsUserDetailsEdit(true)
+  }
+
+  const closeAlert = () => {
+    setAlertState({
+      open: false,
+      content: []
+    })
+    setIsUserDetailsEdit(false)
+  }
+
+  const checkValidationFields = () => {
+    setUserErrors([])
+    const errors = []
+    const notFields = ['coupon', 'driver_tip', 'mobile_phone', 'address', 'zipcode', 'address_notes']
+    const userSelected = isCustomerMode ? customerState.user : user
+
+    Object.values(validationFields?.fields?.checkout).map(field => {
+      if (field?.enabled && field?.required && !notFields.includes(field.code)) {
+        if (userSelected && !userSelected[field?.code]) {
+          errors.push(t(`VALIDATION_ERROR_${field.code.toUpperCase()}_REQUIRED`, `The field ${field?.name} is required`))
+        }
+      }
+    })
+
+    if (
+      userSelected &&
+      !userSelected?.cellphone &&
+      validationFields?.fields?.checkout?.cellphone?.enabled &&
+      validationFields?.fields?.checkout?.cellphone?.required
+    ) {
+      errors.push(t('VALIDATION_ERROR_MOBILE_PHONE_REQUIRED', 'The field Phone number is required'))
+    }
+
+    if (userSelected && userSelected?.cellphone) {
+      if (userSelected?.country_phone_code) {
+        let phone = null
+        phone = `+${userSelected?.country_phone_code}${userSelected?.cellphone}`
+        const phoneNumber = parsePhoneNumber(phone)
+        if (!phoneNumber?.isValid()) {
+          errors.push(t('VALIDATION_ERROR_MOBILE_PHONE_INVALID', 'The field Phone number is invalid.'))
+        }
+      } else {
+        errors.push(t('INVALID_ERROR_COUNTRY_CODE_PHONE_NUMBER', 'The country code of the phone number is invalid'))
+      }
+    }
+
+    setUserErrors(errors)
+  }
+
+  useEffect(() => {
+    if (validationFields && validationFields?.fields?.checkout) {
+      checkValidationFields()
+    }
+  }, [validationFields, user, customerState])
+
+  useEffect(() => {
+    if (errors) {
+      setAlertState({
+        open: true,
+        content: errors
+      })
+    }
+  }, [errors])
+
+  useEffect(() => {
+    const paymethods = businessDetails?.business?.paymethods || []
+    if (paymethods && paymethods.length > 1) {
+      handlePaymethodChange(null)
+    }
+  }, [cart?.total])
+
+  return (
+    <>
+      {props.beforeElements?.map((BeforeElement, i) => (
+        <React.Fragment key={i}>
+          {BeforeElement}
+        </React.Fragment>))}
+      {props.beforeComponents?.map((BeforeComponent, i) => (
+        <BeforeComponent key={i} {...props} />))}
+      <Container>
+        <WrappContainer>
+          {!cartState.loading && cart?.status === 2 && (
+            <WarningMessage>
+              <VscWarning />
+              <h1>
+                {t('CART_STATUS_PENDING_MESSAGE', 'Your order is being processed, please wait a little more. if you\'ve been waiting too long, please reload the page')}
+              </h1>
+            </WarningMessage>
+          )}
+          {props.beforeElementsSectionOne?.map((BeforeElement, i) => (
+            <React.Fragment key={i}>
+              {BeforeElement}
+            </React.Fragment>))}
+          {props.beforeComponentsSectionOne?.map((BeforeComponent, i) => (
+            <BeforeComponent key={i} {...props} />))}
+
+          {!props.isHideSectionOne && (
+            (businessDetails?.loading || cartState.loading) ? (
+              <div style={{ width: '100%', marginBottom: '20px' }}>
+                <Skeleton height={35} style={{ marginBottom: '10px' }} />
+                <Skeleton height={150} />
+              </div>
+            ) : (
+              <AddressDetails
+                location={businessDetails?.business?.location}
+                businessLogo={businessDetails?.business?.logo || theme.images?.dummies?.businessLogo}
+                isCartPending={cart?.status === 2}
+                businessId={cart?.business_id}
+                apiKey={configs?.google_maps_api_key?.value}
+                mapConfigs={mapConfigs}
+                isCustomerMode={isCustomerMode}
+              />
+            )
+          )}
+
+          {props.beforeElementsSectionTwo?.map((BeforeElement, i) => (
+            <React.Fragment key={i}>
+              {BeforeElement}
+            </React.Fragment>))}
+          {props.beforeComponentsSectionTwo?.map((BeforeComponent, i) => (
+            <BeforeComponent key={i} {...props} />))}
+
+          {!props.isHideSectionTwo && (
+            <UserDetailsContainer>
+              <WrapperUserDetails>
+                {cartState.loading || (isCustomerMode && !customerState?.user?.id) ? (
+                  <div>
+                    <Skeleton height={35} style={{ marginBottom: '10px' }} />
+                    <Skeleton height={35} style={{ marginBottom: '10px' }} />
+                    <Skeleton height={35} style={{ marginBottom: '10px' }} />
+                    <Skeleton height={35} style={{ marginBottom: '10px' }} />
+                    <Skeleton height={35} style={{ marginBottom: '10px' }} />
+                  </div>
+                ) : (
+                  <UserDetails
+                    isUserDetailsEdit={isUserDetailsEdit}
+                    cartStatus={cart?.status}
+                    businessId={cart?.business_id}
+                    useValidationFields
+                    useDefualtSessionManager
+                    useSessionUser={!isCustomerMode}
+                    isCustomerMode={isCustomerMode}
+                    userData={isCustomerMode && customerState.user}
+                    userId={isCustomerMode && customerState?.user?.id}
+                  />
+                )}
+              </WrapperUserDetails>
+            </UserDetailsContainer>
+          )}
+
+          {props.beforeElementsSectionThree?.map((BeforeElement, i) => (
+            <React.Fragment key={i}>
+              {BeforeElement}
+            </React.Fragment>))}
+          {props.beforeComponentsSectionThree?.map((BeforeComponent, i) => (
+            <BeforeComponent key={i} {...props} />))}
+
+          {!props.isHideSectionThree && (
+            <BusinessDetailsContainer>
+              {(businessDetails?.loading || cartState.loading) && !businessDetails?.error && (
+                <div>
+                  <div>
+                    <Skeleton height={35} style={{ marginBottom: '10px' }} />
+                    <Skeleton height={35} style={{ marginBottom: '10px' }} />
+                    <Skeleton height={35} style={{ marginBottom: '10px' }} />
+                    <Skeleton height={35} style={{ marginBottom: '10px' }} />
+                    <Skeleton height={35} style={{ marginBottom: '10px' }} />
+                  </div>
+                </div>
+              )}
+              {!cartState.loading && businessDetails?.business && Object.values(businessDetails?.business)?.length > 0 && (
+                <div>
+                  <h1>{t('BUSINESS_DETAILS', 'Business Details')}</h1>
+                  <div>
+                    <p><strong>{t('NAME', 'Name')}:</strong> {businessDetails?.business?.name}</p>
+                    <p><strong>{t('EMAIL', 'Email')}:</strong> {businessDetails?.business?.email}</p>
+                    <p><strong>{t('CELLPHONE', 'Cellphone')}:</strong> {businessDetails?.business?.cellphone}</p>
+                    <p><strong>{t('ADDRESS', 'Address')}:</strong> {businessDetails?.business?.address}</p>
+                  </div>
+                </div>
+              )}
+              {businessDetails?.error && businessDetails?.error?.length > 0 && (
+                <div>
+                  <h1>{t('BUSINESS_DETAILS', 'Business Details')}</h1>
+                  <NotFoundSource
+                    content={businessDetails?.error[0]?.message || businessDetails?.error[0]}
+                  />
+                </div>
+              )}
+            </BusinessDetailsContainer>
+          )}
+
+          {props.beforeElementsSectionFour?.map((BeforeElement, i) => (
+            <React.Fragment key={i}>
+              {BeforeElement}
+            </React.Fragment>))}
+          {props.beforeComponentsSectionFour?.map((BeforeComponent, i) => (
+            <BeforeComponent key={i} {...props} />))}
+
+          {!props.isHideSectionFour &&
+            !cartState.loading &&
+            cart &&
+            cart?.business_id &&
+            options.type === 1 &&
+            cart?.status !== 2 &&
+            validationFields?.fields?.checkout?.driver_tip?.enabled &&
+            driverTipsOptions.length > 0 &&
+            (
+              <DriverTipContainer>
+                <h1>{t('DRIVER_TIPS', 'Driver Tips')}</h1>
+                <DriverTips
+                  businessId={cart?.business_id}
+                  driverTipsOptions={driverTipsOptions}
+                  isFixedPrice={parseInt(configs?.driver_tip_type?.value, 10) === 1 || !!parseInt(configs?.driver_tip_use_custom?.value, 10)}
+                  isDriverTipUseCustom={!!parseInt(configs?.driver_tip_use_custom?.value, 10)}
+                  driverTip={parseInt(configs?.driver_tip_type?.value, 10) === 1 || !!parseInt(configs?.driver_tip_use_custom?.value, 10)
+                    ? cart?.driver_tip
+                    : cart?.driver_tip_rate}
+                  useOrderContext
+                />
+              </DriverTipContainer>
+            )}
+
+          {props.beforeElementsSectionFive?.map((BeforeElement, i) => (
+            <React.Fragment key={i}>
+              {BeforeElement}
+            </React.Fragment>))}
+          {props.beforeComponentsSectionFive?.map((BeforeComponent, i) => (
+            <BeforeComponent key={i} {...props} />))}
+
+          {!props.isHideSectionFive && !cartState.loading && cart && (
+            <PaymentMethodContainer>
+              <h1>{t('PAYMENT_METHODS', 'Payment Methods')}</h1>
+              {!cartState.loading && cart?.status === 4 && (
+                <WarningMessage style={{ marginTop: 20 }}>
+                  <VscWarning />
+                  <h1>
+                    {t('CART_STATUS_CANCEL_MESSAGE', 'The payment has not been successful, please try again')}
+                  </h1>
+                </WarningMessage>
+              )}
+              <PaymentOptions
+                cart={cart}
+                isDisabled={cart?.status === 2}
+                businessId={businessDetails?.business?.id}
+                isLoading={businessDetails.loading}
+                paymethods={businessDetails?.business?.paymethods}
+                onPaymentChange={handlePaymethodChange}
+                errorCash={errorCash}
+                setErrorCash={setErrorCash}
+                handleOrderRedirect={handleOrderRedirect}
+                isPaymethodNull={paymethodSelected}
+                paymethodsCallCenterCustom={['cash', 'card_delivery', 'ivr']}
+                setAlertState={setAlertState}
+                isOpenIvrModal={isOpenIvrModal}
+                setIsOpenIvrModal={setIsOpenIvrModal}
+              />
+            </PaymentMethodContainer>
+          )}
+          {props.beforeElementsSectionSix?.map((BeforeElement, i) => (
+            <React.Fragment key={i}>
+              {BeforeElement}
+            </React.Fragment>))}
+          {props.beforeComponentsSectionSix?.map((BeforeComponent, i) => (
+            <BeforeComponent key={i} {...props} />))}
+
+          {!props.isHideSectionSix && !cartState.loading && cart && (
+            <CartContainer>
+              <h1>{t('YOUR_ORDER', 'Your Order')}</h1>
+              <Cart
+                isCartPending={cart?.status === 2}
+                cart={cart}
+                isCheckout
+                isProducts={cart?.products?.length || 0}
+              />
+            </CartContainer>
+          )}
+
+          {props.beforeElementsSectionSeven?.map((BeforeElement, i) => (
+            <React.Fragment key={i}>
+              {BeforeElement}
+            </React.Fragment>))}
+          {props.beforeComponentsSectionSeven?.map((BeforeComponent, i) => (
+            <BeforeComponent key={i} {...props} />))}
+
+          {!props.isHideSectionSeven && !cartState.loading && cart && cart?.status !== 2 && (
+            <WrapperPlaceOrderButton>
+              <Button
+                color={(!cart?.valid_maximum || !cart?.valid_minimum) ? 'secundary' : 'primary'}
+                disabled={!cart?.valid || !paymethodSelected || placing || errorCash || !cart?.valid_maximum || !cart?.valid_minimum}
+                onClick={() => handlePlaceOrder()}
+              >
+                {!cart?.valid_maximum ? (
+                  `${t('MAXIMUM_SUBTOTAL_ORDER', 'Maximum subtotal order')}: ${parsePrice(cart?.maximum)}`
+                ) : !cart?.valid_minimum ? (
+                  `${t('MINIMUN_SUBTOTAL_ORDER', 'Minimum subtotal order:')} ${parsePrice(cart?.minimum)}`
+                ) : placing ? t('PLACING', 'Placing') : t('PLACE_ORDER', 'Place Order')}
+              </Button>
+            </WrapperPlaceOrderButton>
+          )}
+
+          {cart?.pay_reference && (
+            <WrapperPlaceOrderButton>
+              <Button
+                color={(!cart?.valid_maximum || !cart?.valid_minimum) ? 'secundary' : 'primary'}
+                onClick={() => setIsOpenIvrModal(true)}
+              >
+                {t('CHECK_STATUS_MANUALLY', 'Check status manually')}
+              </Button>
+            </WrapperPlaceOrderButton>
+          )}
+
+          {!cart?.valid_address && cart?.status !== 2 && (
+            <WarningText>
+              {t('INVALID_CART_ADDRESS', 'Selected address is invalid, please select a closer address.')}
+            </WarningText>
+          )}
+
+          {!paymethodSelected && cart?.status !== 2 && (
+            <WarningText>
+              {t('WARNING_NOT_PAYMENT_SELECTED', 'Please, select a payment method to place order.')}
+            </WarningText>
+          )}
+
+          {!cart?.valid_products && cart?.status !== 2 && (
+            <WarningText>
+              {t('WARNING_INVALID_PRODUCTS', 'Some products are invalid, please check them.')}
+            </WarningText>
+          )}
+
+        </WrappContainer>
+        <Alert
+          title={t('CUSTOMER_DETAILS', 'Customer Details')}
+          content={alertState.content}
+          acceptText={t('ACCEPT', 'Accept')}
+          open={alertState.open}
+          onClose={() => closeAlert()}
+          onAccept={() => closeAlert()}
+          closeOnBackdrop={false}
+        />
+      </Container>
+      {props.afterComponents?.map((AfterComponent, i) => (
+        <AfterComponent key={i} {...props} />))}
+      {props.afterElements?.map((AfterElement, i) => (
+        <React.Fragment key={i}>
+          {AfterElement}
+        </React.Fragment>))}
+    </>
+  )
+}
+
+export const Checkout = (props) => {
+  const {
+    errors,
+    clearErrors,
+    query,
+    cartUuid,
+    handleOrderRedirect,
+    handleCheckoutRedirect,
+    handleSearchRedirect,
+    handleCheckoutListRedirect
+  } = props
+
+  const [orderState, { confirmCart }] = useOrder()
+  const [{ token }] = useSession()
+  const [ordering] = useApi()
+  const [, t] = useLanguage()
+
+  const [cartState, setCartState] = useState({ loading: true, error: null, cart: null })
+
+  const [openUpselling, setOpenUpselling] = useState(false)
+  const [canOpenUpselling, setCanOpenUpselling] = useState(false)
+  const [currentCart, setCurrentCart] = useState(null)
+  const [alertState, setAlertState] = useState({ open: false, content: [] })
+
+  const cartsWithProducts = orderState?.carts && (Object.values(orderState?.carts)?.filter(cart => cart?.products?.length) || null)
+
+  const closeAlert = () => {
+    setAlertState({
+      open: false,
+      content: []
+    })
+    clearErrors && clearErrors()
+  }
+
+  const handleUpsellingPage = () => {
+    setOpenUpselling(false)
+    setCurrentCart(null)
+    setCanOpenUpselling(false)
+    handleCheckoutRedirect(currentCart.uuid)
+  }
+
+  useEffect(() => {
+    if (!orderState.loading && currentCart?.business_id) {
+      setCurrentCart(...Object.values(orderState.carts)?.filter(cart => cart?.business_id === currentCart?.business_id))
+    }
+  }, [orderState.loading])
+
+  useEffect(() => {
+    if (currentCart?.products) {
+      setOpenUpselling(true)
+    }
+  }, [currentCart])
+
+  useEffect(() => {
+    if (errors?.length) {
+      setAlertState({
+        open: true,
+        content: errors
+      })
+    }
+  }, [errors])
+
+  const getOrder = async (cartId) => {
+    try {
+      setCartState({ ...cartState, loading: true })
+      const userCustomer = JSON.parse(window.localStorage.getItem('user-customer'))
+      const url = userCustomer
+        ? `${ordering.root}/carts/${cartId}?user_id=${userCustomer?.id}`
+        : `${ordering.root}/carts/${cartId}`
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        }
+      })
+      const { result } = await response.json()
+
+      if (result.status === 1 && result.order?.uuid) {
+        handleOrderRedirect(result.order.uuid)
+        setCartState({ ...cartState, loading: false })
+      } else if (result.status === 2 && result.paymethod_data?.gateway === 'stripe_redirect' && query.get('payment_intent')) {
+        try {
+          const confirmCartRes = await confirmCart(cartUuid)
+          if (confirmCartRes.error) {
+            setAlertState({
+              open: true,
+              content: [confirmCartRes.error.message]
+            })
+          }
+          if (confirmCartRes.result.order?.uuid) {
+            handleOrderRedirect(confirmCartRes.result.order.uuid)
+          }
+          setCartState({
+            ...cartState,
+            loading: false,
+            cart: result
+          })
+        } catch (error) {
+          setAlertState({
+            open: true,
+            content: [error.message]
+          })
+        }
+      } else {
+        const cart = Array.isArray(result) ? null : result
+        setCartState({
+          ...cartState,
+          loading: false,
+          cart,
+          error: cart ? null : result
+        })
+      }
+    } catch (e) {
+      setCartState({
+        ...cartState,
+        loading: false,
+        error: [e.toString()]
+      })
+    }
+  }
+
+  useEffect(() => {
+    if (token && cartUuid) {
+      getOrder(cartUuid)
+    }
+  }, [token, cartUuid])
+
+  const checkoutProps = {
+    ...props,
+    UIComponent: CheckoutUI,
+    cartState,
+    businessId: cartState.cart?.business_id
+  }
+
+  return (
+    <>
+      {!cartUuid && orderState.carts && cartsWithProducts && cartsWithProducts?.length === 0 && (
+        <NotFoundSource
+          content={t('NOT_FOUND_CARTS', 'Sorry, You don\'t seem to have any carts.')}
+          btnTitle={t('SEARCH_REDIRECT', 'Go to Businesses')}
+          onClickButton={handleSearchRedirect}
+        />
+      )}
+      {!cartUuid && orderState.carts && cartsWithProducts && cartsWithProducts?.length > 0 && (
+        <CartsList>
+          <CartContent
+            carts={cartsWithProducts}
+            isOrderStateCarts={!!orderState.carts}
+            isForceOpenCart
+          />
+        </CartsList>
+      )}
+
+      {cartUuid && cartState.error && cartState.error?.length > 0 && (
+        <NotFoundSource
+          content={t('ERROR_CART_SELECTED', 'Sorry, the selected cart was not found.')}
+          btnTitle={t('CHECKOUT_REDIRECT', 'Go to Checkout list')}
+          onClickButton={handleCheckoutListRedirect}
+        />
+      )}
+
+      {cartState.loading && !(window.location.pathname === '/checkout') && (
+        <div style={{ width: '80%', margin: 'auto auto 20px' }}>
+          <Skeleton height={35} style={{ marginBottom: '10px' }} />
+          <Skeleton height={150} style={{ marginBottom: '10px' }} />
+          <Skeleton height={35} count={6} style={{ marginBottom: '10px' }} />
+        </div>
+      )}
+
+      {cartUuid && cartState.cart && cartState.cart?.status !== 1 && <CheckoutController {...checkoutProps} />}
+
+      {currentCart?.products && (
+        <UpsellingPage
+          businessId={currentCart?.business_id}
+          cartProducts={currentCart?.products}
+          business={currentCart?.business}
+          handleUpsellingPage={handleUpsellingPage}
+          openUpselling={openUpselling}
+          canOpenUpselling={canOpenUpselling}
+          setCanOpenUpselling={setCanOpenUpselling}
+        />
+      )}
+
+      <Alert
+        title={t('CHECKOUT ', 'Checkout')}
+        content={alertState.content}
+        acceptText={t('ACCEPT', 'Accept')}
+        open={alertState.open}
+        onClose={() => closeAlert()}
+        onAccept={() => closeAlert()}
+        closeOnBackdrop={false}
+      />
+    </>
+  )
+}
+
+export const CheckoutPage = (props) => {
+  const { cartUuid } = useParams()
+  const [events] = useEvent()
+  const [errors, setErrors] = useState([])
+
+  const useQuery = () => {
+    return new URLSearchParams(useLocation().search)
+  }
+
+  const actionsBeforePlace = async (paymethod, cart) => {
+    switch (paymethod.gateway) {
+      case 'stripe':
+      case 'stripe_connect':
+      case 'stripe_direct': {
+        const stripe = await loadStripe(paymethod.paymethod.credentials.publishable)
+        await stripe.confirmCardPayment(cart.paymethod_data.result.client_secret)
+        return true
+      }
+      case 'stripe_redirect': {
+        const stripe = await loadStripe(paymethod.paymethod.credentials.publishable)
+        const confirmOption = {
+          bancontact: {
+            name: 'confirmBancontactPayment',
+            type: 1
+          },
+          alipay: {
+            name: 'confirmAlipayPayment',
+            type: 2
+          },
+          giropay: {
+            name: 'confirmGiropayPayment',
+            type: 1
+          },
+          ideal: {
+            name: 'confirmIdealPayment',
+            type: 2
+          }
+        }
+        const params = {
+          1: {
+            payment_method: {
+              billing_details: cart.paymethod_data.data.owner
+            },
+            return_url: `${window.location.origin}/checkout/${cartUuid}`
+          },
+          2: {
+            return_url: `${window.location.origin}/checkout/${cartUuid}`
+          }
+        }
+        stripe[confirmOption[paymethod.data.type].name](
+          cart.paymethod_data.result.client_secret,
+          params[confirmOption[paymethod.data.type].type]
+        ).then((result) => {
+          if (result?.error) {
+            setErrors([...errors, result?.error?.message])
+          }
+        })
+      }
+    }
+  }
+
+  const checkoutProps = {
+    ...props,
+    isCustomerMode: true,
+    cartUuid,
+    actionsBeforePlace,
+    query: useQuery(),
+    errors,
+    clearErrors: () => setErrors([]),
+    useValidationFields: true,
+    validationFieldsType: 'checkout',
+    onPlaceOrderClick: (data, paymethod, cart) => {
+      if (cart?.order?.uuid) {
+        events.emit('go_to_page', { page: 'order_detail', params: { orderId: cart.order?.uuid } })
+      }
+    },
+    handleOrderRedirect: (uuid) => {
+      events.emit('go_to_page', { page: 'order_detail', params: { orderId: uuid } })
+    },
+    handleCheckoutRedirect: (uuid) => {
+      events.emit('go_to_page', { page: 'checkout', params: { cartUuid: uuid } })
+    },
+    handleSearchRedirect: () => {
+      events.emit('go_to_page', { page: 'search' })
+    },
+    handleCheckoutListRedirect: () => {
+      events.emit('go_to_page', { page: 'checkout_list' })
+    },
+    handleStoreRedirect: (store) => {
+      events.emit('go_to_page', { page: 'business', params: { store } })
+    }
+  }
+  return (
+    <>
+      <HelmetTags page='checkout' />
+      <Checkout {...checkoutProps} />
+    </>
+  )
+}

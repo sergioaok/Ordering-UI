@@ -203,7 +203,7 @@ const SignUpFormUI = (props) => {
                       <InputGroup key={field.id}>
                         <label>{t(field.name)}</label>
                         <Input
-                          type={field.enabled && field.required ? field.type : 'hidden'}
+                          type={field.type}
                           name={field.code}
                           aria-label={field.code}
                           className='form'

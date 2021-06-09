@@ -100,7 +100,7 @@ export const WarningMessage = styled.div`
     margin: 11px;
     ${props => props.theme?.rtl && css`
         right: 0;
-        left: initial
+        left: initial;
     `}
   }
 

@@ -25,6 +25,16 @@ const LogoutButtonUI = (props) => {
       }
     })
 
+    const GoogleAuth = window?.gapi?.auth2?.getAuthInstance()
+    if (GoogleAuth) {
+      const signedIn = GoogleAuth.isSignedIn.get()
+      if (signedIn) {
+        GoogleAuth.signOut().then(() => {
+          GoogleAuth.disconnect()
+        })
+      }
+    }
+
     props.handleLogoutClick()
     onCustomClick && onCustomClick()
   }

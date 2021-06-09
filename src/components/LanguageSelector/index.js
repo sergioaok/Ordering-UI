@@ -7,7 +7,9 @@ const LanguageSelectorUI = (props) => {
     languagesState,
     currentLanguage,
     handleChangeLanguage,
-    notReload
+    notReload,
+    defaultLanguages,
+    defaultCurrentLanguage
   } = props
   const _languages = languagesState?.languages?.map(language => {
     return {
@@ -19,8 +21,8 @@ const LanguageSelectorUI = (props) => {
   )
   return (
     <Select
-      options={_languages}
-      defaultValue={currentLanguage}
+      options={languagesState?.loading ? defaultLanguages : _languages}
+      defaultValue={languagesState?.loading ? defaultCurrentLanguage : currentLanguage}
       onChange={(languageId) => handleChangeLanguage(languageId)}
       notReload={notReload}
     />
@@ -29,11 +31,18 @@ const LanguageSelectorUI = (props) => {
 
 export const LanguageSelector = (props) => {
   const DefaultChangeLanguage = () => {}
+  const langProps = {
+    ...props,
+    UIComponent: LanguageSelectorUI,
+    onChangeLanguage: props.onChangeLanguage || DefaultChangeLanguage,
+    defaultLanguages: [{
+      content: 'English',
+      showOnSelected: 'EN',
+      value: 'en'
+    }],
+    defaultCurrentLanguage: 'en'
+  }
   return (
-    <LanguageSelectorController
-      {...props}
-      UIComponent={LanguageSelectorUI}
-      onChangeLanguage={props.onChangeLanguage || DefaultChangeLanguage}
-    />
+    <LanguageSelectorController {...langProps} />
   )
 }

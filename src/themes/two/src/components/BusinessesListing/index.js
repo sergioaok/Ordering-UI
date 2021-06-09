@@ -3,10 +3,10 @@ import {
   useLanguage,
   useOrder,
   useEvent,
-  useSession
+  useSession,
+  BusinessList as BusinessListController
 } from 'ordering-components'
 import { SearchBar } from '../SearchBar'
-import BsArrowRightShort from '@meronex/icons/bs/BsArrowRightShort'
 import { Button } from '../../styles/Buttons'
 import { BusinessTypeFilter } from '../BusinessTypeFilter'
 import { PickupOrderTypeToggleButton } from '../PickupOrderTypeToggleButton'
@@ -14,13 +14,13 @@ import {
   BusinessContainer,
   InnerContainer,
   WrappperButtonGroup,
-  WrapperOrderingPass,
-  WrapperGoButton
+  WrapperOrderingPass
 } from './styles'
 import { useTheme } from 'styled-components'
-import { FeaturedBusinessListing } from '../FeaturedBusinessListing'
+import { FeaturedBusinessListingUI } from '../FeaturedBusinessListing'
 import { AllBusinessesListing } from '../AllBusinessesListing'
-export const BusinessesListing = (props) => {
+
+const BusinessesListingUI = (props) => {
   const [, t] = useLanguage()
   const theme = useTheme()
   const [events] = useEvent()
@@ -80,7 +80,7 @@ export const BusinessesListing = (props) => {
             <p>{t('$_0_DELIVERY_FEES_REDUCED_SERVICE_FEES', '$ 0 delivery fees, reduced service fees.')}</p>
             <p>{t('SIGN_UP_FOR_ORDERING_PASS', 'Sign Up for Ordering Pass')}</p>
           </WrapperOrderingPass>
-          <FeaturedBusinessListing
+          <FeaturedBusinessListingUI
             {...props}
             orderType={1}
             isSortByReview
@@ -97,4 +97,13 @@ export const BusinessesListing = (props) => {
       </BusinessContainer>
     </>
   )
+}
+
+export const BusinessesListing = (props) => {
+  const BusinessesListingProps = {
+    ...props,
+    UIComponent: BusinessesListingUI,
+    windowPathname: window.location.pathname
+  }
+  return <BusinessListController {...BusinessesListingProps} />
 }

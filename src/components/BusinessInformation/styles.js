@@ -232,7 +232,7 @@ export const ScheduleBlock = styled.div`
     margin: 0px 0px 3px;
     font-weight: bold;
     text-transform: uppercase;
-    color: #D81212;
+    color: ${props => props.theme?.colors?.primary};
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

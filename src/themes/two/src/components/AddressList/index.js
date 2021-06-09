@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import Skeleton from 'react-loading-skeleton'
 import TiPencil from '@meronex/icons/ti/TiPencil'
 import VscClose from '@meronex/icons/vsc/VscClose'
+import FaHome from '@meronex/icons/fa/FaHome'
+import FaPlus from '@meronex/icons/fa/FaPlus'
+import FaRegBuilding from '@meronex/icons/fa/FaRegBuilding'
+import FaRegHeart from '@meronex/icons/fa/FaRegHeart'
 import IosRadioButtonOn from '@meronex/icons/ios/IosRadioButtonOn'
 import IosRadioButtonOff from '@meronex/icons/ios/IosRadioButtonOff'
 
@@ -48,12 +53,13 @@ const AddressListUI = (props) => {
 
   const [, t] = useLanguage()
   const [orderState] = useOrder()
+  const location = useLocation()
 
   const [curAddress, setCurAddress] = useState(false)
   const [addressOpen, setAddressOpen] = useState(false)
   const [confirm, setConfirm] = useState({ open: false, content: null, handleOnAccept: null })
   const theme = useTheme()
-
+  const isHome = location.pathname === '/' || location.pathname === '/home'
   const uniqueAddressesList = (addressList.addresses && addressList.addresses.filter(
     (address, i, self) =>
       i === self.findIndex(obj => (
@@ -141,9 +147,21 @@ const AddressListUI = (props) => {
   return (
     <AddressListContainer id='address_control' isLoading={actionStatus?.loading || orderState?.loading}>
       {
+        (!isPopover || !addressOpen) && isHome && (
+          <Button
+            className='add'
+            color='primary'
+            onClick={() => openAddress({})}
+            disabled={orderState?.loading || actionStatus.loading}
+          >
+            {(orderState?.loading || actionStatus.loading) ? t('LOADING', 'Loading') : t('ADD_ADDRESS', 'Add Address')}
+          </Button>
+        )
+      }
+      {
         isPopover && addressOpen && (
           <AddressForm
-            isAddressEdit
+            isAddressEdit={!isHome}
             userId={userId}
             addressesList={addressList?.addresses}
             useValidationFileds
@@ -161,7 +179,7 @@ const AddressListUI = (props) => {
             onClose={() => setAddressOpen(false)}
           >
             <AddressForm
-              isAddressEdit
+              isAddressEdit={!isHome}
               addressesList={addressList?.addresses}
               useValidationFileds
               address={curAddress}
@@ -208,6 +226,12 @@ const AddressListUI = (props) => {
                     <span className='radio'>
                       {checkAddress(address) ? <IosRadioButtonOn /> : <IosRadioButtonOff />}
                     </span>
+                    <span className='tag'>
+                      {address?.tag === 'home' && <FaHome />}
+                      {address?.tag === 'office' && <FaRegBuilding />}
+                      {address?.tag === 'favorite' && <FaRegHeart />}
+                      {address?.tag === 'other' && <FaPlus />}
+                    </span>
                     <div className='address'>
                       <span>{address.address}</span>
                       <span>{address.internal_number} {address.zipcode}</span>
@@ -228,7 +252,7 @@ const AddressListUI = (props) => {
         )
       }
 
-      {!(addressList.loading || actionStatus.loading || orderState.loading) && !addressList.error && addressList?.addresses?.length === 0 && !isProductForm && (
+      {!(addressList.loading || actionStatus.loading || orderState.loading) && !addressList.error && addressList?.addresses?.length === 0 && !isProductForm && !(isPopover && addressOpen && isHome) && (
         <WrappNotAddresses>
           <img src={theme.images?.general?.notFound} alt='Not Found' width='200px' height='112px' loading='lazy' />
           <h1>{t('NOT_FOUND_ADDRESS.', 'Sorry, You don\'t seem to have any addresses.')}</h1>

@@ -38,6 +38,15 @@ import orderStatus9 from './template/assets/images/order/status-9.svg'
 import orderStatus10 from './template/assets/images/order/status-10.svg'
 import orderStatus11 from './template/assets/images/order/status-11.svg'
 import orderStatus12 from './template/assets/images/order/status-12.svg'
+import orderStatus13 from './template/assets/images/order/status-13.svg'
+import orderStatus14 from './template/assets/images/order/status-14.svg'
+import orderStatus15 from './template/assets/images/order/status-15.svg'
+import orderStatus16 from './template/assets/images/order/status-16.svg'
+import orderStatus17 from './template/assets/images/order/status-17.svg'
+import orderStatus18 from './template/assets/images/order/status-18.svg'
+import orderStatus19 from './template/assets/images/order/status-19.svg'
+import orderStatus20 from './template/assets/images/order/status-20.svg'
+import orderStatus21 from './template/assets/images/order/status-21.svg'
 
 import categoryFood from './template/assets/images/categories/category-food.png'
 import categoryGroceries from './template/assets/images/categories/category-groceries.png'
@@ -62,14 +71,16 @@ const configFile = {
 }
 
 Sentry.init({
-  environment: process.env.NODE_ENV,
+  environment: window?.location?.hostname === 'localhost' ? 'development' : process.env.NODE_ENV,
   dsn: 'https://6bd6a07b6f9b4d22bb5160c0bea6c45a@o460529.ingest.sentry.io/5720161',
   integrations: [
     new Integrations.BrowserTracing()
   ],
+  release: 'react-template-callcenter-1@' + process.env.npm_package_version,
 
-  // We recommend adjusting this value in production, or using tracesSampler
-  // for finer control
+  // Set tracesSampleRate to 1.0 to capture 100%
+  // of transactions for performance monitoring.
+  // We recommend adjusting this value in production
   tracesSampleRate: 1.0
 })
 
@@ -106,7 +117,16 @@ theme.images = {
     status9: orderStatus9,
     status10: orderStatus10,
     status11: orderStatus11,
-    status12: orderStatus12
+    status12: orderStatus12,
+    status13: orderStatus13,
+    status14: orderStatus14,
+    status15: orderStatus15,
+    status16: orderStatus16,
+    status17: orderStatus17,
+    status18: orderStatus18,
+    status19: orderStatus19,
+    status20: orderStatus20,
+    status21: orderStatus21
   },
   categories: {
     food: categoryFood,

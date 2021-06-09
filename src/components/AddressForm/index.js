@@ -431,6 +431,7 @@ const AddressFormUI = (props) => {
                       handleChangeInput({ target: { name: field.name, value: e.target.value } })
                     }}
                     autoComplete='new-field'
+                    maxLength={30}
                   />
                 ) : (
                   <TextArea
@@ -442,6 +443,7 @@ const AddressFormUI = (props) => {
                       handleChangeInput({ target: { name: 'address_notes', value: e.target.value } })
                     }}
                     autoComplete='new-field'
+                    maxLength={250}
                   />
                 )}
               </React.Fragment>

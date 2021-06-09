@@ -77,9 +77,24 @@ export const OrderData = styled.div`
     color: ${props => props.theme.colors.grayTextColor};
   }
 
+  .order-data-section {
+    max-width: 600px;
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0;
+
+    > dl dd {
+      padding: 0 10px;
+    }
+  }
+
   @media (max-width: 992px) {
     h1 {
       font-size: 24px;
+    }
+
+    .order-data-section {
+      flex-direction: column;
     }
   }
 `

@@ -17,7 +17,7 @@ import { Alert } from '../src/components/Confirm'
 
 import { BusinessesList } from './pages/BusinessesList'
 import { BusinessProductsList } from './pages/BusinessProductsList'
-import { CheckoutPage } from './pages/Checkout'
+import { CheckoutPage } from './pages/CheckoutIVR'
 import { Cms } from './pages/Cms'
 import { ForgotPassword } from './pages/ForgotPassword'
 import { HomePage } from './pages/Home'
@@ -37,7 +37,7 @@ export const App = () => {
   const [orderStatus] = useOrder()
   const [events] = useEvent()
   const [{ configs }] = useConfig()
-  const [, t] = useLanguage()
+  const [languageState, t] = useLanguage()
   const [loaded, setLoaded] = useState(false)
   const onlineStatus = useOnlineStatus()
   const location = useLocation()
@@ -91,7 +91,6 @@ export const App = () => {
       }
     }
   }, [configs, loaded])
-
   return (
     <>
       {configs?.track_id_google_analytics?.value && (
@@ -99,12 +98,12 @@ export const App = () => {
       )}
       <ListenPageChanges />
       {
-        !loaded && (
+        (!loaded || languageState.loading) && (
           <SpinnerLoader />
         )
       }
       {
-        loaded && (
+        loaded && !languageState.loading && (
           <>
             <Header
               isHome={isHome}
@@ -177,7 +176,7 @@ export const App = () => {
                     {auth ? (
                       <Profile
                         userId={user.id}
-                        accessToken={user.session.access_token}
+                        accessToken={user?.session?.access_token}
                         useValidationFields
                         isHiddenAddress
                       />

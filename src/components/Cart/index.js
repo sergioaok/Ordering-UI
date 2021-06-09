@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Cart as CartController, useOrder, useLanguage, useEvent, useUtils, useValidationFields } from 'ordering-components'
+import { Cart as CartController, useOrder, useLanguage, useEvent, useUtils, useValidationFields, useConfig } from 'ordering-components'
 import { Button } from '../../styles/Buttons'
 import { ProductItemAccordion } from '../ProductItemAccordion'
 import { BusinessItemAccordion } from '../BusinessItemAccordion'
@@ -17,6 +17,7 @@ import {
   CheckoutAction,
   CouponContainer
 } from './styles'
+import { verifyDecimals } from '../../utils'
 
 const CartUI = (props) => {
   const {
@@ -42,6 +43,7 @@ const CartUI = (props) => {
   const [events] = useEvent()
   const [{ parsePrice, parseNumber, parseDate }] = useUtils()
   const [validationFields] = useValidationFields()
+  const [{ configs }] = useConfig()
 
   const [confirm, setConfirm] = useState({ open: false, content: null, handleOnAccept: null })
   const [openProduct, setModalIsOpen] = useState(false)
@@ -60,7 +62,7 @@ const CartUI = (props) => {
       open: true,
       content: t('QUESTION_DELETE_PRODUCT', 'Are you sure that you want to delete the product?'),
       handleOnAccept: () => {
-        removeProduct(product)
+        removeProduct(product, cart)
         setConfirm({ ...confirm, open: false })
       }
     })
@@ -114,14 +116,6 @@ const CartUI = (props) => {
     handleClickCheckout()
   }
 
-  const verifyDecimals = (value, parser) => {
-    if (value % 1 === 0) {
-      return value
-    } else {
-      return parser(value)
-    }
-  }
-
   return (
     <>
       {props.beforeElements?.map((BeforeElement, i) => (
@@ -173,7 +167,7 @@ const CartUI = (props) => {
                     <tr>
                       {cart?.discount_type === 1 ? (
                         <td>
-                          {t('DISCOUNT', 'Discount')}
+                          {t('DISCOUNT', 'Discount')}{' '}
                           <span>{`(${verifyDecimals(cart?.discount_rate, parsePrice)}%)`}</span>
                         </td>
                       ) : (
@@ -186,7 +180,7 @@ const CartUI = (props) => {
                     cart.business.tax_type !== 1 && (
                       <tr>
                         <td>
-                          {t('TAX', 'Tax')}
+                          {t('TAX', 'Tax')}{' '}
                           <span>{`(${verifyDecimals(cart?.business?.tax, parseNumber)}%)`}</span>
                         </td>
                         <td>{parsePrice(cart?.tax || 0)}</td>
@@ -202,8 +196,13 @@ const CartUI = (props) => {
                   {cart?.driver_tip > 0 && (
                     <tr>
                       <td>
-                        {t('DRIVER_TIP', 'Driver tip')}
-                        {cart?.driver_tip_rate > 0 && <span>{`(${verifyDecimals(cart?.driver_tip_rate, parseNumber)}%)`}</span>}
+                        {t('DRIVER_TIP', 'Driver tip')}{' '}
+                        {cart?.driver_tip_rate > 0 &&
+                          parseInt(configs?.driver_tip_type?.value, 10) === 2 &&
+                          !!!parseInt(configs?.driver_tip_use_custom?.value, 10) &&
+                        (
+                          <span>{`(${verifyDecimals(cart?.driver_tip_rate, parseNumber)}%)`}</span>
+                        )}
                       </td>
                       <td>{parsePrice(cart?.driver_tip)}</td>
                     </tr>
@@ -211,7 +210,7 @@ const CartUI = (props) => {
                   {cart?.service_fee > 0 && (
                     <tr>
                       <td>
-                        {t('SERVICE_FEE', 'Service Fee')}
+                        {t('SERVICE_FEE', 'Service Fee')}{' '}
                         <span>{`(${verifyDecimals(cart?.business?.service_fee, parseNumber)}%)`}</span>
                       </td>
                       <td>{parsePrice(cart?.service_fee)}</td>
@@ -238,7 +237,7 @@ const CartUI = (props) => {
               </table>
             </OrderBill>
           )}
-          {(onClickCheckout || isForceOpenCart) && !isCheckout && (
+          {(onClickCheckout || isForceOpenCart) && !isCheckout && cart?.valid_products && (
             <CheckoutAction>
               <Button
                 color={(!cart?.valid_maximum || !cart?.valid_minimum || !cart?.valid_address) ? 'secundary' : 'primary'}
@@ -277,7 +276,7 @@ const CartUI = (props) => {
             isCartProduct
             productCart={curProduct}
             businessSlug={cart?.business?.slug}
-            businessId={curProduct?.business_id}
+            businessId={cart?.business_id}
             categoryId={curProduct?.category_id}
             productId={curProduct?.id}
             onSave={handlerProductAction}

@@ -1,5 +1,4 @@
 {
-  "experimentalComponentTesting": true,
   "componentFolder": "src/tests",
   "excludeAfterRemap": false,
   "specFiles": "*spec.*",

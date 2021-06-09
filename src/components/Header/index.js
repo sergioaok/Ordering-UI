@@ -76,7 +76,7 @@ export const Header = (props) => {
     if (isActionsClick) {
       setConfirm({
         open: true,
-        content: t('QUESTION_CLEAR_CUSTOMER', 'Are you sure that you want to clear the customer?'),
+        content: t('QUESTION_CLEAR_CUSTOMER', theme?.defaultLanguages?.QUESTION_CLEAR_CUSTOMER || 'Are you sure that you want to clear the customer?'),
         handleOnAccept: () => {
           deleteUserCustomer(true)
           refreshOrderOptions()
@@ -170,9 +170,10 @@ export const Header = (props) => {
                     </span>
                   </CustomerInfo>
                 )}
-                {!configState?.loading && configTypes.length > 0 && (
-                  <OrderTypeSelectorHeader configTypes={configTypes} />
-                )}
+                <OrderTypeSelectorHeader
+                  configTypes={!configState?.loading && configTypes.length > 0 ? configTypes : null}
+                  defaultValue={!(!configState?.loading && configTypes.length > 0) && 1}
+                />
                 {onlineStatus && windowSize.width > 820 && (
                   <>
                     <MomentPopover
@@ -200,9 +201,9 @@ export const Header = (props) => {
                 {
                   !auth && windowSize.width > 870 && (
                     <>
-                      <MenuLink onClick={() => handleGoToPage({ page: 'signin' })} name='signin'>{t('SIGN_IN', 'Sign in')}</MenuLink>
+                      <MenuLink onClick={() => handleGoToPage({ page: 'signin' })} name='signin'>{t('SIGN_IN', theme?.defaultLanguages?.SIGN_IN || 'Sign in')}</MenuLink>
                       {!isHideSignup && (
-                        <MenuLink onClick={() => handleGoToPage({ page: 'signup' })} highlight={1} name='signup'>{t('SIGN_UP', 'Sign up')}</MenuLink>
+                        <MenuLink onClick={() => handleGoToPage({ page: 'signup' })} highlight={1} name='signup'>{t('SIGN_UP', theme?.defaultLanguages?.SIGN_UP || 'Sign up')}</MenuLink>
                       )}
                     </>
                   )
@@ -348,9 +349,9 @@ export const Header = (props) => {
           </Modal>
         )}
         <Confirm
-          title={t('CUSTOMER', 'Customer')}
+          title={t('CUSTOMER', theme?.defaultLanguages?.CUSTOMER || 'Customer')}
           content={confirm.content}
-          acceptText={t('ACCEPT', 'Accept')}
+          acceptText={t('ACCEPT', theme?.defaultLanguages?.ACCEPT || 'Accept')}
           open={isCustomerMode && confirm.open}
           onClose={() => setConfirm({ ...confirm, open: false })}
           onCancel={() => setConfirm({ ...confirm, open: false })}

@@ -23,7 +23,7 @@ const UserDetailsUI = (props) => {
   const [, t] = useLanguage()
   const [{ user }] = useSession()
   const [openModal, setOpenModal] = useState(false)
-  const userData = formState.result?.result ? formState.result?.result : externalUserData
+  const userData = externalUserData || formState.result?.result || user
 
   useEffect(() => {
     if (isUserDetailsEdit) {
@@ -44,17 +44,26 @@ const UserDetailsUI = (props) => {
       {!(validationFields.loading || formState.loading || externalLoading) && (
         <Container>
           <Header className='user-form'>
-            <h1>{t('PHONE_NUMBER', 'Phone number')}</h1>
+            <h1>{t('CUSTOMER_DETAILS', 'Customer details')}</h1>
             <span onClick={() => setOpenModal(true)}>
               {t('CHANGE', 'Change')}
             </span>
           </Header>
 
           <UserData>
+            {(userData?.name || userData?.middle_name || userData?.lastname || userData?.second_lastname) && (
+              <p>
+                <strong>{t('NAME', 'Name')}:</strong> {userData?.name} {userData?.middle_name} {userData?.lastname} {userData?.second_lastname}
+              </p>
+            )}
+            {userData?.email && (
+              <p><strong>{t('EMAIL', 'Email')}:</strong> {userData?.email}</p>
+            )}
             {(userData?.cellphone || user?.cellphone) && (
-              <>
-                {(userData?.cellphone || user?.cellphone)}
-              </>
+              <p>
+                <strong>{t('CELLPHONE', 'Cellphone')}:</strong>
+                {(userData?.country_phone_code) && `+${(userData?.country_phone_code)} `}{(userData?.cellphone)}
+              </p>
             )}
           </UserData>
         </Container>
@@ -69,6 +78,7 @@ const UserDetailsUI = (props) => {
           isCheckout
           {...props}
           onCancel={() => setOpenModal(false)}
+          closeModal={() => setOpenModal(false)}
         />
       </Modal>
     </>

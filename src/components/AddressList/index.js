@@ -2,6 +2,10 @@ import React, { useState, useEffect } from 'react'
 import Skeleton from 'react-loading-skeleton'
 import TiPencil from '@meronex/icons/ti/TiPencil'
 import VscTrash from '@meronex/icons/vsc/VscTrash'
+import FaHome from '@meronex/icons/fa/FaHome'
+import FaPlus from '@meronex/icons/fa/FaPlus'
+import FaRegBuilding from '@meronex/icons/fa/FaRegBuilding'
+import FaRegHeart from '@meronex/icons/fa/FaRegHeart'
 import IosRadioButtonOn from '@meronex/icons/ios/IosRadioButtonOn'
 import IosRadioButtonOff from '@meronex/icons/ios/IosRadioButtonOff'
 
@@ -220,6 +224,12 @@ const AddressListUI = (props) => {
                   <div className='wrapAddress' onClick={() => handleSetAddress(address)}>
                     <span className='radio'>
                       {checkAddress(address) ? <IosRadioButtonOn /> : <IosRadioButtonOff />}
+                    </span>
+                    <span className='tag'>
+                      {address?.tag === 'home' && <FaHome />}
+                      {address?.tag === 'office' && <FaRegBuilding />}
+                      {address?.tag === 'favorite' && <FaRegHeart />}
+                      {address?.tag === 'other' && <FaPlus />}
                     </span>
                     <div className='address'>
                       <span>{address.address}</span>

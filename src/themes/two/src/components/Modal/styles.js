@@ -15,7 +15,7 @@ export const ModalDialog = styled.div`
   width: 100vw;
   border-radius: 0px;
   box-sizing: border-box;
-  margin-top: auto;
+  margin-top: ${({ isProductForm }) => !isProductForm && 'auto'};
   margin-bottom: auto;
   height: ${({ height }) => height || '100%'};;
   max-height: 100vh;

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import Skeleton from 'react-loading-skeleton'
-import { useLanguage, useOrder, useSession, BusinessList as BusinessListController } from 'ordering-components'
+import { useLanguage, useOrder, useSession } from 'ordering-components'
 import { BusinessTypeFilter } from '../BusinessTypeFilter'
 import { Button } from '../../styles/Buttons'
 import { BusinessController } from '../BusinessController'
@@ -22,7 +22,7 @@ import {
   LeftInnerContainer
 } from './styles'
 
-const AllBusinessesListingUI = (props) => {
+export const AllBusinessesListing = (props) => {
   const {
     businessesList,
     paginationProps,
@@ -118,13 +118,15 @@ const AllBusinessesListingUI = (props) => {
             }
             {
               businessesList.businesses?.map((business) => (
-                <BusinessController
-                  key={business.id}
-                  className='card'
-                  business={business}
-                  handleCustomClick={handleBusinessClick}
-                  orderType={orderState?.options?.type}
-                />
+                (business && (
+                  <BusinessController
+                    key={business.id}
+                    className='card'
+                    business={business}
+                    handleCustomClick={handleBusinessClick}
+                    orderType={orderState?.options?.type}
+                  />
+                ))
               ))
             }
             {businessesList.loading && (
@@ -161,13 +163,4 @@ const AllBusinessesListingUI = (props) => {
       </Modal>
     </AllBuinessContainer>
   )
-}
-
-export const AllBusinessesListing = (props) => {
-  const AllBusinessesListingProps = {
-    ...props,
-    UIComponent: AllBusinessesListingUI
-  }
-
-  return <BusinessListController {...AllBusinessesListingProps} />
 }

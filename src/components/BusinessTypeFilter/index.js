@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import Skeleton from 'react-loading-skeleton'
 import { BusinessTypeFilter as BusinessTypeFilterController, useLanguage } from 'ordering-components'
 
 import { Tabs, Tab } from '../../styles/Tabs'
@@ -9,13 +10,16 @@ import { useTheme } from 'styled-components'
 
 const BusinessTypeFilterUI = (props) => {
   const {
-    images,
-    businessTypes,
+    typesState,
     currentTypeSelected,
     handleChangeBusinessType
   } = props
+  const { loading, error, types } = typesState
   const [, t] = useLanguage()
+  const theme = useTheme()
   const [load, setLoad] = useState(false)
+
+  const defaultImage = theme.images?.categories?.all
 
   const handleChangeCategory = (category) => {
     handleChangeBusinessType && handleChangeBusinessType(category)
@@ -30,45 +34,46 @@ const BusinessTypeFilterUI = (props) => {
       {props.beforeComponents?.map((BeforeComponent, i) => (
         <BeforeComponent key={i} {...props} />))}
       <TypeContainer id='container'>
-        <Tabs variant='primary'>
-          <AutoScroll>
-            {businessTypes && businessTypes.length > 0 && businessTypes.map((type, i) => (
-              <Tab className='category' active={type.value === currentTypeSelected} key={type.value}>
-                {!type.value || i > (images.length - 1) ? (
-                  <ImageContainer active={type.value === currentTypeSelected} load={load}>
+        {loading && (
+          <Tabs variant='primary'>
+            <AutoScroll>
+              <Tab className='category' style={styles.wrapperSkeleton}>
+                {[...Array(4)].map((_, i) => (
+                  <Skeleton id='skeleton' key={i} circle={true} height={150} width={150} />
+                ))}
+              </Tab>
+            </AutoScroll>
+          </Tabs>
+        )}
+        {!loading && !error && types && types.length > 0 && (
+          <Tabs variant='primary'>
+            <AutoScroll>
+              {types.map((type, i) => type.enabled && (
+                <Tab
+                  key={type.id}
+                  active={type.id === currentTypeSelected}
+                  className='category'
+                >
+                  <ImageContainer
+                    active={type.id === currentTypeSelected}
+                    load={load}
+                  >
                     <img
-                      src={images[0].image}
-                      alt='all'
+                      src={type.image || defaultImage}
+                      alt={type.name.toLowerCase()}
                       onLoad={() => setLoad(true)}
-                      onClick={() => handleChangeCategory(type.value)}
+                      onClick={() => handleChangeCategory(type.id)}
                       width='150px'
                       height='150px'
                       loading='lazy'
                     />
-                  </ImageContainer>)
-                  : ''}
-                {images.map(image => (
-                  <React.Fragment key={image.value}>
-                    {image.value === type.value ? (
-                      <ImageContainer active={type.value === currentTypeSelected} load={load}>
-                        <img
-                          src={image.image}
-                          alt={type.value}
-                          onClick={() => handleChangeCategory(type.value)}
-                          width='150px'
-                          height='150px'
-                          loading='lazy'
-                        />
-                      </ImageContainer>)
-                      : ''}
-                  </React.Fragment>
-                )
-                )}
-                {t(`BUSINESS_TYPE_${type.value ? type.value.replace(/\s/g, '_').toUpperCase() : 'ALL'}`, type.key)}
-              </Tab>
-            ))}
-          </AutoScroll>
-        </Tabs>
+                  </ImageContainer>
+                  {t(`BUSINESS_TYPE_${type.name.replace(/\s/g, '_').toUpperCase()}`, type.name)}
+                </Tab>
+              ))}
+            </AutoScroll>
+          </Tabs>
+        )}
       </TypeContainer>
       {props.afterComponents?.map((AfterComponent, i) => (
         <AfterComponent key={i} {...props} />))}
@@ -80,25 +85,18 @@ const BusinessTypeFilterUI = (props) => {
   )
 }
 
+const styles = {
+  wrapperSkeleton: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+  }
+}
+
 export const BusinessTypeFilter = (props) => {
-  const theme = useTheme()
   const businessTypeFilterProps = {
     ...props,
     UIComponent: BusinessTypeFilterUI,
-    businessTypes: props.businessTypes || [
-      { key: 'All', value: null },
-      { key: 'Food', value: 'food' },
-      { key: 'Alcohol', value: 'alcohol' },
-      { key: 'Groceries', value: 'groceries' },
-      { key: 'Laundry', value: 'laundry' }
-    ],
-    images: props.images || [
-      { image: theme.images?.categories?.all, value: 'all' },
-      { image: theme.images?.categories?.food, value: 'food' },
-      { image: theme.images?.categories?.groceries, value: 'groceries' },
-      { image: theme.images?.categories?.alcohol, value: 'alcohol' },
-      { image: theme.images?.categories?.laundry, value: 'laundry' }
-    ],
     defaultBusinessType: props.defaultBusinessType || null,
     onChangeBusinessType: props.handleChangeBusinessType
   }

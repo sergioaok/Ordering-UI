@@ -17,7 +17,8 @@ import {
   PositionControl,
   IconControl,
   Text,
-  SuboptionQuanitySelectContainer
+  SuboptionQuanitySelectContainer,
+  SubOptionThumbnail,
 } from './styles'
 import MdCheckBox from '@meronex/icons/md/MdCheckBox'
 import MdCheckBoxOutlineBlank from '@meronex/icons/md/MdCheckBoxOutlineBlank'
@@ -93,6 +94,9 @@ const ProductOptionSubOptionUI = (props) => {
               )
             )}
           </IconControl>
+          {suboption.image && (
+            <SubOptionThumbnail src={suboption.image} />
+          )}
           <Text>
             <div>{suboption?.name}</div>
             {showMessage && <span>{`${t('OPTIONS_MAX_LIMIT', 'Maximum options to choose')}: ${option?.max}`}</span>}

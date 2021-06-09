@@ -28,6 +28,10 @@ export const TypeContainer = styled.div`
 
   .category{
     padding: 10px 7px;
+
+    > span {
+      margin: 0 10px;
+    }
   }
 
   @media (min-width: 480px){
@@ -35,7 +39,6 @@ export const TypeContainer = styled.div`
       padding: 10px 15px;
     }
   }
-  
 `
 
 export const ImageContainer = styled.div`

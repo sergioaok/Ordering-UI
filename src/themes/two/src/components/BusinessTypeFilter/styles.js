@@ -10,9 +10,9 @@ export const TypeContainer = styled.div`
   ::-webkit-scrollbar {
       opacity: 0
   }
-  
+
   > div {
-    margin: 0 auto;   
+    margin: 0 auto;
     > span {
       column-gap: 10px;
     }
@@ -34,6 +34,10 @@ export const TypeContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    > span {
+      margin: 0 10px;
+    }
   }
 
   ${({ noAutoScroll }) => noAutoScroll && css`
@@ -68,10 +72,9 @@ export const TypeContainer = styled.div`
       .category{
         padding: 10px 5px;
       }
-    `
+    `}
   }
 `
-
 export const ImageContainer = styled.div`
   width: 120px;
   height: 125px;

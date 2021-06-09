@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react'
-import { useOrder, useLanguage, useUtils, useConfig } from 'ordering-components'
+import { useOrder, useLanguage, useUtils, useConfig, useSession } from 'ordering-components'
 import { usePopper } from 'react-popper'
 import { HeaderItem, PopoverBody, PopoverArrow } from './styles'
 import { MomentContent } from '../MomentContent'
@@ -10,6 +10,7 @@ export const MomentPopover = (props) => {
   const [orderStatus] = useOrder()
   const [, t] = useLanguage()
   const [{ parseDate }] = useUtils()
+  const [{ auth }] = useSession()
   const referenceElement = useRef()
   const popperElement = useRef()
   const arrowElement = useRef()
@@ -70,6 +71,7 @@ export const MomentPopover = (props) => {
         ref={referenceElement}
         onClick={configs?.max_days_preorder?.value === -1 || configs?.max_days_preorder?.value === 0 ? null : props.onClick}
         isHome={props.isHome}
+        auth={auth}
       >
         {orderStatus.options?.moment
           ? parseDate(orderStatus.options?.moment, { outputFormat: configs?.format_time?.value === '12' ? 'MM/DD hh:mma' : 'MM/DD HH:mm' })

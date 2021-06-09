@@ -28,6 +28,25 @@ export const PopularBusinessContainer = styled.div`
     padding-top: 60px;
   `}
 `
+export const PositionedContainer = styled.div`
+  position: static;
+
+  ${props =>
+    props.absolute &&
+    css`
+      position: absolute;
+    `};
+  ${props =>
+    props.fixed &&
+    css`
+      position: fixed;
+    `};
+  ${props =>
+    props.relative &&
+    css`
+      position: relative;
+    `};
+`
 export const TextContent = styled.div`
   width: 30%;
   padding: 20px 0;

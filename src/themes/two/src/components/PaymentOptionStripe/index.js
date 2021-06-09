@@ -57,6 +57,7 @@ const PaymentOptionStripeUI = (props) => {
   const _handleNewCard = (card) => {
     setAddCardOpen(false)
     handleNewCard(card)
+    setDefaultCard(card)
   }
 
   const handleDeleteCard = (card) => {

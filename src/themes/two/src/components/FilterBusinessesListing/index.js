@@ -4,10 +4,9 @@ import {
   useLanguage,
   useOrder,
   useSession,
-  useEvent,
   BusinessList as BusinessListController
 } from 'ordering-components'
-
+import { useHistory } from 'react-router-dom'
 import { BusinessTypeFilter } from '../BusinessTypeFilter'
 import { Button } from '../../styles/Buttons'
 import { SearchBar } from '../SearchBar'
@@ -46,8 +45,8 @@ const FilterBusinessesListingUI = (props) => {
     handleChangeTimeLimit
   } = props
   const [, t] = useLanguage()
+  const history = useHistory()
   const [orderState] = useOrder()
-  const [events] = useEvent()
   const [{ auth }] = useSession()
   const PIXELS_TO_SCROLL = document.getElementById('footer')?.offsetHeight + 100 || 700
 
@@ -56,7 +55,7 @@ const FilterBusinessesListingUI = (props) => {
   const [isGoBackClicked, setIsGoBackClicked] = useState(false)
 
   const handleGoToPage = () => {
-    events.emit('go_to_page', { page: 'search' })
+    history.goBack()
   }
 
   const handleClickAddress = (e) => {
@@ -232,10 +231,10 @@ const FilterBusinessesListingUI = (props) => {
 }
 
 export const FilterBusinessesListing = (props) => {
-  const AllBusinessesListingProps = {
+  const FilterBusinessesListingProps = {
     ...props,
     UIComponent: FilterBusinessesListingUI
   }
 
-  return <BusinessListController {...AllBusinessesListingProps} />
+  return <BusinessListController {...FilterBusinessesListingProps} />
 }

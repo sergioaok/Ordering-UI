@@ -111,8 +111,8 @@ export const Select = styled.div`
   border-width: 1px;
   border-style: solid;
   border-color: #CCC;
-  background-color: ${({ isHome }) => isHome ? 'rgba(247,247,247,0.3)' : '#CCC'} !important;
-  color: ${({ isHome }) => isHome ? '#FFF' : '#333'} !important;
+  background-color: ${({ isHome }) => isHome ? 'rgba(247,247,247,1)' : '#CCC'} !important;
+  color: ${({ isHome }) => isHome ? '#767676' : '#333'} !important;
   position: relative;
 
   ${props => props.disabled && css`

@@ -182,7 +182,7 @@ export const ProductComment = styled.div`
     margin: 0px 20px 0px 40px;
     text-overflow: ellipsis;
     white-space: nowrap;
-    overflow: hidden;
+    overflow-x: hidden;
     ${props => props.theme?.rtl && css`
       margin: 0px 40px 0px 20px
     `}

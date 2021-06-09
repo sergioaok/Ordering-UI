@@ -9,7 +9,15 @@ export const BusinessProductsList = (props) => {
   const [ordering] = useApi()
   const { search } = useLocation()
 
-  const [category, product] = search && search.substring(1).split('&')
+  let category
+  let product
+
+  if (search) {
+    const data = search.substring(1).split('&')
+    category = data[0]
+    product = data[1]
+  }
+
   const categoryId = category && category.split('=')[1]
   const productId = product && product.split('=')[1]
   const [events] = useEvent()

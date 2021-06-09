@@ -1,5 +1,5 @@
 import React from 'react'
-import { useLanguage, useUtils, useOrder } from 'ordering-components'
+import { useLanguage, useUtils, useOrder, useConfig } from 'ordering-components'
 import {
   CheckoutBillContainer
 } from './styles'
@@ -10,6 +10,7 @@ export const CheckoutBill = (props) => {
   const [, t] = useLanguage()
   const [{ parsePrice, parseNumber }] = useUtils()
   const [orderState] = useOrder()
+  const [{ configs }] = useConfig()
 
   return (
     <>
@@ -48,7 +49,12 @@ export const CheckoutBill = (props) => {
                 <tr>
                   <td>
                     {t('DRIVER_TIP', 'Driver tip')}
-                    {cart?.driver_tip_rate > 0 && <span>{`(${parseNumber(cart?.driver_tip_rate)}%)`}</span>}
+                    {cart?.driver_tip_rate > 0 &&
+                      parseInt(configs?.driver_tip_type?.value, 10) === 2 &&
+                      !!!parseInt(configs?.driver_tip_use_custom?.value, 10) &&
+                    (
+                      <span>{`(${parseNumber(cart?.driver_tip_rate)}%)`}</span>
+                    )}
                   </td>
                   <td>{parsePrice(cart?.driver_tip)}</td>
                 </tr>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Cart as CartController, useOrder, useLanguage, useEvent, useUtils, useValidationFields } from 'ordering-components'
+import { Cart as CartController, useOrder, useLanguage, useEvent, useUtils, useValidationFields, useConfig } from 'ordering-components'
 import { Button } from '../../styles/Buttons'
 import { ProductItemAccordion } from '../ProductItemAccordion'
 import { BusinessItemAccordion } from '../BusinessItemAccordion'
@@ -39,6 +39,7 @@ const CartUI = (props) => {
   const [events] = useEvent()
   const [{ parsePrice, parseNumber, parseDate }] = useUtils()
   const [validationFields] = useValidationFields()
+  const [{ configs }] = useConfig()
 
   const [confirm, setConfirm] = useState({ open: false, content: null, handleOnAccept: null })
   const [openProduct, setModalIsOpen] = useState(false)
@@ -160,7 +161,12 @@ const CartUI = (props) => {
                   <tr>
                     <td>
                       {t('DRIVER_TIP', 'Driver tip')}
-                      {cart?.driver_tip_rate > 0 && <span>{`(${parseNumber(cart?.driver_tip_rate)}%)`}</span>}
+                      {cart?.driver_tip_rate > 0 &&
+                        parseInt(configs?.driver_tip_type?.value, 10) === 2 &&
+                        !parseInt(configs?.driver_tip_use_custom?.value, 10) &&
+                      (
+                        <span>{`(${parseNumber(cart?.driver_tip_rate)}%)`}</span>
+                      )}
                     </td>
                     <td>{parsePrice(cart?.driver_tip)}</td>
                   </tr>
@@ -241,12 +247,13 @@ const CartUI = (props) => {
         padding='0'
         closeOnBackdrop
         onClose={() => setModalIsOpen(false)}
+        isProductForm
       >
         <ProductForm
           isCartProduct
           productCart={curProduct}
           businessSlug={cart?.business?.slug}
-          businessId={curProduct?.business_id}
+          businessId={cart?.business_id}
           categoryId={curProduct?.category_id}
           productId={curProduct?.id}
           onSave={handlerProductAction}

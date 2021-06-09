@@ -12,6 +12,7 @@ import { AddressForm } from '../AddressForm'
 import { HeaderOption } from '../HeaderOption'
 import { Modal } from '../Modal'
 import { CartContent } from '../CartContent'
+import { LanguageSelector } from '../LanguageSelector'
 import {
   Header as HeaderContainer,
   InnerHeader,
@@ -84,43 +85,23 @@ export const Header = (props) => {
     return () => events.off('cart_product_added', handleAddProduct)
   }, [windowSize.width])
 
-  const handleChangePage = (orderType) => {
-    switch (orderType) {
-      case 1:
-        handleGoToPage({ page: 'delivery' })
-        break
-      case 2:
-        handleGoToPage({ page: 'pickup' })
-        break
-      case 3:
-        handleGoToPage({ page: 'eatin' })
-        break
-      case 4:
-        handleGoToPage({ page: 'curbside' })
-        break
-      case 5:
-        handleGoToPage({ page: 'drivethru' })
-        break
-    }
-  }
-
   return (
     <>
-      <HeaderContainer isHome={isHome} isAuthPage={isAuthPage}>
+      <HeaderContainer isHome={isHome} auth={auth} isAuthPage={isAuthPage}>
         <InnerHeader>
           <LeftHeader>
             <SidebarMenu
               auth={auth}
               configTypes={configTypes}
             />
+            {(!auth && !isAuthPage) && <LanguageSelector />}
             {!configState?.loading && configTypes.length > 0 && isBusinessListingPage && windowSize.width > 992 && (
               <OrderTypeSelectorHeader
                 dropDownStyle
                 configTypes={configTypes}
-                handleChangePage={handleChangePage}
               />
             )}
-            {onlineStatus && isBusinessListingPage && (
+            {onlineStatus && (isBusinessListingPage || (isHome && auth)) && (
               windowSize.width > 992 && (
                 <WrapMomentAndAddress>
                   <MomentPopover
@@ -158,7 +139,7 @@ export const Header = (props) => {
                     </>
                   )
                 }
-                {!isHome && !isAuthPage && auth && (
+                {(!isHome || (isHome && auth)) && !isAuthPage && auth && (
                   windowSize.width > 768 ? (
                     <CartPopover
                       open={openPopover.cart}
@@ -227,7 +208,6 @@ export const Header = (props) => {
                 <OrderTypeSelectorHeader
                   dropDownStyle
                   configTypes={configTypes}
-                  handleChangePage={handleChangePage}
                 />
               )}
               <WrapMomentAndAddress>

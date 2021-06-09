@@ -4,8 +4,10 @@ import { ProductOption as ProductOptionController, useLanguage } from 'ordering-
 import {
   Container,
   WrapHeader,
+  TitleContainer,
   Title,
-  Flag
+  Flag,
+  OptionThumbnail
 } from './styles'
 
 const ProductOptionUI = (props) => {
@@ -37,7 +39,13 @@ const ProductOptionUI = (props) => {
       }
       <Container>
         <WrapHeader>
-          <Title>{option.name}</Title>
+          <TitleContainer>
+            {option.image && (
+              <OptionThumbnail src={option.image} />
+            )}
+            <Title><span>{option.name}</span></Title>
+          </TitleContainer>
+
           <Flag>{maxMin}</Flag>
         </WrapHeader>
         {children}

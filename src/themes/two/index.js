@@ -98,12 +98,13 @@ import { VerticalOrdersLayout } from './src/components/VerticalOrdersLayout'
 
 import { ThemeContext, ThemeProvider, useTheme } from '../../contexts/ThemeContext'
 import { Button } from './src/styles/Buttons'
-import {Input, InputGroup, InputPrimary, InputGroupLeft, InputGroupPrimary, InputGroupRight, InputSecundary, TextArea } from './src/styles/Inputs'
+import { Input, InputGroup, InputPrimary, InputGroupLeft, InputGroupPrimary, InputGroupRight, InputSecundary, TextArea } from './src/styles/Inputs'
 import { Select } from './src/styles/Select'
 import { Tab, Tabs } from './src/styles/Tabs'
 
 import { useOnlineStatus } from '../../hooks/useOnlineStatus'
 import { useWindowSize } from '../../hooks/useWindowSize'
+import { getHourMin } from '../../utils'
 
 export {
   AccountManage,
@@ -224,4 +225,5 @@ export {
   // Hooks
   useOnlineStatus,
   useWindowSize,
+  getHourMin
 }

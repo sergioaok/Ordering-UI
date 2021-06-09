@@ -34,7 +34,7 @@ const ReviewOrderUI = (props) => {
         title: t('REVIEW_SUCCESS_TITLE', 'Well done'),
         content: t('REVIEW_SUCCESS_CONTENT', 'Thank you, Review successfully submitted!')
       })
-      setIsReviewed(true)
+      setIsReviewed && setIsReviewed(true)
     }
   }, [formState])
 
@@ -150,9 +150,6 @@ const ReviewOrderUI = (props) => {
             placeholder={t('COMMENTS', 'Comments')}
             name='comments'
             onChange={(e) => handleChangeInput(e)}
-            ref={register({
-              required: t('FIELD_COMMENT_REQUIRED', 'The field comments is required')
-            })}
             autoComplete='off'
           />
         </Comments>

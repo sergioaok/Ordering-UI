@@ -208,8 +208,6 @@ export const WrapAdjustPin = styled.div`
   width: 100%;
   padding: 20px 0;
   column-gap: 5px;
-  border-bottom: 15px solid ${props => props.theme.colors.lightGrayColor};
-
   > span {
     color: ${props => props.theme.colors.grayTextColor};
     font-weight: 500;

@@ -40,12 +40,12 @@ const BusinessProductsListUI = (props) => {
       {props.beforeComponents?.map((BeforeComponent, i) => (
         <BeforeComponent key={i} {...props} />))}
       <ProductsContainer>
-        {category.id && (
+        {category?.id && (
           <ProductsListing>
             {
               categoryState.products?.map(product => (
                 <SingleProductCard
-                  key={product.id}
+                  key={product?.id}
                   isSoldOut={(product.inventoried && !product.quantity)}
                   product={product}
                   businessId={businessId}
@@ -58,7 +58,7 @@ const BusinessProductsListUI = (props) => {
         )}
 
         {
-          !category.id && (
+          !category?.id && (
             <>
               {
                 featured && categoryState?.products?.find(product => product.featured) && (
@@ -67,7 +67,7 @@ const BusinessProductsListUI = (props) => {
                     <ProductsListing>
                       {categoryState.products?.map(product => product.featured && (
                         <SingleProductCard
-                          key={product.id}
+                          key={product?.id}
                           isSoldOut={(product.inventoried && !product.quantity)}
                           product={product}
                           businessId={businessId}
@@ -84,10 +84,10 @@ const BusinessProductsListUI = (props) => {
         }
 
         {
-          !category.id && categories.filter(category => category.id !== null).map((category, i, _categories) => {
-            const products = categoryState.products?.filter(product => product.category_id === category.id) || []
+          !category?.id && categories.filter(category => category?.id !== null).map((category, i, _categories) => {
+            const products = categoryState.products?.filter(product => product?.category_id === category?.id) || []
             return (
-              <React.Fragment key={category.id}>
+              <React.Fragment key={category?.id}>
                 {
                   products.length > 0 && (
                     <WrapAllCategories id='container'>
@@ -96,7 +96,7 @@ const BusinessProductsListUI = (props) => {
                         {
                           products.map(product => (
                             <SingleProductCard
-                              key={product.id}
+                              key={product?.id}
                               isSoldOut={product.inventoried && !product.quantity}
                               businessId={businessId}
                               product={product}

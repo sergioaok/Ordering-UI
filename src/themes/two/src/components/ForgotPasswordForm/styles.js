@@ -2,14 +2,20 @@ import styled, { css } from 'styled-components'
 
 export const ForgotPasswordContainer = styled.div`
   width: 100%;
-  height: ${({ isPopup }) => isPopup ? '100vh' : 'auto'};
+  height: 100%;
   display: flex;
+  min-height: ${({ isPopup }) => isPopup ? '500px' : '100vh'};
   flex-direction: column;
+  justify-content: center;
 
-  @media (min-width: 992px) {
+  @media (min-width: 768px) {
+    justify-content: flex-start;
+    background: ${props => props.theme.colors.lightGrayColor};
+    min-height: ${({ isPopup }) => isPopup ? '500px' : 'calc(100vh - 90px)'};
     flex-direction: row;
-    height: 100%;
-    min-height: ${({ isPopup }) => isPopup ? '500px' : 'calc(100vh - 65px)'};
+    ${({ isPopup }) => !isPopup && css`
+      padding-top: 60px;
+    `}
   }
 `
 const Side = styled.div`
@@ -30,48 +36,27 @@ export const HeroSide = styled(Side)`
   }
 `
 
-export const TitleHeroSide = styled.div`
-  width: 90%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-
-  h1 {
-    font-size: 22px;
-  }
-
-  p {
-    font-size: 13px;
-  }
-
-  h1,
-  p {
-    margin: 0px;
-    color: #FFF;
-  }
-
-  @media (min-width: 768px) {
-    h1 {
-      font-size: 50px;
-    }
-
-    p {
-      font-size: 18px;
-    }
-  }
-`
-
 export const FormSide = styled(Side)`
   flex-direction: column;
   align-items: center;
-  margin-top: 30px;
+  margin: 0 auto;
+  background: #fff;
+  padding-bottom: 40px;
+
+  @media (min-width: 769px) {
+    ${({ isPopup }) => isPopup && css`
+      margin: 20px 0px;
+    `}
+  }
 
   @media (min-width: 992px) {
-
-    margin: auto;
-    width: 45%;
+    min-width: 580px;
+    width: ${({ isPopup }) => isPopup ? '100%' : '45%'};
     font-size: ${({ isPopup }) => isPopup ? '12px' : '1em'};
+  }
+
+  @media (min-width: 1200px){
+    font-size: ${({ isPopup }) => isPopup ? '0.9em' : '1em'};
   }
 `
 
@@ -80,19 +65,21 @@ export const FormInput = styled.form`
   display: flex;
   flex-direction: column;
 
-  * {
-    padding: 8px 20px;
-    margin: 10px;
+  input {
+    padding: 10px 20px;
   }
 
   input:not(:last-child) {
-    margin-top: 10px;
-    margin-bottom: 0px;
+    margin: 10px 0px;
   }
 
   button {
     margin-top: 10px;
-    padding: 5px;
+    padding: 10px 15px;
+  }
+
+  @media (max-width: 576px) {
+    width: 91%;
   }
 `
 
@@ -149,5 +136,25 @@ export const RedirectLink = styled.div`
     ${({ isPopup }) => isPopup && css`
       font-size: 16px;
     `};
+  }
+`
+
+export const FormTitle = styled.h1`
+  font-size: 42px;
+  margin-bottom: 0px;
+
+  @media (max-width: 992px) {
+    font-size: 32px;
+  }
+`
+
+export const InputGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  row-gap: 5px;
+  label {
+    color: ${props => props.theme.colors.darkTextColor};
+    font-weight: 500;
+    font-size: 18px;
   }
 `

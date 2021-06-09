@@ -61,6 +61,20 @@ export const Text = styled.div`
   }
 `
 
+export const SubOptionThumbnail = styled.div`
+  display: inline-block;
+  border-radius: 8px;
+  background-image: url(${({src}) => src});
+  background-repeat: no-repeat, repeat;
+  width: 40px;
+  height: 40px;
+  background-size: cover;
+  object-fit: cover;
+  background-position: center;
+  justify-content: center;
+  align-items: center;
+`
+
 export const QuantityControl = styled.div`
   display: flex;
   color: #555;

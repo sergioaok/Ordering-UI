@@ -62,6 +62,7 @@ import {
   ExclamationWrapper
 } from './styles'
 import { useTheme } from 'styled-components'
+import { verifyDecimals } from '../../utils'
 
 const OrderDetailsUI = (props) => {
   const {
@@ -74,7 +75,7 @@ const OrderDetailsUI = (props) => {
     messages,
     setMessages,
     readMessages,
-    messagesReadList
+    messagesReadList,
   } = props
   const [, t] = useLanguage()
   const [{ configs }] = useConfig()
@@ -92,19 +93,28 @@ const OrderDetailsUI = (props) => {
   const getOrderStatus = (s) => {
     const status = parseInt(s)
     const orderStatus = [
-      { key: 0, value: t('PENDING', 'Pending'), slug: 'PENDING', percentage: 25 },
-      { key: 1, value: t('COMPLETED', 'Completed'), slug: 'COMPLETED', percentage: 100 },
-      { key: 2, value: t('REJECTED', 'Rejected'), slug: 'REJECTED', percentage: 0 },
-      { key: 3, value: t('DRIVER_IN_BUSINESS', 'Driver in business'), slug: 'DRIVER_IN_BUSINESS', percentage: 60 },
-      { key: 4, value: t('PREPARATION_COMPLETED', 'Preparation Completed'), slug: 'PREPARATION_COMPLETED', percentage: 70 },
-      { key: 5, value: t('REJECTED_BY_BUSINESS', 'Rejected by business'), slug: 'REJECTED_BY_BUSINESS', percentage: 0 },
-      { key: 6, value: t('REJECTED_BY_DRIVER', 'Rejected by Driver'), slug: 'REJECTED_BY_DRIVER', percentage: 0 },
-      { key: 7, value: t('ACCEPTED_BY_BUSINESS', 'Accepted by business'), slug: 'ACCEPTED_BY_BUSINESS', percentage: 35 },
-      { key: 8, value: t('ACCEPTED_BY_DRIVER', 'Accepted by driver'), slug: 'ACCEPTED_BY_DRIVER', percentage: 45 },
-      { key: 9, value: t('PICK_UP_COMPLETED_BY_DRIVER', 'Pick up completed by driver'), slug: 'PICK_UP_COMPLETED_BY_DRIVER', percentage: 80 },
-      { key: 10, value: t('PICK_UP_FAILED_BY_DRIVER', 'Pick up Failed by driver'), slug: 'PICK_UP_FAILED_BY_DRIVER', percentage: 0 },
-      { key: 11, value: t('DELIVERY_COMPLETED_BY_DRIVER', 'Delivery completed by driver'), slug: 'DELIVERY_COMPLETED_BY_DRIVER', percentage: 100 },
-      { key: 12, value: t('DELIVERY_FAILED_BY_DRIVER', 'Delivery Failed by driver'), slug: 'DELIVERY_FAILED_BY_DRIVER', percentage: 0 }
+      { key: 0, value: t('PENDING', theme?.defaultLanguages?.PENDING || 'Pending'), slug: 'PENDING', percentage: 25 },
+      { key: 1, value: t('COMPLETED', theme?.defaultLanguages?.COMPLETED || 'Completed'), slug: 'COMPLETED', percentage: 100 },
+      { key: 2, value: t('REJECTED', theme?.defaultLanguages?.REJECTED || 'Rejected'), slug: 'REJECTED', percentage: 0 },
+      { key: 3, value: t('DRIVER_IN_BUSINESS', theme?.defaultLanguages?.DRIVER_IN_BUSINESS || 'Driver in business'), slug: 'DRIVER_IN_BUSINESS', percentage: 60 },
+      { key: 4, value: t('PREPARATION_COMPLETED', theme?.defaultLanguages?.PREPARATION_COMPLETED || 'Preparation Completed'), slug: 'PREPARATION_COMPLETED', percentage: 70 },
+      { key: 5, value: t('REJECTED_BY_BUSINESS', theme?.defaultLanguages?.REJECTED_BY_BUSINESS || 'Rejected by business'), slug: 'REJECTED_BY_BUSINESS', percentage: 0 },
+      { key: 6, value: t('REJECTED_BY_DRIVER', theme?.defaultLanguages?.REJECTED_BY_DRIVER || 'Rejected by Driver'), slug: 'REJECTED_BY_DRIVER', percentage: 0 },
+      { key: 7, value: t('ACCEPTED_BY_BUSINESS', theme?.defaultLanguages?.ACCEPTED_BY_BUSINESS || 'Accepted by business'), slug: 'ACCEPTED_BY_BUSINESS', percentage: 35 },
+      { key: 8, value: t('ACCEPTED_BY_DRIVER', theme?.defaultLanguages?.ACCEPTED_BY_DRIVER || 'Accepted by driver'), slug: 'ACCEPTED_BY_DRIVER', percentage: 45 },
+      { key: 9, value: t('PICK_UP_COMPLETED_BY_DRIVER', theme?.defaultLanguages?.PICK_UP_COMPLETED_BY_DRIVER || 'Pick up completed by driver'), slug: 'PICK_UP_COMPLETED_BY_DRIVER', percentage: 80 },
+      { key: 10, value: t('PICK_UP_FAILED_BY_DRIVER', theme?.defaultLanguages?.PICK_UP_FAILED_BY_DRIVER || 'Pick up Failed by driver'), slug: 'PICK_UP_FAILED_BY_DRIVER', percentage: 0 },
+      { key: 11, value: t('DELIVERY_COMPLETED_BY_DRIVER', theme?.defaultLanguages?.DELIVERY_COMPLETED_BY_DRIVER || 'Delivery completed by driver'), slug: 'DELIVERY_COMPLETED_BY_DRIVER', percentage: 100 },
+      { key: 12, value: t('DELIVERY_FAILED_BY_DRIVER', theme?.defaultLanguages?.DELIVERY_FAILED_BY_DRIVER || 'Delivery Failed by driver'), slug: 'DELIVERY_FAILED_BY_DRIVER', percentage: 0 },
+      { key: 13, value: t('PREORDER', theme?.defaultLanguages?.PREORDER || 'PreOrder'), slug: 'PREORDER', percentage: 0 },
+      { key: 14, value: t('ORDER_NOT_READY', theme?.defaultLanguages?.ORDER_NOT_READY || 'Order not ready'), slug: 'ORDER_NOT_READY', percentage: 65 },
+      { key: 15, value: t('ORDER_PICKEDUP_COMPLETED_BY_CUSTOMER', theme?.defaultLanguages?.ORDER_PICKEDUP_COMPLETED_BY_CUSTOMER || 'Order picked up completed by customer'), slug: 'ORDER_PICKEDUP_COMPLETED_BY_CUSTOMER', percentage: 100 },
+      { key: 16, value: t('ORDER_STATUS_CANCELLED_BY_CUSTOMER', theme?.defaultLanguages?.ORDER_STATUS_CANCELLED_BY_CUSTOMER || 'Order cancelled by customer'), slug: 'ORDER_STATUS_CANCELLED_BY_CUSTOMER', percentage: 0 },
+      { key: 17, value: t('ORDER_NOT_PICKEDUP_BY_CUSTOMER', theme?.defaultLanguages?.ORDER_NOT_PICKEDUP_BY_CUSTOMER || 'Order not picked up by customer'), slug: 'ORDER_NOT_PICKEDUP_BY_CUSTOMER', percentage: 0 },
+      { key: 18, value: t('ORDER_DRIVER_ALMOST_ARRIVED_BUSINESS', theme?.defaultLanguages?.ORDER_DRIVER_ALMOST_ARRIVED_BUSINESS || 'Driver almost arrived to business'), slug: 'ORDER_DRIVER_ALMOST_ARRIVED_BUSINESS', percentage: 55 },
+      { key: 19, value: t('ORDER_DRIVER_ALMOST_ARRIVED_CUSTOMER', theme?.defaultLanguages?.ORDER_DRIVER_ALMOST_ARRIVED_CUSTOMER || 'Driver almost arrived to customer'), slug: 'ORDER_DRIVER_ALMOST_ARRIVED_CUSTOMER', percentage: 90 },
+      { key: 20, value: t('ORDER_CUSTOMER_ALMOST_ARRIVED_BUSINESS', theme?.defaultLanguages?.ORDER_CUSTOMER_ALMOST_ARRIVED_BUSINESS || 'Customer almost arrived to business'), slug: 'ORDER_CUSTOMER_ALMOST_ARRIVED_BUSINESS', percentage: 90 },
+      { key: 21, value: t('ORDER_CUSTOMER_ARRIVED_BUSINESS', theme?.defaultLanguages?.ORDER_CUSTOMER_ARRIVED_BUSINESS || 'Customer arrived to business'), slug: 'ORDER_CUSTOMER_ARRIVED_BUSINESS', percentage: 95 }
     ]
 
     const objectStatus = orderStatus.find((o) => o.key === status)
@@ -185,8 +195,8 @@ const OrderDetailsUI = (props) => {
                 </HeaderImg>
                 <HeaderInfo className='order-header'>
                   <HeaderText column>
-                    <h1>{t('ORDER_MESSAGE_RECEIVED', 'Your order has been received')}</h1>
-                    <p>{t('ORDER_MESSAGE_HEADER_TEXT', 'Once business accepts your order, we will send you an email, thank you!')}</p>
+                    <h1>{t('ORDER_MESSAGE_RECEIVED', theme?.defaultLanguages?.ORDER_MESSAGE_RECEIVED || 'Your order has been received')}</h1>
+                    <p>{t('ORDER_MESSAGE_HEADER_TEXT', theme?.defaultLanguages?.ORDER_MESSAGE_HEADER_TEXT || 'Once business accepts your order, we will send you an email, thank you!')}</p>
                   </HeaderText>
                 </HeaderInfo>
               </Header>
@@ -198,6 +208,8 @@ const OrderDetailsUI = (props) => {
                   <BusinessInfo>
                     <h1>{order?.business?.name}</h1>
                     <p>{order?.business?.address}</p>
+                    <p>{order?.business?.cellphone}</p>
+                    <p>{order?.business?.email}</p>
                   </BusinessInfo>
                 </BusinessWrapper>
                 <ActionsBlock>
@@ -221,8 +233,8 @@ const OrderDetailsUI = (props) => {
 
               <OrderInfo>
                 <OrderData>
-                  <h1>{t('ORDER', 'Order')} #{order?.id}</h1>
-                  <p>{t('DATE_TIME_FOR_ORDER', 'Date and time for your order')}</p>
+                  <h1>{t('ORDER', theme?.defaultLanguages?.ORDER || 'Order')} #{order?.id}</h1>
+                  <p>{t('DATE_TIME_FOR_ORDER', theme?.defaultLanguages?.DATE_TIME_FOR_ORDER || 'Date and time for your order')}</p>
                   <p className='date'>
                     {
                       order?.delivery_datetime_utc
@@ -241,7 +253,7 @@ const OrderDetailsUI = (props) => {
               </OrderInfo>
 
               <SectionTitle>
-                {t('CUSTOMER', 'Customer')}
+                {t('CUSTOMER', theme?.defaultLanguages?.CUSTOMER || 'Customer')}
               </SectionTitle>
               <OrderCustomer>
                 <div className='photo'>
@@ -260,13 +272,13 @@ const OrderDetailsUI = (props) => {
               {parseInt(configs?.guest_uuid_access?.value, 10) && order?.hash_key && (
                 <ShareOrder>
                   <div className='text'>
-                    <h1>{t('SHARE_THIS_DELIVERY', 'Share this delivery')}</h1>
-                    <p>{t('LET_SOMEONE_FOLLOW_ALONG', 'Let someone follow along')}</p>
+                    <h1>{t('SHARE_THIS_DELIVERY', theme?.defaultLanguages?.SHARE_THIS_DELIVERY || 'Share this delivery')}</h1>
+                    <p>{t('LET_SOMEONE_FOLLOW_ALONG', theme?.defaultLanguages?.LET_SOMEONE_FOLLOW_ALONG || 'Let someone follow along')}</p>
                   </div>
                   <div className='wrap'>
                     <ProductShare
                       withBtn
-                      btnText={t('SHARE', 'Share')}
+                      btnText={t('SHARE', theme?.defaultLanguages?.SHARE || 'Share')}
                       defaultUrl={urlToShare(order?.hash_key)}
                     />
                   </div>
@@ -287,7 +299,7 @@ const OrderDetailsUI = (props) => {
                   )}
                   <>
                     <SectionTitle>
-                      {t('YOUR_DRIVER', 'Your Driver')}
+                      {t('YOUR_DRIVER', theme?.defaultLanguages?.YOUR_DRIVER || 'Your Driver')}
                     </SectionTitle>
                     <OrderDriver>
                       <WrapperDriver>
@@ -300,7 +312,7 @@ const OrderDetailsUI = (props) => {
                         </div>
                         <InfoBlock>
                           <h1>{order?.driver?.name} {order?.driver?.lastname}</h1>
-                          <span>{t('DRIVER', 'Driver')}</span>
+                          <span>{t('DRIVER', theme?.defaultLanguages?.DRIVER || 'Driver')}</span>
                         </InfoBlock>
                       </WrapperDriver>
                       <ActionsBlock>
@@ -323,7 +335,7 @@ const OrderDetailsUI = (props) => {
               )}
 
               <SectionTitle>
-                {t('YOUR_ORDER', 'Your Order')}
+                {t('YOUR_ORDER', theme?.defaultLanguages?.YOUR_ORDER || 'Your Order')}
               </SectionTitle>
               <OrderProducts>
                 {order?.products?.length && order?.products.map(product => (
@@ -337,59 +349,66 @@ const OrderDetailsUI = (props) => {
                 <table>
                   <tbody>
                     <tr>
-                      <td>{t('SUBTOTAL', 'Subtotal')}</td>
+                      <td>{t('SUBTOTAL', theme?.defaultLanguages?.SUBTOTAL || 'Subtotal')}</td>
                       <td>{parsePrice(order?.summary?.subtotal || order?.subtotal)}</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        {order?.tax_type === 1
-                          ? t('TAX_INCLUDED', 'Tax (included)')
-                          : t('TAX', 'Tax')}
-                        <span>{`(${parseNumber(order?.tax)}%)`}</span>
-                      </td>
-                      <td>{parsePrice(order?.summary?.tax || order?.totalTax)}</td>
-                    </tr>
-                    {(order?.summary?.delivery_price > 0 || order?.deliveryFee > 0) && (
-                      <tr>
-                        <td>{t('DELIVERY_FEE', 'Delivery Fee')}</td>
-                        <td>{parsePrice(order?.summary?.delivery_price || order?.deliveryFee)}</td>
-                      </tr>
-                    )}
-                    <tr>
-                      <td>
-                        {t('DRIVER_TIP', 'Driver tip')}
-                        {(order?.summary?.driver_tip > 0 || order?.driver_tip > 0) && (
-                          <span>{`(${parseNumber(order?.driver_tip)}%)`}</span>
-                        )}
-                      </td>
-                      <td>{parsePrice(order?.summary?.driver_tip || order?.totalDriverTip)}</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        {t('SERVICE_FEE', 'Service Fee')}
-                        <span>{`(${parseNumber(order?.service_fee)}%)`}</span>
-                      </td>
-                      <td>{parsePrice(order?.summary?.service_fee || order?.serviceFee || 0)}</td>
                     </tr>
                     {(order?.summary?.discount > 0 || order?.discount > 0) && (
                       <tr>
                         {order?.offer_type === 1 ? (
                           <td>
-                            {t('DISCOUNT', 'Discount')}
-                            <span>{`(${parseNumber(order?.offer_rate)}%)`}</span>
+                            {t('DISCOUNT', theme?.defaultLanguages?.DISCOUNT || 'Discount')}{' '}
+                            <span>{`(${verifyDecimals(order?.offer_rate, parsePrice)}%)`}</span>
                           </td>
                         ) : (
-                          <td>{t('DISCOUNT', 'Discount')}</td>
+                          <td>{t('DISCOUNT', theme?.defaultLanguages?.DISCOUNT || 'Discount')}</td>
                         )}
                         <td>- {parsePrice(order?.summary?.discount || order?.discount)}</td>
                       </tr>
                     )}
+                    {
+                      order?.tax_type !== 1 && (
+                        <tr>
+                          <td>
+                            {t('TAX', theme?.defaultLanguages?.TAX || 'Tax')}{' '}
+                            <span>{`(${verifyDecimals(order?.tax, parseNumber)}%)`}</span>
+                          </td>
+                          <td>{parsePrice(order?.summary?.tax || order?.totalTax)}</td>
+                        </tr>
+                      )
+                    }
+                    {(order?.summary?.delivery_price > 0 || order?.deliveryFee > 0) && (
+                      <tr>
+                        <td>{t('DELIVERY_FEE', theme?.defaultLanguages?.DELIVERY_FEE || 'Delivery Fee')}</td>
+                        <td>{parsePrice(order?.summary?.delivery_price || order?.deliveryFee)}</td>
+                      </tr>
+                    )}
+                    {(order?.summary?.driver_tip > 0 || order?.driver_tip > 0) && (
+                      <tr>
+                        <td>
+                          {t('DRIVER_TIP', theme?.defaultLanguages?.DRIVER_TIP || 'Driver tip')}{' '}
+                          {(order?.summary?.driver_tip > 0 || order?.driver_tip > 0) &&
+                            parseInt(configs?.driver_tip_type?.value, 10) === 2 &&
+                            !!!parseInt(configs?.driver_tip_use_custom?.value, 10) &&
+                          (
+                            <span>{`(${verifyDecimals(order?.driver_tip, parseNumber)}%)`}</span>
+                          )}
+                        </td>
+                        <td>{parsePrice(order?.summary?.driver_tip || order?.totalDriverTip)}</td>
+                      </tr>
+                    )}
+                    <tr>
+                      <td>
+                        {t('SERVICE_FEE', theme?.defaultLanguages?.SERVICE_FEE || 'Service Fee')}{' '}
+                        <span>{`(${verifyDecimals(order?.service_fee, parseNumber)}%)`}</span>
+                      </td>
+                      <td>{parsePrice(order?.summary?.service_fee || order?.serviceFee || 0)}</td>
+                    </tr>
                   </tbody>
                 </table>
                 <table className='total'>
                   <tbody>
                     <tr>
-                      <td>{t('TOTAL', 'Total')}</td>
+                      <td>{t('TOTAL', theme?.defaultLanguages?.TOTAL || 'Total')}</td>
                       <td>{parsePrice(order?.summary?.total || order?.total)}</td>
                     </tr>
                   </tbody>
@@ -407,7 +426,7 @@ const OrderDetailsUI = (props) => {
               ) && !order.review && !isReviewed && (
                 <ReviewsAction>
                   <Button color='primary' onClick={() => setOpenReview(true)}>
-                    {t('REVIEW_ORDER', 'Review your Order')}
+                    {t('REVIEW_ORDER', theme?.defaultLanguages?.REVIEW_ORDER || 'Review your Order')}
                   </Button>
                 </ReviewsAction>
               )}
@@ -415,7 +434,7 @@ const OrderDetailsUI = (props) => {
               {!userCustomerId && (
                 <FootActions>
                   <a onClick={() => handleGoToPage({ page: 'orders' })}>
-                    {t('MY_ORDERS', 'My Orders')}
+                    {t('MY_ORDERS', theme?.defaultLanguages?.MY_ORDERS || 'My Orders')}
                     <BiCaretUp />
                   </a>
                 </FootActions>
@@ -446,8 +465,8 @@ const OrderDetailsUI = (props) => {
             />
           ) : (
             <NotFoundSource
-              content={t('NOT_FOUND_ORDER', 'Sorry, we couldn\'t find the requested order.')}
-              btnTitle={t('ORDERS_REDIRECT', 'Go to Orders')}
+              content={t('NOT_FOUND_ORDER', theme?.defaultLanguages?.NOT_FOUND_ORDER || 'Sorry, we couldn\'t find the requested order.')}
+              btnTitle={t('ORDERS_REDIRECT', theme?.defaultLanguages?.ORDERS_REDIRECT || 'Go to Orders')}
               onClickButton={handleOrderRedirect}
             />
           )
@@ -475,7 +494,7 @@ const OrderDetailsUI = (props) => {
           <Modal
             open={openReview}
             onClose={() => setOpenReview(false)}
-            title={order ? `${t('WRITE_A_REVIEW', 'Write a Review')} #${order?.id}` : t('LOADING', 'Loading...')}
+            title={order ? `${t('WRITE_A_REVIEW', theme?.defaultLanguages?.WRITE_A_REVIEW || 'Write a Review')} #${order?.id}` : t('LOADING', theme?.defaultLanguages?.LOADING || 'Loading...')}
           >
             <ReviewOrder order={order} closeReviewOrder={() => setOpenReview(false)} setIsReviewed={setIsReviewed} />
           </Modal>

@@ -37,6 +37,8 @@ export const IconContent = styled.button`
     flex-shrink: 0;
     font-size: 30px;
     color: ${({ isHome }) => isHome ? 'rgb(255, 255, 255)' : '#333'};
+    background: ${({ isHome, auth }) => isHome && auth && 'rgba(0,0,0,0.5)'};
+    border-radius: ${({ isHome, auth }) => isHome && auth && '10px'};
   }
 `
 

@@ -43,7 +43,7 @@ export const TitleHeroSide = styled.div`
   h1,
   p {
     margin: 0px;
-    color: #FFF;
+    color: ${props => props.theme.colors.colorTextSignForm};
   }
 `
 
@@ -203,5 +203,8 @@ export const TogglePassword = styled.span`
   span{
     cursor: pointer;
   }
+`
 
+export const ReCaptchaWrapper = styled.div`
+  margin: 12px auto;
 `

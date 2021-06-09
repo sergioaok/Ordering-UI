@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="158.236" height="169" viewBox="0 0 158.236 169">
+  <g id="Group_5476" data-name="Group 5476" transform="translate(-1591.882 -1387)">
+    <g id="Shopping_Time_3_" transform="translate(1591.882 1390.045)">
+      <g id="Group_5475" data-name="Group 5475" transform="translate(0 13.908)">
+        <g id="Group_5474" data-name="Group 5474" transform="translate(0)">
+          <path id="Path_7399" data-name="Path 7399" d="M148.9,138.478l9.272-55.63a4.63,4.63,0,0,0-4.572-5.4H118.65a4.635,4.635,0,0,0-3.441,1.53c-8.891,9.842-25.588,9.842-34.479,0-.878-.973-2.128-1.53-40.15-1.53L37.614,62.634a4.634,4.634,0,0,0-4.545-3.726H4.636a4.636,4.636,0,0,0,0,9.272h24.63c16.538,82.694,12.855,64.9,17.8,89.608a4.634,4.634,0,0,0,4.545,3.726h92.716a4.636,4.636,0,0,0,0-9.272H55.415l-1.858-9.89h90.772a4.637,4.637,0,0,0,4.572-3.875Z" transform="translate(0 -45.001)" fill="#9a9a9a"/>
+        </g>
+      </g>
+    </g>
+    <circle id="Ellipse_427" data-name="Ellipse 427" cx="13.5" cy="13.5" r="13.5" transform="translate(1644 1529)" fill="#9a9a9a"/>
+    <circle id="Ellipse_428" data-name="Ellipse 428" cx="13.5" cy="13.5" r="13.5" transform="translate(1714 1529)" fill="#9a9a9a"/>
+    <g id="_224-clock" data-name="224-clock" transform="translate(1646 1387)">
+      <path id="Path_7411" data-name="Path 7411" d="M42.5,0A42.5,42.5,0,1,1,0,42.5,42.5,42.5,0,0,1,42.5,0Z" fill="#f8f8f8"/>
+      <path id="Path_7400" data-name="Path 7400" d="M42.291,5.833A36.457,36.457,0,1,1,5.833,42.291,36.5,36.5,0,0,1,42.291,5.833m0-5.833A42.291,42.291,0,1,0,84.581,42.291,42.291,42.291,0,0,0,42.291,0Z" fill="#d81212"/>
+      <path id="Path_7409" data-name="Path 7409" d="M29.666,28.879H18" transform="translate(8.249 13.235)" fill="none" stroke="#010300" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="4"/>
+      <path id="Path_7410" data-name="Path 7410" d="M29,30.92V14.879" transform="translate(13.291 6.819)" fill="none" stroke="#010300" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="4"/>
+      <circle id="Ellipse_430" data-name="Ellipse 430" cx="4.375" cy="4.375" r="4.375" transform="translate(37.916 37.739)" fill="#000300"/>
+    </g>
+  </g>
+</svg>

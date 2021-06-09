@@ -21,7 +21,8 @@ const ModalUI = (props) => {
     acceptText,
     cancelText,
     isTransparent,
-    hideCloseDefault
+    hideCloseDefault,
+    isProductForm
   } = props
   const [, t] = useLanguage()
 
@@ -46,6 +47,7 @@ const ModalUI = (props) => {
       height={props.height}
       padding={props.padding}
       isTransparent={isTransparent}
+      isProductForm={isProductForm}
     >
       {!hideCloseDefault && (
         <ModalIcon>

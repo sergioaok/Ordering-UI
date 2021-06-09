@@ -49,7 +49,6 @@ const OrdersOptionUI = (props) => {
     ? orders && orders.length > 0 && !orders.map(order => businessesIds && businessesIds.includes(order.business_id)).every(i => !i)
     : orders.length > 0
 
-  const [ordersSorted, setOrdersSorted] = useState([])
   const [reorderLoading, setReorderLoading] = useState(false)
 
   const handleReorder = async (orderId) => {
@@ -89,16 +88,6 @@ const OrdersOptionUI = (props) => {
     return objectStatus && objectStatus
   }
 
-  useEffect(() => {
-    const ordersSorted = orders.sort((a, b) => {
-      if (activeOrders) {
-        return new Date(b.created_at) - new Date(a.created_at)
-      }
-      return new Date(a.created_at) - new Date(b.created_at)
-    })
-    setOrdersSorted(ordersSorted)
-  }, [orders])
-
   return (
     <>
       {props.beforeElements?.map((BeforeElement, i) => (
@@ -116,7 +105,7 @@ const OrdersOptionUI = (props) => {
                 : t('PREVIOUS_ORDERS', 'Previous Orders'))}
             </h1>
           </OptionTitle>
-          {!loading && ordersSorted.length === 0 && (
+          {!loading && orders.length === 0 && (
             <NotFoundSource
               image={imageFails}
               content={t('NO_RESULTS_FOUND', 'Sorry, no results found')}
@@ -184,7 +173,7 @@ const OrdersOptionUI = (props) => {
         horizontal ? (
           <HorizontalOrdersLayout
             businessesIds={businessesIds}
-            orders={ordersSorted}
+            orders={orders}
             pagination={pagination}
             onRedirectPage={onRedirectPage}
             loadMoreOrders={loadMoreOrders}
@@ -197,7 +186,7 @@ const OrdersOptionUI = (props) => {
         ) : (
           <VerticalOrdersLayout
             reorderLoading={reorderLoading}
-            orders={ordersSorted}
+            orders={orders}
             pagination={pagination}
             loadMoreOrders={loadMoreOrders}
             onRedirectPage={onRedirectPage}
@@ -220,7 +209,7 @@ export const OrdersOption = (props) => {
   const orderListProps = {
     ...props,
     UIComponent: OrdersOptionUI,
-    orderStatus: props.activeOrders ? [0, 3, 4, 7, 8, 9] : [1, 2, 5, 6, 10, 11, 12],
+    orderStatus: props.activeOrders ? [0, 3, 4, 7, 8, 9, 13, 14, 15, 18, 19, 20, 21] : [1, 2, 5, 6, 10, 11, 12, 16, 17],
     useDefualtSessionManager: true,
     paginationSettings: {
       initialPage: 1,

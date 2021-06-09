@@ -4,8 +4,10 @@ import BsCheck from '@meronex/icons/bs/BsCheck'
 import {
   Container,
   WrapHeader,
+  TitleContainer,
   Title,
-  Flag
+  Flag,
+  OptionThumbnail
 } from './styles'
 
 const ProductOptionUI = (props) => {
@@ -29,12 +31,18 @@ const ProductOptionUI = (props) => {
   return (
     <Container>
       <WrapHeader>
-        <Title>
-          <span>{option.name}</span>
-          {option.min === 1 && option.max === 1 && (
-            <span>{t('SELECT_AT_LEAST_1', 'select at least 1')}</span>
+        <TitleContainer>
+          {option.image && (
+            <OptionThumbnail src={option.image} />
           )}
-        </Title>
+          <Title>
+            <span>{option.name}</span>
+            {option.min === 1 && option.max === 1 && (
+              <span>{t('SELECT_AT_LEAST_1', 'select at least 1')}</span>
+            )}
+          </Title>
+        </TitleContainer>
+
         <Flag error={error}>
           {option.min === 1 && option.max === 1 && !error && (
             <BsCheck />

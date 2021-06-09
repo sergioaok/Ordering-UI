@@ -81,7 +81,7 @@ const OrderDetailsUI = (props) => {
       { key: 6, value: t('REJECTED', 'Rejected'), slug: 'REJECTED', percentage: 0 },
       { key: 7, value: t('ACCEPTED', 'Accepted'), slug: 'ACCEPTED', percentage: 66.66 },
       { key: 8, value: t('ACCEPTED', 'Accepted'), slug: 'ACCEPTED', percentage: 66.66 },
-      { key: 9, value: t('ACCEPTED', 'Accepted'), slug: 'ACCEPTED', percentage: 66.66 },
+      { key: 9, value: t('PICK_UP_COMPLETED_BY_DRIVER', 'Pick up completed by driver'), slug: 'PICK_UP_COMPLETED_BY_DRIVER', percentage: 66.66 },
       { key: 10, value: t('REJECTED', 'Rejected'), slug: 'REJECTED', percentage: 0 },
       { key: 11, value: t('COMPLETED', 'Completed'), slug: 'COMPLETED', percentage: 100 },
       { key: 12, value: t('REJECTED', 'Rejected'), slug: 'REJECTED', percentage: 0 }
@@ -151,12 +151,15 @@ const OrderDetailsUI = (props) => {
                     <h1>
                       <span>{getOrderStatus(order?.status)?.value}</span>
                       <span onClick={() => handleOpenMessages({ driver: false, business: true })}>
-                        {t('HELP', 'Help')}
+                        {t('ORDER_CHAT', 'Order Chat')}
                       </span>
                     </h1>
                     <p className='date'>
-                      <span>{order?.business?.name}</span>
-                      <BsDot />
+                      <span>Order Id: </span>
+                      <span>
+                        {order?.id}
+                      </span>
+                      <br />
                       <span>
                         {
                           order?.delivery_datetime_utc
@@ -165,6 +168,37 @@ const OrderDetailsUI = (props) => {
                         }
                       </span>
                     </p>
+
+                    <div className='order-data-section'>
+                      <dl>
+                        <dt>{t('FROM', 'from')}:</dt>
+                        <dd>
+                          <p>{order?.business?.name}</p>
+                          <p>{order?.business?.address}</p>
+                          <p>{order?.business?.phone} <BsDot/> {order?.business?.cellphone}</p>
+                          <p>{order?.business?.email}</p>
+                        </dd>
+                      </dl>
+
+                      <dl>
+                        <dt>{t('TO', 'to')}:</dt>
+                        <dd>
+                          <p>
+                            {order?.customer?.name}&nbsp;
+                            {order?.customer?.middle}&nbsp;
+                            {order?.customer?.lastname}&nbsp;
+                            {order?.customer?.second_lastname}
+                          </p>
+                          <p>
+                            {order?.customer?.address}&nbsp;
+                            {order?.customer?.zipcode}
+                          </p>
+                          <p>{order?.customer?.cellphone}</p>
+                          <p>{order?.customer?.email}</p>
+                        </dd>
+                      </dl>
+                    </div>
+
                     {!isOrderDetail && (
                       <StatusBar percentage={getOrderStatus(order?.status)?.percentage}>
                         <div>
@@ -202,7 +236,6 @@ const OrderDetailsUI = (props) => {
                   <BusinessInfo>
                     <h1 onClick={() => setIsOrderDetail(true)}>
                       <span>{order?.business?.name}</span>
-                      <BsChevronRight />
                     </h1>
                     <p>{order.products.length} {t('ITEM', 'Item')}</p>
                     {order?.products?.length && order?.products.map(product => (
@@ -246,7 +279,10 @@ const OrderDetailsUI = (props) => {
                         <tr>
                           <td>
                             {t('DRIVER_TIP', 'Driver tip')}
-                            {(order?.summary?.driver_tip > 0 || order?.driver_tip > 0) && (
+                            {(order?.summary?.driver_tip > 0 || order?.driver_tip > 0) &&
+                              parseInt(configs?.driver_tip_type?.value, 10) === 2 &&
+                              !!!parseInt(configs?.driver_tip_use_custom?.value, 10) &&
+                            (
                               <span>{`(${parseNumber(order?.driver_tip)}%)`}</span>
                             )}
                           </td>
@@ -290,8 +326,7 @@ const OrderDetailsUI = (props) => {
                     <div>
                       <img src={theme.images.general.gift} width='40' height='40' alt='gift' />
                       <p>
-                        <span>{t('GET_$15.00_OFF', 'Get $15.00 off')}</span>
-                        <span>{t('INVITE_FRIENDS', 'Invite Friends')}</span>
+                        <span>{t('SHARE_WITH_FRIENDS', 'Share with friends')}</span>
                       </p>
                     </div>
                     <span>

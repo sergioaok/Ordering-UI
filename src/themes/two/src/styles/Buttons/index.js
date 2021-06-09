@@ -59,11 +59,6 @@ export const Button = styled.button`
       color: #FFF;
       background: ${darken(0.07, '#CCC')};
     }
-
-    &:hover {
-      background: ${darken(0.07, '#CCC')};
-      color: #FFF;
-    }
   `}
 
   ${({ circle }) => circle && css`
@@ -116,6 +111,10 @@ export const Button = styled.button`
     &:active {
       background: ${props => darken(0.07, props.theme.colors.darkTextColor)};
     }
+
+    &:hover {
+      background: ${props => darken(0.07, props.theme.colors.darkTextColor)};
+    }
   `}
 
   ${({ color }) => color === 'primary' && css`
@@ -124,6 +123,10 @@ export const Button = styled.button`
     border-color: ${props => props.theme.colors.primary};
 
     &:active {
+      background: ${props => darken(0.07, props.theme.colors.primary)};
+    }
+
+    &:hover {
       background: ${props => darken(0.07, props.theme.colors.primary)};
     }
 
@@ -184,6 +187,11 @@ export const Button = styled.button`
     border-color: ${props => props.theme.colors.secondary};
 
     &:active {
+      background: ${props => darken(0.07, props.theme.colors.secondary)};
+      color: ${props => props.theme.colors.secondaryContrast};
+    }
+
+    &:hover {
       background: ${props => darken(0.07, props.theme.colors.secondary)};
       color: ${props => props.theme.colors.secondaryContrast};
     }

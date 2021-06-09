@@ -361,6 +361,7 @@ const AddressFormUI = (props) => {
               handleChangeInput({ target: { name: 'internal_number', value: e.target.value } })
             }}
             autoComplete='new-field'
+            maxLength={30}
           />
 
           <Input
@@ -372,6 +373,7 @@ const AddressFormUI = (props) => {
               handleChangeInput({ target: { name: 'zipcode', value: e.target.value } })
             }}
             autoComplete='new-field'
+            maxLength={30}
           />
 
           <TextArea
@@ -383,6 +385,7 @@ const AddressFormUI = (props) => {
               handleChangeInput({ target: { name: 'address_notes', value: e.target.value } })
             }}
             autoComplete='new-field'
+            maxLength={250}
           />
 
           {!formState.loading && formState.error && <p style={{ color: '#c10000' }}>{formState.error}</p>}

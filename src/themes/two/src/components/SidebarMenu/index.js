@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import IosMenu from '@meronex/icons/ios/IosMenu'
 import MdClose from '@meronex/icons/md/MdClose'
 import AiOutlineLogin from '@meronex/icons/ai/AiOutlineLogin'
@@ -13,6 +13,7 @@ import VscAccount from '@meronex/icons/vsc/VscAccount'
 import HiOutlineShoppingBag from '@meronex/icons/hi/HiOutlineShoppingBag'
 import { useEvent, useLanguage, useOrder, useSession } from 'ordering-components'
 
+import { useOutsideClick } from '../../../../../hooks/useOutsideClick'
 import { useWindowSize } from '../../../../../hooks/useWindowSize'
 import { LogoutButton } from '../LogoutButton'
 import { LanguageSelector } from '../LanguageSelector'
@@ -32,6 +33,7 @@ import {
 } from './styles'
 
 export const SidebarMenu = (props) => {
+  const sideBarRef = useRef(null)
   const { configTypes } = props
   const [{ auth, user }] = useSession()
   const [events] = useEvent()
@@ -64,19 +66,26 @@ export const SidebarMenu = (props) => {
       }
     }
   }, [width])
+  
+  useOutsideClick(sideBarRef, () => {
+    actionSidebar(false)
+    setIsMenuOpen(false)
+  });
 
   return (
     <>
-      {!isHome && (
+      {(!isHome || (isHome && auth)) && (
         <Container auth={auth}>
           <IconContent
             isHome={isHome}
+            auth={auth}
             aria-label='menu'
             onClick={() => actionSidebar(true)}
           >
             <IosMenu />
           </IconContent>
           <SidebarContent
+            ref={sideBarRef}
             id='sidebar_menu'
             isHome={isHome}
           >
@@ -87,155 +96,154 @@ export const SidebarMenu = (props) => {
             >
               <MdClose />
             </MenuClose>
-
-            <MenuLink
-              isHome={isHome}
-              onClick={() => handleGoToPage({ page: options?.address?.location ? 'delivery' : 'home' })}
-            >
-              <WrappContent>
-                <MenuLinkIcon
+            {!(isHome && !options?.address?.location) && (
+              <>
+                <MenuLink
                   isHome={isHome}
-                  active={
-                    window.location.pathname === '/' ||
+                  onClick={() => handleGoToPage({ page: options?.address?.location ? 'delivery' : 'home' })}
+                >
+                  <WrappContent>
+                    <MenuLinkIcon
+                      isHome={isHome}
+                      active={
+                        window.location.pathname === '/' ||
                     window.location.pathname === '/home' ||
                     window.location.pathname === '/search'
-                  }
-                >
-                  {options?.address?.location ? (
-                    <BiStore />
-                  ) : (
-                    <AiOutlineHome />
-                  )}
-                </MenuLinkIcon>
-                <MenuLinkText>
-                  <TextInfo
-                    isHome={isHome}
-                    active={
-                      window.location.pathname === '/' ||
+                      }
+                    >
+                      {options?.address?.location ? (
+                        <BiStore />
+                      ) : (
+                        <AiOutlineHome />
+                      )}
+                    </MenuLinkIcon>
+                    <MenuLinkText>
+                      <TextInfo
+                        isHome={isHome}
+                        active={
+                          window.location.pathname === '/' ||
                       window.location.pathname === '/home' ||
                       window.location.pathname === '/delivery'
-                    }
-                  >
-                    {options?.address?.location ? (
-                      t('DELIVERY', 'Delivery')
-                    ) : (
-                      t('HOME', 'Home')
-                    )}
-                  </TextInfo>
-                </MenuLinkText>
-              </WrappContent>
-            </MenuLink>
-
-            {configTypes.includes(2) && (
-              <MenuLink
-                isHome={isHome}
-                onClick={() => handleGoToPage({ page: options?.address?.location ? 'pickup' : 'home' })}
-              >
-                <WrappContent>
-                  <MenuLinkIcon
+                        }
+                      >
+                        {options?.address?.location ? (
+                          t('DELIVERY', 'Delivery')
+                        ) : (
+                          t('HOME', 'Home')
+                        )}
+                      </TextInfo>
+                    </MenuLinkText>
+                  </WrappContent>
+                </MenuLink>
+                {configTypes.includes(2) && (
+                  <MenuLink
                     isHome={isHome}
-                    active={
-                      window.location.pathname === '/pickup'
-                    }
+                    onClick={() => handleGoToPage({ page: options?.address?.location ? 'pickup' : 'home' })}
                   >
-                    <HiOutlineShoppingBag />
-                  </MenuLinkIcon>
-                  <MenuLinkText>
-                    <TextInfo
-                      isHome={isHome}
-                      active={
-                        window.location.pathname === '/pickup'
-                      }
-                    >
-                      {t('PICKUP', 'Pickup')}
-                    </TextInfo>
-                  </MenuLinkText>
-                </WrappContent>
-              </MenuLink>
-            )}
-
-            {configTypes.includes(3) && (
-              <MenuLink
-                isHome={isHome}
-                onClick={() => handleGoToPage({ page: options?.address?.location ? 'eatin' : 'home' })}
-              >
-                <WrappContent>
-                  <MenuLinkIcon
+                    <WrappContent>
+                      <MenuLinkIcon
+                        isHome={isHome}
+                        active={
+                          window.location.pathname === '/pickup'
+                        }
+                      >
+                        <HiOutlineShoppingBag />
+                      </MenuLinkIcon>
+                      <MenuLinkText>
+                        <TextInfo
+                          isHome={isHome}
+                          active={
+                            window.location.pathname === '/pickup'
+                          }
+                        >
+                          {t('PICKUP', 'Pickup')}
+                        </TextInfo>
+                      </MenuLinkText>
+                    </WrappContent>
+                  </MenuLink>
+                )}
+                {configTypes.includes(3) && (
+                  <MenuLink
                     isHome={isHome}
-                    active={
-                      window.location.pathname === '/eatin'
-                    }
+                    onClick={() => handleGoToPage({ page: options?.address?.location ? 'eatin' : 'home' })}
                   >
-                    <AiFillShop />
-                  </MenuLinkIcon>
-                  <MenuLinkText>
-                    <TextInfo
-                      isHome={isHome}
-                      active={
-                        window.location.pathname === '/eatin'
-                      }
-                    >
-                      {t('EAT_IN', 'Eat in')}
-                    </TextInfo>
-                  </MenuLinkText>
-                </WrappContent>
-              </MenuLink>
-            )}
-
-            {configTypes.includes(4) && (
-              <MenuLink
-                isHome={isHome}
-                onClick={() => handleGoToPage({ page: options?.address?.location ? 'curbside' : 'home' })}
-              >
-                <WrappContent>
-                  <MenuLinkIcon
+                    <WrappContent>
+                      <MenuLinkIcon
+                        isHome={isHome}
+                        active={
+                          window.location.pathname === '/eatin'
+                        }
+                      >
+                        <AiFillShop />
+                      </MenuLinkIcon>
+                      <MenuLinkText>
+                        <TextInfo
+                          isHome={isHome}
+                          active={
+                            window.location.pathname === '/eatin'
+                          }
+                        >
+                          {t('EAT_IN', 'Eat in')}
+                        </TextInfo>
+                      </MenuLinkText>
+                    </WrappContent>
+                  </MenuLink>
+                )}
+                {configTypes.includes(4) && (
+                  <MenuLink
                     isHome={isHome}
-                    active={
-                      window.location.pathname === '/curbside'
-                    }
+                    onClick={() => handleGoToPage({ page: options?.address?.location ? 'curbside' : 'home' })}
                   >
-                    <GiFoodTruck />
-                  </MenuLinkIcon>
-                  <MenuLinkText>
-                    <TextInfo
-                      isHome={isHome}
-                      active={
-                        window.location.pathname === '/curbside'
-                      }
-                    >
-                      {t('CURBSIDE', 'Curbside')}
-                    </TextInfo>
-                  </MenuLinkText>
-                </WrappContent>
-              </MenuLink>
-            )}
-
-            {configTypes.includes(5) && (
-              <MenuLink
-                isHome={isHome}
-                onClick={() => handleGoToPage({ page: options?.address?.location ? 'drivethru' : 'home' })}
-              >
-                <WrappContent>
-                  <MenuLinkIcon
+                    <WrappContent>
+                      <MenuLinkIcon
+                        isHome={isHome}
+                        active={
+                          window.location.pathname === '/curbside'
+                        }
+                      >
+                        <GiFoodTruck />
+                      </MenuLinkIcon>
+                      <MenuLinkText>
+                        <TextInfo
+                          isHome={isHome}
+                          active={
+                            window.location.pathname === '/curbside'
+                          }
+                        >
+                          {t('CURBSIDE', 'Curbside')}
+                        </TextInfo>
+                      </MenuLinkText>
+                    </WrappContent>
+                  </MenuLink>
+                )}
+                {configTypes.includes(5) && (
+                  <MenuLink
                     isHome={isHome}
-                    active={
-                      window.location.pathname === '/drivethru'
-                    }
+                    onClick={() => handleGoToPage({ page: options?.address?.location ? 'drivethru' : 'home' })}
                   >
-                    <FaCarSide />
-                  </MenuLinkIcon>
-                  <MenuLinkText>
-                    <TextInfo
-                      isHome={isHome}
-                      active={
-                        window.location.pathname === '/drivethru'
-                      }
-                    >
-                      {t('DRIVE_THRU', 'Drive thru')}
-                    </TextInfo>
-                  </MenuLinkText>
-                </WrappContent>
-              </MenuLink>
+                    <WrappContent>
+                      <MenuLinkIcon
+                        isHome={isHome}
+                        active={
+                          window.location.pathname === '/drivethru'
+                        }
+                      >
+                        <FaCarSide />
+                      </MenuLinkIcon>
+                      <MenuLinkText>
+                        <TextInfo
+                          isHome={isHome}
+                          active={
+                            window.location.pathname === '/drivethru'
+                          }
+                        >
+                          {t('DRIVE_THRU', 'Drive thru')}
+                        </TextInfo>
+                      </MenuLinkText>
+                    </WrappContent>
+                  </MenuLink>
+                )}
+              </>
             )}
 
             {auth && (

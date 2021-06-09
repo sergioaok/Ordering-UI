@@ -6,7 +6,8 @@
   "exports": {
     ".": "./_modules/index.js",
     "./theme_two": "./_modules/themes/two/index.js",
-    "./theme_three": "./_modules/themes/three/index.js"
+    "./theme_three": "./_modules/themes/three/index.js",
+    "./theme_wow": "./_modules/themes/wow/index.js"
   },
   "scripts": {
     "clean": "shx rm -rf _bundles _modules",
@@ -72,12 +73,13 @@
     "libphonenumber-js": "^1.9.4",
     "lodash": "^4.17.19",
     "moment": "^2.29.0",
-    "ordering-components": "github:Ordering-Inc/ordering-components#development",
+    "ordering-components": "github:Ordering-Inc/ordering-components#release",
     "polished": "^3.6.6",
     "react-calendar": "^3.3.1",
     "react-helmet": "^6.1.0",
     "react-hook-form": "^6.8.1",
     "react-loading-skeleton": "^2.1.1",
+    "react-otp-input": "^2.3.0",
     "react-phone-number-input": "^3.1.6",
     "react-popper": "^2.2.3",
     "react-to-print": "^2.12.3",

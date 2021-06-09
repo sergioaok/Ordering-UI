@@ -237,7 +237,7 @@ const PaymentOptionsUI = (props) => {
             <PaymentOptionStripe
               paymethod={paymethodSelected}
               businessId={props.businessId}
-              publicKey={paymethodSelected.credentials.publishable}
+              publicKey={paymethodSelected?.credentials?.publishable}
               payType={paymethodsList?.name}
               onSelectCard={handlePaymethodDataChange}
               onCancel={() => handlePaymethodClick(null)}
@@ -256,8 +256,8 @@ const PaymentOptionsUI = (props) => {
             <PaymentOptionStripe
               paymethod={paymethodSelected}
               businessId={props.businessId}
-              publicKey={paymethodSelected.credentials.stripe.publishable}
-              clientSecret={paymethodSelected.credentials.publishable}
+              publicKey={paymethodSelected?.credentials?.stripe?.publishable}
+              clientSecret={paymethodSelected?.credentials?.publishable}
               payType={paymethodsList?.name}
               onSelectCard={handlePaymethodDataChange}
               onCancel={() => handlePaymethodClick(null)}
@@ -275,7 +275,7 @@ const PaymentOptionsUI = (props) => {
           {paymethodSelected?.gateway === 'stripe_direct' && (
             <StripeElementsForm
               businessId={props.businessId}
-              publicKey={paymethodSelected.credentials.publishable}
+              publicKey={paymethodSelected?.credentials?.publishable}
               handleSource={handlePaymethodDataChange}
               onCancel={() => handlePaymethodClick(null)}
             />

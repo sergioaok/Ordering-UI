@@ -18,8 +18,7 @@ const OrderTypeSelectorHeaderUI = (props) => {
     typeSelected,
     defaultValue,
     configTypes,
-    orderTypes,
-    handleChangePage
+    orderTypes
   } = props
   const options = orderTypes.filter(type => configTypes?.includes(type.value))
   const defaultType = configTypes?.includes(typeSelected) ? null : configTypes?.[0]
@@ -35,7 +34,7 @@ const OrderTypeSelectorHeaderUI = (props) => {
           <Select
             options={orderTypes.filter(type => configTypes?.includes(type.value))}
             defaultValue={defaultType || defaultValue || typeSelected}
-            onChange={(orderType) => handleChangePage(orderType)}
+            onChange={(orderType) => handleChangeOrderType(orderType)}
           />
         ) : (
           <>

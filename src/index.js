@@ -37,6 +37,7 @@ import { Image } from './components/Image'
 import { InputPhoneNumber } from './components/InputPhoneNumber'
 import { LanguageSelector } from './components/LanguageSelector'
 import { LoginForm } from './components/LoginForm'
+import { LogoutButton } from './components/LogoutButton'
 import { Messages } from './components/Messages'
 import { Modal } from './components/Modal'
 import { MomentContent } from './components/MomentContent'
@@ -85,6 +86,16 @@ import { Input, InputGroup, InputPrimary, InputGroupLeft, InputGroupPrimary, Inp
 import { Select } from './styles/Select'
 import { Tab, Tabs } from './styles/Tabs'
 
+// additional
+import {
+  sortInputFields,
+  capitalize,
+  convertHoursToMinutes,
+  scrollTo,
+  DriverTipsOptions,
+  bytesConverter
+} from './utils'
+
 export {
   AddressDetails,
   AddressesPopover,
@@ -129,6 +140,7 @@ export {
   InputPhoneNumber,
   LanguageSelector,
   LoginForm,
+  LogoutButton,
   Messages,
   Modal,
   MomentControl,
@@ -187,5 +199,13 @@ export {
   Select,
   Tab,
   Tabs,
-  TextArea
+  TextArea,
+
+  // additional
+  sortInputFields,
+  capitalize,
+  convertHoursToMinutes,
+  scrollTo,
+  DriverTipsOptions,
+  bytesConverter
 }
