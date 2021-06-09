@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button } from 'ordering-ui'
+import { Button } from '../../../../src/styles/Buttons'
 import {useLanguage} from 'ordering-components'
 import { PaymentOptionIvrContainer, Title, Code,WrapperButtons } from './styles'
 

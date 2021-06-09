@@ -17,17 +17,15 @@ import {
   useCustomer,
   useEvent,
 } from 'ordering-components'
-import {
-  UpsellingPage,
-  AddressDetails,
-  UserDetails,
-  DriverTips,
-  Cart,
-  Alert,
-  CartContent,
-  Button,
-  NotFoundSource
-} from 'ordering-ui'
+import { UpsellingPage } from '../../../src/components/UpsellingPage'
+import { AddressDetails } from '../../../src/components/AddressDetails'
+import { UserDetails } from '../../../src/components/UserDetails'
+import { DriverTips } from '../../../src/components/DriverTips'
+import { Cart } from '../../../src/components/Cart'
+import { Alert } from '../../../src/components/Confirm'
+import { CartContent } from '../../../src/components/CartContent'
+import { Button } from '../../../src/styles/Buttons'
+import { NotFoundSource } from '../../../src/components/NotFoundSource'
 import parsePhoneNumber from 'libphonenumber-js'
 import {PaymentOptions} from './PaymentOptions'
 

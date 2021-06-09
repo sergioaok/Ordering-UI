@@ -10,15 +10,13 @@ import GrStripe from '@meronex/icons/gr/GrStripe'
 import EnPaypal from '@meronex/icons/en/EnPaypal'
 import { useLanguage, useSession,useOrder, PaymentOptions as PaymentOptionsController } from 'ordering-components'
 
-import {
-  Modal,
-  PaymentOptionCash,
-  PaymentOptionStripe,
-  PaymentOptionPaypal,
-  StripeElementsForm,
-  StripeRedirectForm,
-  NotFoundSource
-} from 'ordering-ui'
+import { Modal } from '../../../../src/components/Modal'
+import { PaymentOptionCash } from '../../../../src/components/PaymentOptionCash'
+import { PaymentOptionStripe } from '../../../../src/components/PaymentOptionStripe'
+import { PaymentOptionPaypal } from '../../../../src/components/PaymentOptionPaypal'
+import { StripeElementsForm } from '../../../../src/components/StripeElementsForm'
+import { StripeRedirectForm } from '../../../../src/components/StripeRedirectForm'
+import { NotFoundSource } from '../../../../src/components/NotFoundSource'
 
 import {
   PaymentMethodsContainer,
