@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import Select from 'react-select'
 import {
   PhoneAutocomplete as PhoneAutocompleteController,
   useLanguage,
@@ -9,7 +10,6 @@ import { useTheme } from 'styled-components'
 import { Modal } from '../Modal'
 import { SignUpForm } from '../SignUpForm'
 import { Button } from '../../styles/Buttons'
-import { Input } from '../../styles/Inputs'
 import { Alert } from '../Confirm'
 import { UserDetails } from '../UserDetails'
 import { AddressList } from '../AddressList'
@@ -19,11 +19,9 @@ import {
   ContentWrapper,
   Title,
   Slogan,
-  AutoComplete,
   UserEdit,
   WrappBtn
 } from './styles'
-import { SpinnerLoader } from '../SpinnerLoader'
 
 const PhoneAutocompleteUI = (props) => {
   const {
@@ -42,6 +40,8 @@ const PhoneAutocompleteUI = (props) => {
   const [, t] = useLanguage()
   const theme = useTheme()
   const [alertState, setAlertState] = useState({ open: false, content: [] })
+  const [inputValue, setInputValue] = useState('')
+  const [optSelected, setOptSelected] = useState(null)
 
   const userCustomer = JSON.parse(window.localStorage.getItem('user-customer'))
 
@@ -74,6 +74,48 @@ const PhoneAutocompleteUI = (props) => {
     }
   }, [customersPhones?.error])
 
+  const onInputChange = (inputValue, { action }) => {
+    if (action === 'menu-close' || action === 'input-blur' || action === 'set-value') {
+      return
+    }
+    if (!inputValue) {
+      setInputValue(inputValue)
+    }
+    if ((inputValue && inputValue.length > 10) || !(/^[0-9]+$/.test(inputValue))) {
+      return
+    }
+    setInputValue(inputValue)
+    onChangeNumber(inputValue)
+  }
+
+  const onChange = (option) => {
+    setOptSelected(option)
+    setInputValue(option ? option?.value : '')
+    const user = customersPhones.users?.find(user => user.cellphone === option?.value)
+    if (user) {
+      setCustomerState({ ...customerState, result: user })
+      setOpenModal({ ...openModal, customer: true })
+    }
+  }
+
+  const createNewUser = () => {
+    if ((optSelected && optSelected?.value?.length === 10) || (!optSelected && phone.length === 10)) {
+      setOpenModal({ ...openModal, signup: true })
+    } else {
+      setAlertState({
+        open: true,
+        content: t('ERROR_MIN_CHARACTERS_PHONE', 'The Phone / Mobile must be 10 characters')
+      })
+    }
+  }
+
+  const optionsToSelect = customersPhones.users.map(user => {
+    const obj = {}
+    obj.value = user.cellphone
+    obj.label = `${user.cellphone} (${user.name})`
+    return obj
+  }) || []
+
   return (
     <>
       {props.beforeElements?.map((BeforeElement, i) => (
@@ -86,52 +128,42 @@ const PhoneAutocompleteUI = (props) => {
         <ContentWrapper>
           <Title>{t('TITLE_HOME_CALLCENTER', 'Welcome to your Ordering Call Center.')}</Title>
           <Slogan>{t('SUBTITLE_HOME_CALLCENTER', 'Start First by adding the customers\' phone number')}</Slogan>
-          <AutoComplete className='autocomplete'>
-            <Input
-              name='phone-input'
-              id='phone-input'
-              placeholder={t('PHONE', 'Phone')}
-              type='text'
-              pattern='[0-9]*'
-              onInput={onChangeNumber}
-              value={phone}
-              onChange={() => {}}
-              maxLength='10'
-              autoComplete='off'
-              disabled={customersPhones?.loading}
-            />
-            {phone && (
-              <Button name='phone-button' id='phone-button' className='phone-button'>
-                {t('SEE_PHONES', 'See phones')}
-              </Button>
-            )}
-            {customersPhones?.loading && (
-              <SpinnerLoader
-                style={{
-                  top: 0,
-                  position: 'absolute',
-                  height: 'auto',
-                  left: '100%',
-                  width: '0px',
-                  transform: 'translate(-10px, 10%)'
-                }}
+          {!userCustomer && (
+            <div style={{ position: 'relative', width: '60%' }}>
+              <Select
+                isSearchable
+                isClearable
+                className='basic-single'
+                classNamePrefix='select'
+                placeholder={t('PHONE', 'Phone')}
+                value={optSelected}
+                inputValue={!optSelected ? inputValue : ''}
+                onChange={onChange}
+                onInputChange={onInputChange}
+                isLoading={customersPhones?.loading}
+                options={optionsToSelect}
               />
-            )}
-          </AutoComplete>
-          <WrappBtn>
-            <Button
-              color='primary'
-              name='find'
-              onClick={() => handleFindClick()}
-              disabled={!userCustomer?.id}
-            >
-              {userCustomer?.id ? (
-                `${t('CONTINUE_WITH', 'Continue with')} ${userName}`
-              ) : (
-                t('FIND', 'Find')
-              )}
-            </Button>
-          </WrappBtn>
+              <Button
+                color={inputValue ? 'primary' : 'secundary'}
+                onClick={() => createNewUser()}
+                style={{ position: 'absolute', top: 13, right: 60 }}
+                disabled={!inputValue}
+              >
+                {t('CREATE_CUSTOMER', 'Create new customer')}
+              </Button>
+            </div>
+          )}
+          {userCustomer?.id && (
+            <WrappBtn>
+              <Button
+                color='primary'
+                name='find'
+                onClick={() => handleFindClick()}
+              >
+                {`${t('CONTINUE_WITH', 'Continue with')} ${userName}`}
+              </Button>
+            </WrappBtn>
+          )}
         </ContentWrapper>
       </PhoneContainer>
       <Modal
@@ -140,7 +172,7 @@ const PhoneAutocompleteUI = (props) => {
         onClose={() => setOpenModal({ openModal, signup: false })}
       >
         <SignUpForm
-          externalPhoneNumber={`${countryCallingCode} ${phone}`}
+          externalPhoneNumber={`${countryCallingCode} ${optSelected?.value || phone}`}
           saveCustomerUser={saveCustomerUser}
           fieldsNotValid={props.fieldsNotValid}
           useChekoutFileds

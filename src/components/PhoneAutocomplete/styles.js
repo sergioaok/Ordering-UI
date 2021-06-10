@@ -79,6 +79,31 @@ export const ContentWrapper = styled.div`
   height: 100%;
   padding: 0px 20px 0px;
 
+  .basic-single {
+    margin-bottom: 15px;
+  }
+
+  .select__control {
+    border-radius: 30px;
+  }
+
+  .select__control.select__control--is-focused {
+    border-color: ${props => props.theme?.colors?.primary} !important;
+    box-shadow: 0 0 0 1px ${props => props.theme?.colors?.primary} !important;
+  }
+
+  .select__value-container {
+    padding: 10px 8px 0;
+  }
+  .select__indicator.select__loading-indicator {
+    color: ${props => props.theme?.colors?.primary} !important;
+  }
+
+  .select__indicator.select__dropdown-indicator,
+  .select__indicator-separator {
+    display: none;
+  }
+
   ${props => props.theme?.rtl && css`
       padding: 0px 20px 0px;
     `}
