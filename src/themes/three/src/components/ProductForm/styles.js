@@ -3,13 +3,17 @@ import styled, { css } from 'styled-components'
 
 export const ProductContainer = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   max-height: 100vh;
   position: relative;
-  padding: 10px;
+  padding: 50px 10px 10px;
 
   @media (min-width: 768px) {
     height: 100%;
+  }
+
+  @media (min-width: 769px) {
+    padding: 10px;
   }
 
   @media (min-width: 1201px) {
@@ -22,10 +26,15 @@ export const ProductContainer = styled.div`
 export const WrapperImage = styled.div`
   width: 100%;
   position: relative;
-  border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
+
+  @media (min-width: 1201px) {
+    width: calc(50% - 10px);
+    position: sticky;
+    top: 0;
+  }
 `
 
 export const ProductImage = styled.div`
@@ -35,14 +44,13 @@ export const ProductImage = styled.div`
   height: 300px;
 
   img {
-    border-radius: 16px;
     object-fit: contain;
     height: 100%;
     box-sizing: border-box;
   }
 
   @media (min-width: 1201px) {
-    height: 400px;
+    height: 100%;
     img {
       width: 100%;
       object-fit: cover;
@@ -57,11 +65,11 @@ export const ProductInfo = styled.div`
   padding: 0px;
   position: relative;
   margin-top: 10px;
-  box-sizing: border-box;
 
   h1 {
     font-size: 20px;
     font-weight: 500;
+    text-align: center;
     color: #263238;
     margin-top: 0px;
   }
@@ -92,6 +100,8 @@ export const ProductInfo = styled.div`
   }
 
   @media (min-width: 1201px) {
+    width: calc(50% - 20px);
+    padding: 0px 10px;
     top: 0;
     margin-top: 0px;
   }
@@ -125,10 +135,6 @@ export const ProductComment = styled.div`
     margin-bottom: 5px;
   }
 
-  textarea {
-    border-radius: unset;
-  }
-
   @media (min-width: 577px) {
     margin-bottom: 62px;
   }
@@ -150,10 +156,6 @@ export const ProductActions = styled.div`
   right: 0;
   width: 100%;
   background-color: #FFF;
-
-  button {
-    border-radius: unset;
-  }
 
   div.incdec-control {
     width: 50%;
@@ -265,7 +267,6 @@ export const SkeletonBlock = styled.div`
 `
 
 export const WrapperSubOption = styled.div`
-  border-radius: 10px;
   &.error {
     background-color: ${lighten(0.58, '#A52121')};
   }
@@ -275,27 +276,56 @@ export const WrapperSubOption = styled.div`
   }
 `
 
+export const SkuContent = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  h2 {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 0px;
+  }
+
+  p {
+    font-size: 14px;
+  }
+`
+
 export const WrapperIngredients = styled.div`
   ${({ isProductSoldout }) => isProductSoldout && css`
     border-radius: 10px;
     pointer-events: none;
     background: hsl(0, 0%, 72%);
   `}
+  overflow: hidden;
 `
-export const WrapSectionTitle = styled.div`
-  background-color: ${props => props.theme.colors.secundary};
+
+export const IngredientHeader = styled.div`
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  align-items: center;
-  padding: 0 15px;
-`
-export const WrapButton = styled.div`
   cursor: pointer;
-  background-color: #FFF;
-  width: 30px;
-  height: 30px;
-  border-radius: 15px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  transition: background-color 0.6s ease;
+  position: relative;
+  padding: 0 15px;
+  background-color: ${props => props.theme.colors?.lightGray};
+
+  span {
+    background-color: #FFF;
+    width: 30px;
+    height: 30px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #e2e2e2;
+  }
+
+  .rotate {
+    transform: rotate(180deg);
+  }
+
+  .accordion__icon {
+    transition: transform 0.6s ease;
+  }
 `

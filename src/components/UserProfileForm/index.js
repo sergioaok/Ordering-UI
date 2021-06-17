@@ -175,7 +175,7 @@ const UserProfileFormUI = (props) => {
         </UserProfileContainer>
         {(userData?.addresses || user?.addresses) && !isHiddenAddress && (
           <SavedPlaces>
-            <h1>Saved Places</h1>
+            <h1>{t('SAVED_PLACES', 'Saved places')}</h1>
             <AddressList isModal addressList={user?.addresses} />
           </SavedPlaces>
         )}

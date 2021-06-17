@@ -6,9 +6,12 @@ export const Button = styled.button`
   color: #FFF;
   border: 1px solid #CCC;
   border-radius: 30px;
+  ${({ rectangle }) => rectangle && css`
+    border-radius: unset;
+  `}
   line-height: 30px;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-left: 15px;
+  padding-right: 15px;
   font-size: 16px;
   cursor: pointer;
   outline: none;
@@ -21,9 +24,6 @@ export const Button = styled.button`
     opacity: 0.5;
     cursor: not-allowed;
   }
-  ${({ rectangle }) => rectangle && css`
-    border-radius: unset;
-  `}
   ${({ bgtransparent }) => bgtransparent && css`
       background: transparent !important;
   `}
@@ -190,56 +190,4 @@ export const Button = styled.button`
       }
     `}
   `}
-  ${({ color }) => color === 'green' && css`
-  background: ${props => props.theme.colors?.darkGreen};
-  color: ${props => props.theme.colors?.white};
-  border-color: ${props => props.theme.colors?.darkGreen};
-  &:active {
-    background: ${props => darken(0.07, props.theme.colors?.darkGreen)};
-  }
-  ${({ outline }) => outline && css`
-    background: #FFF;
-    color: ${props => props.theme.colors?.darkGreen};
-    border-color: ${props => props.theme.colors?.darkGreen};
-    &:active {
-      color: ${props => props.theme.colors?.darkGreen};
-      background: ${props => darken(0.05, props.theme.colors?.white)};
-    }
-    &:hover {
-      background: ${props => darken(0.07, props.theme.colors?.white)};
-    }
-  `}
-  ${({ circle }) => circle && css`
-    background: ${props => props.theme.colors?.white};
-    color: ${props => props.theme.colors?.darkGreen};
-    border-color: ${props => props.theme.colors?.darkGreen};
-    padding: 0;
-    width: 34px;
-    height: 34px;
-    line-height: 34px;
-    text-align: center;
-    border-radius: 50%;
-    &:active {
-      color: ${props => props.theme.colors?.darkGreen};
-      border-color: ${props => darken(0.07, props.theme.colors?.darkGreen)};
-      background: ${props => darken(0.07, props.theme.colors?.white)};
-    }
-  `}
-  ${({ circle, outline }) => circle && outline && css`
-    background: #FFF;
-    color: ${props => props.theme.colors?.darkGreen};
-    border-color: ${props => props.theme.colors?.darkGreen};
-    padding: 0;
-    width: 34px;
-    height: 34px;
-    line-height: 34px;
-    text-align: center;
-    border-radius: 50%;
-    &:active {
-      border-color: ${props => props.theme.colors?.darkGreen};
-      background: ${props => props.theme.colors?.white};
-      color: ${props => props.theme.colors?.darkGreen};
-    }
-  `}
-`}
 `

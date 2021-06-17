@@ -12,25 +12,29 @@ import {
 
 import {
   ProductsContainer,
-  InnerContainer,
+  BusinessProductsContent,
   WrapContent,
   ProductLoading,
   SkeletonItem,
+  WrapperSearch,
   WrappLayout
 } from './styles'
 
 import { NotFoundSource } from '../../../../../components/NotFoundSource'
+
 import { BusinessBasicInformation } from '../BusinessBasicInformation'
 import { BusinessProductsCategories } from '../../../../../components/BusinessProductsCategories'
 import { BusinessProductsList } from '../BusinessProductsList'
 import { PageNotFound } from '../../../../../components/PageNotFound'
 import { ProductForm } from '../ProductForm'
-import { FloatingButton } from '../../../../../components/FloatingButton'
+import { FloatingButton } from '../FloatingButton'
 import { Modal } from '../../../../../components/Modal'
+import { SearchBar } from '../../../../../components/SearchBar'
 import { UpsellingPage } from '../../../../../components/UpsellingPage'
 import { Cart } from '../../../../../components/Cart'
+import { Select } from '../../styles/Select'
 
-const PIXELS_TO_SCROLL = 500
+const PIXELS_TO_SCROLL = 600
 
 const BusinessProductsListingUI = (props) => {
   const {
@@ -39,6 +43,7 @@ const BusinessProductsListingUI = (props) => {
     businessState,
     categorySelected,
     searchValue,
+    sortByValue,
     categoryState,
     categoryId,
     productId,
@@ -52,7 +57,9 @@ const BusinessProductsListingUI = (props) => {
     handleChangeSearch,
     handleSearchRedirect,
     featuredProducts,
-    isCartOnProductsList
+    handleChangeSortBy,
+    isCartOnProductsList,
+    errorQuantityProducts
   } = props
 
   const { business, loading, error } = businessState
@@ -71,6 +78,13 @@ const BusinessProductsListingUI = (props) => {
   const [isCartOpen, setIsCartOpen] = useState(false)
 
   const currentCart = Object.values(carts).find(cart => cart?.business?.slug === business?.slug) ?? {}
+
+  const sortByOptions = [
+    { value: null, content: t('SORT_BY', 'Sort By'), showOnSelected: t('SORT_BY', 'Sort By') },
+    { value: 'rank', content: t('RANK', 'Rank'), showOnSelected: t('RANK', 'Rank') },
+    { value: 'a-z', content: t('A_to_Z', 'A-Z'), showOnSelected: t('A_to_Z', 'A-Z') }
+  ]
+
   const handler = () => {
     setOpenBusinessInformation(true)
   }
@@ -159,11 +173,9 @@ const BusinessProductsListingUI = (props) => {
       {props.beforeElements?.map((BeforeElement, i) => (
         <React.Fragment key={i}>
           {BeforeElement}
-        </React.Fragment>
-      ))}
+        </React.Fragment>))}
       {props.beforeComponents?.map((BeforeComponent, i) => (
-        <BeforeComponent key={i} {...props} />
-      ))}
+        <BeforeComponent key={i} {...props} />))}
       <ProductsContainer>
         {
           !loading && business?.id && (
@@ -176,7 +188,24 @@ const BusinessProductsListingUI = (props) => {
                   setOpenBusinessInformation={setOpenBusinessInformation}
                   openBusinessInformation={openBusinessInformation}
                 />
-                <InnerContainer>
+                <BusinessProductsContent>
+                  {(categoryState.products.length !== 0 || searchValue) && !errorQuantityProducts && (
+                    <WrapperSearch>
+                      <SearchBar
+                        onSearch={handleChangeSearch}
+                        search={searchValue}
+                        placeholder={t('SEARCH_PRODUCTS', 'Search Products')}
+                        lazyLoad={businessState?.business?.lazy_load_products_recommended}
+                      />
+                      <Select
+                        notAsync
+                        notReload
+                        options={sortByOptions}
+                        defaultValue={sortByValue}
+                        onChange={(val) => handleChangeSortBy && handleChangeSortBy(val)}
+                      />
+                    </WrapperSearch>
+                  )}
                   {!(business?.categories?.length === 0 && !categoryId) && (
                     <BusinessProductsCategories
                       categories={[{ id: null, name: t('ALL', 'All') }, { id: 'featured', name: t('FEATURED', 'Featured') }, ...business?.categories.sort((a, b) => a.rank - b.rank)]}
@@ -204,20 +233,21 @@ const BusinessProductsListingUI = (props) => {
                       searchValue={searchValue}
                       isCartOnProductsList={isCartOnProductsList && currentCart?.products?.length > 0}
                       handleClearSearch={handleChangeSearch}
+                      errorQuantityProducts={errorQuantityProducts}
                     />
                   </WrapContent>
-                </InnerContainer>
+                  {isCartOnProductsList && currentCart?.products?.length > 0 && (
+                    <Cart
+                      isForceOpenCart
+                      cart={currentCart}
+                      isCartPending={currentCart?.status === 2}
+                      isProducts={currentCart.products.length}
+                      isCartOnProductsList={isCartOnProductsList && currentCart?.products?.length > 0}
+                      handleCartOpen={(val) => setIsCartOpen(val)}
+                    />
+                  )}
+                </BusinessProductsContent>
               </div>
-              {isCartOnProductsList && currentCart?.products?.length > 0 && (
-                <Cart
-                  isForceOpenCart
-                  cart={currentCart}
-                  isCartPending={currentCart?.status === 2}
-                  isProducts={currentCart.products.length}
-                  isCartOnProductsList={isCartOnProductsList && currentCart?.products?.length > 0}
-                  handleCartOpen={(val) => setIsCartOpen(val)}
-                />
-              )}
             </WrappLayout>
           )
         }
@@ -230,19 +260,22 @@ const BusinessProductsListingUI = (props) => {
               handler={handler}
               openBusinessInformation={openBusinessInformation}
             />
-            <BusinessProductsCategories
-              categories={[]}
-              isSkeleton
-              openBusinessInformation={openBusinessInformation}
-            />
-            <WrapContent>
-              <BusinessProductsList
+            <BusinessProductsContent>
+              <BusinessProductsCategories
                 categories={[]}
-                category={categorySelected}
-                categoryState={categoryState}
-                isBusinessLoading={loading}
+                isSkeleton
+                openBusinessInformation={openBusinessInformation}
               />
-            </WrapContent>
+              <WrapContent>
+                <BusinessProductsList
+                  categories={[]}
+                  category={categorySelected}
+                  categoryState={categoryState}
+                  isBusinessLoading={loading}
+                  errorQuantityProducts={errorQuantityProducts}
+                />
+              </WrapContent>
+            </BusinessProductsContent>
           </>
         )}
 
@@ -298,11 +331,12 @@ const BusinessProductsListingUI = (props) => {
       )}
 
       <Modal
-        width='50%'
+        width='70%'
         open={openProduct}
         closeOnBackdrop
         onClose={() => closeModalProductForm()}
         padding='0'
+        isProductForm
       >
 
         {productModal.loading && !productModal.error && (
@@ -346,13 +380,11 @@ const BusinessProductsListingUI = (props) => {
         />
       )}
       {props.afterComponents?.map((AfterComponent, i) => (
-        <AfterComponent key={i} {...props} />
-      ))}
+        <AfterComponent key={i} {...props} />))}
       {props.afterElements?.map((AfterElement, i) => (
         <React.Fragment key={i}>
           {AfterElement}
-        </React.Fragment>
-      ))}
+        </React.Fragment>))}
     </>
   )
 }

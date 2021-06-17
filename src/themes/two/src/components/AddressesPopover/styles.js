@@ -2,10 +2,15 @@ import styled, { css } from 'styled-components'
 
 export const HeaderItem = styled.div`
   cursor: pointer;
+  color: ${props => props.theme.colors.primary};
   display: flex;
   align-items: center;
-  font-weight: 500;
-  color: ${props => props.theme.colors.primary};
+
+  span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 
   ${props => props.isHome && css`
     color: #FFF;
@@ -17,6 +22,18 @@ export const HeaderItem = styled.div`
       margin-left: 5px;
       margin-right: 0px;
     `} 
+  }
+
+  @media (min-width: 992px) {
+    span {
+      max-width: 105px;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    span {
+      max-width: 200px;
+    }
   }
 `
 
@@ -37,4 +54,19 @@ export const PopoverArrow = styled.div`
   border-right: 7px solid transparent;
   border-bottom: 8px solid #FFF;
   top: -8px;
+`
+
+export const Container = styled.div`
+  padding: 20px 10px;
+
+  @media (min-width: 769px) {
+    padding: 0px;
+  }
+`
+
+export const Title = styled.h1`
+  margin: 0px;
+  font-size: 30px;
+  font-weight: 600;
+  padding: 0px 10px 15px;
 `

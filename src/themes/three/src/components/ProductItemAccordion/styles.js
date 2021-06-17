@@ -116,14 +116,9 @@ export const ContentInfo = styled.div`
   `}
 
   h3 {
-    cursor: pointer;
     font-size: 14px;
     margin: 0px;
     font-weight: 600;
-
-    ${({ isOrdersView }) => isOrdersView && css`
-      cursor: initial;
-    `}
   }
 
   span {
@@ -316,7 +311,7 @@ export const ProductPrice = styled.div`
 
 export const ProductSelect = styled.select`
   max-width: 55px;
-  height: 35px;
+  height: 50px;
   border: none;
   background-color: transparent;
   font-size: 17px;
@@ -331,10 +326,6 @@ export const ProductSelect = styled.select`
   background-repeat: no-repeat, repeat;
   background-position: right .7em top 50%, 0 0;
   background-size: .65em auto, 100%;
-
-  background-color: ${props => props.theme.colors.secundary};
-  border-radius: 35px;
-  padding: 0 10px;
 
   ${props => props.theme?.rtl && css`
     margin-left: 5px;

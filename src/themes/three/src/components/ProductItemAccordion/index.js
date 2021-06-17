@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react'
-// import TiPencil from '@meronex/icons/ti/TiPencil'
+import TiPencil from '@meronex/icons/ti/TiPencil'
 import IosArrowDown from '@meronex/icons/ios/IosArrowDown'
-// import VscTrash from '@meronex/icons/vsc/VscTrash'
+import VscTrash from '@meronex/icons/vsc/VscTrash'
 import { useUtils, useLanguage, useOrder } from 'ordering-components'
 import { useWindowSize } from '../../../../../hooks/useWindowSize'
 
@@ -9,15 +9,15 @@ import {
   AccordionSection,
   Accordion,
   AccordionContent,
-  // WrapperProductImage,
-  // ProductImage,
+  WrapperProductImage,
+  ProductImage,
   ContentInfo,
   ProductComment,
   ProductInfo,
   ProductError,
   ProductActions,
-  // ProductActionsEdit,
-  // ProductActionsDelete,
+  ProductActionsEdit,
+  ProductActionsDelete,
   ProductPriceSection,
   ProductPrice,
   ProductNotAvailable,
@@ -28,8 +28,6 @@ import {
 
 export const ProductItemAccordion = (props) => {
   const {
-    isOrdersView,
-    disableContentView,
     isCartPending,
     isCartProduct,
     product,
@@ -40,7 +38,7 @@ export const ProductItemAccordion = (props) => {
     onEditProduct
   } = props
   const [, t] = useLanguage()
-  // const [orderState] = useOrder()
+  const [orderState] = useOrder()
   const [{ parsePrice }] = useUtils()
   const windowSize = useWindowSize()
 
@@ -101,16 +99,16 @@ export const ProductItemAccordion = (props) => {
       {props.beforeElements?.map((BeforeElement, i) => (
         <React.Fragment key={i}>
           {BeforeElement}
-        </React.Fragment>
-      ))}
+        </React.Fragment>))
+      }
       {props.beforeComponents?.map((BeforeComponent, i) => (
-        <BeforeComponent key={i} {...props} />
-      ))}
+        <BeforeComponent key={i} {...props} />))
+      }
       <AccordionSection>
         <Accordion
           isValid={product?.valid ?? true}
           className={`product accordion ${setActive}`}
-          // onClick={(e) => toggleAccordion(e)}
+          onClick={(e) => toggleAccordion(e)}
         >
           <ProductInfo className='info'>
             {isCartProduct && !isCartPending && getProductMax ? (
@@ -134,17 +132,17 @@ export const ProductItemAccordion = (props) => {
                 {product?.quantity}
               </ProductQuantity>
             )}
-            {/* {product?.images && (
+            {product?.images && (
               <WrapperProductImage>
                 <ProductImage bgimage={product?.images} />
               </WrapperProductImage>
-            )} */}
-            <ContentInfo isOrdersView={isOrdersView}>
-              <h3 onClick={() => onEditProduct && onEditProduct(product)}>{product.name}</h3>
+            )}
+            <ContentInfo>
+              <h3>{product.name}</h3>
               {windowSize.width <= 410 && (
                 <span>
                   <p>{parsePrice(product.total || product.price)}</p>
-                  {/* {isCartProduct && !isCartPending && (
+                  {isCartProduct && !isCartPending && (
                     <div>
                       {onEditProduct && (
                         <span ref={productActionsEdit}>
@@ -157,7 +155,7 @@ export const ProductItemAccordion = (props) => {
                         </span>
                       )}
                     </div>
-                  )} */}
+                  )}
                 </span>
               )}
             </ContentInfo>
@@ -169,13 +167,13 @@ export const ProductItemAccordion = (props) => {
                 <span>
                   {parsePrice(product.total || product.price)}
                 </span>
-                {(productInfo().ingredients.length > 0 || productInfo().options.length > 0 || product.comment) && !disableContentView && (
-                  <p onClick={(e) => toggleAccordion(e)}>
+                {(productInfo().ingredients.length > 0 || productInfo().options.length > 0 || product.comment) && (
+                  <p>
                     <IosArrowDown className={`${setRotate}`} />
                   </p>
                 )}
               </ProductPrice>
-              {/* {isCartProduct && !isCartPending && (
+              {isCartProduct && !isCartPending && (
                 <ProductActions>
                   <ProductActionsEdit
                     ref={productActionsEdit}
@@ -192,13 +190,13 @@ export const ProductItemAccordion = (props) => {
                     <VscTrash color='#D81212' />
                   </ProductActionsDelete>
                 </ProductActions>
-              )} */}
+              )}
             </ProductPriceSection>
           )}
 
           {isCartProduct && !isCartPending && product?.valid_menu && !product?.valid_quantity && (
             <ProductError>
-              {/* <ProductActions>
+              <ProductActions>
                 <ProductActionsEdit
                   ref={productActionsEdit}
                   onClick={() => onEditProduct(product)}
@@ -213,7 +211,7 @@ export const ProductItemAccordion = (props) => {
                 >
                   <VscTrash color='#D81212' />
                 </ProductActionsDelete>
-              </ProductActions> */}
+              </ProductActions>
               <ProductNotAvailable>
                 {t('NOT_AVAILABLE', 'Not available')}
               </ProductNotAvailable>
@@ -223,13 +221,13 @@ export const ProductItemAccordion = (props) => {
           {!product?.valid_menu && isCartProduct && !isCartPending && (
             <ProductError>
               <ProductActions>
-                {/* <ProductActionsDelete
+                <ProductActionsDelete
                   ref={productActionsDelete}
                   onClick={() => onDeleteProduct(product)}
                   disabled={orderState.loading}
                 >
                   <VscTrash color='#D81212' />
-                </ProductActionsDelete> */}
+                </ProductActionsDelete>
               </ProductActions>
               <ProductNotAvailable>
                 {t('NOT_AVAILABLE', 'Not available')}
@@ -284,13 +282,13 @@ export const ProductItemAccordion = (props) => {
         </AccordionContent>
       </AccordionSection>
       {props.afterComponents?.map((AfterComponent, i) => (
-        <AfterComponent key={i} {...props} />
-      ))}
+        <AfterComponent key={i} {...props} />))
+      }
       {props.afterElements?.map((AfterElement, i) => (
         <React.Fragment key={i}>
           {AfterElement}
-        </React.Fragment>
-      ))}
+        </React.Fragment>))
+      }
     </>
   )
 }

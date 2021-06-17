@@ -13,7 +13,7 @@ export const OptionTitle = styled.div`
 
   @media (min-width: 768px){
     padding: 0;
-    width: 91%;
+    width: 80%
   }
 `
 
@@ -87,13 +87,12 @@ export const OrdersContainer = styled.div`
       margin-block-start: 0;
       color: #9A9A9A
     }
-
+    div:last-child {
+      border-top: none;
+    }
     @media(min-width: 480px){
       width: 80%;
       padding: 0;
-      div:last-child {
-        border-top: none;
-      }
     }
   `}
 `
@@ -151,15 +150,14 @@ export const SkeletonContent = styled.div`
   `}
 
   ${({ activeOrders }) => !activeOrders && css`
+    flex-direction: column;
     justify-content: space-between;
   `}
 
-  @media (max-width: 700px) {
-    ${({ vertical }) => vertical && css`
-      flex-direction: column;
-      span {
-        width: 100% !important;
-      }
+  @media (min-width: 768px) {
+    ${({ activeOrders }) => !activeOrders && css`
+      flex-direction: row;
+      align-items: center;
     `}
   }
 `
@@ -172,14 +170,21 @@ export const SkeletonText = styled.div`
   ${props => props.theme?.rtl && css`
     text-align: right;
   `}
+
+  @media (max-width: 760px) {
+    ${({ verticalOrders }) => verticalOrders && css`
+      width: 100%;
+      padding: 0 10px;
+      box-sizing: border-box;
+    `}
+  }
 `
 
 export const SkeletonButton = styled.div`
-    span{
-      border-radius: 24px;
-      width: 270px;
-      height: 36px;
-    }
+  span{
+    width: 270px;
+    height: 36px;
+  }
   @media(min-width: 480px){
     span{
       width: 360px;
@@ -189,17 +194,39 @@ export const SkeletonButton = styled.div`
 
 export const SkeletonInformation = styled.div`
   display: flex;
+  align-items: center;
 
   > *{
     margin: 5px;
   }
 
-  @media (max-width: 700px) {
-    ${({ vertical }) => vertical && css`
-      flex-direction: column;
+  ${({ verticalOrders }) => verticalOrders && css`
+    flex-direction: column;
+
+    > div:first-child {
+      width: 100%;
+      padding: 0 10px;
+      box-sizing: border-box;
 
       span {
         width: 100% !important;
+      }
+    }
+  `}
+
+  @media (min-width: 768px) {
+    ${({ verticalOrders }) => verticalOrders && css`
+      flex-direction: row;
+      width: inherit !important;
+
+      > div:first-child {
+        width: initial;
+        padding: 0;
+        box-sizing: border-box;
+  
+        span {
+          width: 250px !important;
+        }
       }
     `}
   }
@@ -227,7 +254,7 @@ export const SkeletonReorder = styled.div`
     height: 30px;
   }
 
-  @media(min-width: 480px){
+  @media(min-width: 768px){
     ${props => props.theme?.rtl ? css`
       margin-left: 0;
     ` : css`
@@ -238,6 +265,24 @@ export const SkeletonReorder = styled.div`
     }
     span:last-child{
       width: 150px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    width: 100%;
+    padding: 0 10px;
+    box-sizing: border-box;
+
+    span:first-child {
+      width: 100%;
+    }
+
+    span:first-child span{
+      width: 60%;
+    }
+  
+    span:last-child{
+      width: 100%;
     }
   }
 `

@@ -1,19 +1,24 @@
 import React, { useState, useEffect } from 'react'
-import { AddressDetails as AddressDetailsController, useOrder, useLanguage } from 'ordering-components'
+import { AddressDetails as AddressDetailsController, useOrder, useLanguage, useCustomer } from 'ordering-components'
 
 import {
   AddressContainer,
   Header,
-  Text
+  Map,
+  WrappMap
 } from './styles'
 
 import { Modal } from '../../../../../components/Modal'
-import { Alert } from '../../../../../components/Confirm'
+import { Alert } from '../Confirm'
 import { AddressList } from '../AddressList'
+import { Button } from '../../styles/Buttons'
 
 const AddressDetailsUI = (props) => {
   const {
-    addressToShow
+    addressToShow,
+    isCartPending,
+    googleMapsUrl,
+    isCustomerMode
   } = props
 
   const [orderState] = useOrder()
@@ -21,6 +26,7 @@ const AddressDetailsUI = (props) => {
   const [openModal, setOpenModal] = useState(false)
   const [alertState, setAlertState] = useState({ open: false, content: [] })
   const userCustomer = JSON.parse(window.localStorage.getItem('user-customer'))
+  const [{ user }] = useCustomer()
 
   const handleFindBusinesses = () => {
     if (!orderState?.options?.address?.location) {
@@ -39,17 +45,24 @@ const AddressDetailsUI = (props) => {
       {props.beforeElements?.map((BeforeElement, i) => (
         <React.Fragment key={i}>
           {BeforeElement}
-        </React.Fragment>
-      ))}
+        </React.Fragment>))}
       {props.beforeComponents?.map((BeforeComponent, i) => (
-        <BeforeComponent key={i} {...props} />
-      ))}
+        <BeforeComponent key={i} {...props} />))}
       <AddressContainer>
         <Header>
-          <Text>
-            <p>{addressToShow || orderState?.options?.address?.address}</p>
-          </Text>
+          <h4>{addressToShow || orderState?.options?.address?.address}</h4>
+          {orderState?.options?.type === 1 && !isCartPending &&
+            <Button
+              onClick={() => setOpenModal(true)}
+            >
+              {t('EDIT', 'Edit')}
+            </Button>}
         </Header>
+        <WrappMap>
+          <Map>
+            <img src={googleMapsUrl} id='google-maps-image' alt='google-maps-location' width='288px' height='162px' loading='lazy' />
+          </Map>
+        </WrappMap>
 
         <Modal
           title={t('ADDRESSES', 'Addresses')}
@@ -63,6 +76,7 @@ const AddressDetailsUI = (props) => {
             userId={isNaN(userCustomer?.id) ? null : userCustomer?.id}
             onCancel={() => setOpenModal(false)}
             onAccept={() => handleFindBusinesses()}
+            userCustomerSetup={isCustomerMode && user}
           />
         </Modal>
 
@@ -77,13 +91,11 @@ const AddressDetailsUI = (props) => {
         />
       </AddressContainer>
       {props.afterComponents?.map((AfterComponent, i) => (
-        <AfterComponent key={i} {...props} />
-      ))}
+        <AfterComponent key={i} {...props} />))}
       {props.afterElements?.map((AfterElement, i) => (
         <React.Fragment key={i}>
           {AfterElement}
-        </React.Fragment>
-      ))}
+        </React.Fragment>))}
     </>
   )
 }

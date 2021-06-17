@@ -4,57 +4,47 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding-top: 110px;
-
-  @media (min-width: 992px) {
-    padding-top: 65px;
-  }
 `
 
 export const WrappContainer = styled.div`
   width: 91%;
-  margin: 20px auto;
+  margin: 30px auto;
   display: flex;
-  justify-content: space-between;
-  @media (max-width: 992px) {
-    flex-direction: column;
+  flex-direction: column;
+  background-color: #FFF;
+
+  @media (min-width: 992px) {
+    width: 80%;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: transparent;
   }
 `
 
-export const LeftContent = styled.div`
-  width: 60%;
-  @media (max-width: 992px) {
-    width: 100%;
+export const LeftContainer = styled.div`
+  width: 100%;
+  box-sizing: border-box;
+  ${({ isSkeleton }) => isSkeleton && css`
+    padding: 20px;
+  `}
+  @media (min-width: 992px) {
+    width: calc(100% - 450px);
+    background-color: #FFF;
   }
 `
 
-export const RightContent = styled.div`
-  width: 30%;
-  @media (max-width: 992px) {
-    width: 100%;
+export const RightContainer = styled.div`
+  width: 100%;
+  ${({ isSkeleton }) => isSkeleton && css`
+    padding: 20px;
+  `}
+  @media (min-width: 992px) {
+    width: 400px;
   }
-`
-
-export const RightInnerContainer = styled.div`
-  position: sticky;
-  top: 80px;
 `
 
 export const WrapperUserDetails = styled.div`
   width: 100%;
-`
-
-export const SectionTitle = styled.h3`
-  font-size: 24px;
-  margin: 0px;
-`
-
-export const DeliveryDetailsContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid ${props => props.theme.colors.secundary};
-  padding-bottom: 20px;
 `
 
 export const UserDetailsContainer = styled.div`
@@ -64,12 +54,14 @@ export const UserDetailsContainer = styled.div`
   flex-wrap: wrap;
 `
 
-export const BusinessDetailsContainer = styled(UserDetailsContainer)`
+export const BusinessDetailsContainer = styled.div`
   div {
     h1 {
       text-transform: capitalize;
       margin: 0px;
       font-size: 24px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #CCC;
     }
   }
 `
@@ -77,7 +69,7 @@ export const BusinessDetailsContainer = styled(UserDetailsContainer)`
 export const PaymentMethodContainer = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 20px 0px 0px;
+  margin: 30px 0px 0px;
   h1 {
     margin: 0px;
     font-size: 24px;
@@ -86,8 +78,8 @@ export const PaymentMethodContainer = styled.div`
 
 export const DriverTipContainer = styled(PaymentMethodContainer)`
   h1 {
-    border-bottom: 1px solid ${props => props.theme.colors.secundary};
-    padding-bottom: 20px;
+    border-bottom: 1px solid #CCC;
+    padding-bottom: 10px
   }
 `
 
@@ -95,6 +87,8 @@ export const CartContainer = styled(PaymentMethodContainer)`
   margin-bottom: 20px;
   h1 {
     margin: 20px 0px;
+    border-bottom: 1px solid #CCC;
+    padding-bottom: 10px
   }
 `
 
@@ -127,7 +121,6 @@ export const WarningMessage = styled.div`
   opacity: 0.8;
   border-radius: 10px;
   position: relative;
-  margin-bottom: 20px;
 
   svg {
     position: absolute;
@@ -137,7 +130,7 @@ export const WarningMessage = styled.div`
     margin: 11px;
     ${props => props.theme?.rtl && css`
         right: 0;
-        left: initial
+        left: initial;
     `}
   }
 
@@ -170,49 +163,128 @@ export const CartsList = styled.div`
 export const WarningText = styled.p`
   margin: 10px auto;
   text-align: center;
-  color: #D83520;
+  color: ${props => props.theme.colors.primary};
 `
 
-export const DeliveryScheduleContainer = styled.div`
-  padding: 20px 0;
-`
-export const PaymentMethodHeader = styled(DeliveryDetailsContainer)`
-`
-export const RightContentItem = styled.div`
+export const PaymentMethodHeader = styled.div`
   display: flex;
   align-items: center;
-  column-gap: 10px;
+  justify-content: space-between;
+  border-bottom: 1px solid #CCC;
+  padding-bottom: 10px;
+`
+
+export const RightInnerContainer = styled.div`
+  position: sticky;
+  top: 20px;
+`
+
+export const CheckoutConfirmInfo = styled.div`
+  border-bottom: 1px solid #CCC;
+  padding: 10px 0;
+`
+
+export const ConfirmInfoItem = styled.div`
+  display: flex;
   margin-bottom: 10px;
 
+  ${({ link }) => link && css`
+    cursor: pointer;
+    width: fit-content;
+
+    span {
+      text-decoration: underline;
+      font-weight: 500;
+    }
+  `}
+  
   svg {
+    font-size: 24px;
+
+    ${props => props.theme?.rtl ? css`
+      margin-left: 5px;
+    ` : css`
+      margin-right: 5px;
+    `}
+  }
+`
+
+export const OrderBill = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 10px;
+  background-color: #FFF;
+  color: ${props => props.theme.colors?.blackColor};
+
+  table {
+    padding: 10px 0;
+    width: 100%;
+    font-size: 16px;
+    font-weight: 300;
+
+    td span {
+      unicode-bidi: bidi-override;
+    }
+
+    tr td:nth-child(2) {
+      font-weight: 500;
+      text-align: right;
+      ${props => props.theme?.rtl && css`
+        text-align: left;
+    `}
+    }
+  }
+  table.total {
+    border-top: 1px solid #EAEAEA;
+    tr {
+      td:nth-child(1) {
+        font-weight: bold;
+      }
+      td:nth-child(2) {
+        font-weight: bold;
+        color: ${props => props.theme.colors.primary};
+      }
+    }
+  }
+
+  @media (min-width: 411px) {
+    table {
+      font-size: 18px;
+    }
+  }
+`
+
+export const CouponAddButton = styled.div`
+  text-align: center;
+  margin: 20px 0;
+  span {
+    cursor: pointer;
+    text-decoration: underline;
+    color: ${props => props.theme.colors.primary};
+    font-weight: 500;
+  }
+`
+
+export const CouponContainer = styled.div`
+  padding: 10px;
+  h2 {
     font-size: 24px;
   }
 
-  ${({ bold }) => bold && css`
-    cursor: pointer;
-    font-weight: 600;
-    text-decoration: underline;
-  `}
+  > div {
+    width: 100%;
+    flex-direction: column;
 
-  ${({ lastItem }) => lastItem && css`
-    padding-bottom: 20px;
-    border-bottom: 1px solid ${props => props.theme.colors.secundary};
-  `}
-`
-
-export const PromoCodeButton = styled.div`
-  text-align: center;
-  span {
-    text-decoration: underline;
-    font-weight: 600;
-    cursor: pointer;
+    input {
+      margin-bottom: 15px;
+      background-color: #F6F6F6;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    button {
+      margin: 0px;
+      height: 41px;
+    }
   }
-`
-
-export const WrapCheckoutDeliveryDetails = styled.div`
-`
-export const AddDeliveryInstrunction = styled.a`
-  cursor: pointer;
-  text-decoration: underline;
-  font-weight: 600;
 `

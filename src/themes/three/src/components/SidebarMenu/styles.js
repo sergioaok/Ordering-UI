@@ -5,9 +5,17 @@ export const Container = styled.div`
   justify-content: center;
   align-items: center;
 
-  a {
-    background: transparent;
-  }
+  ${({ auth }) => auth && css`
+    @media (min-width: 769px) {
+      display: none;
+    }
+  `}
+
+  ${({ auth }) => !auth && css`
+    @media (min-width: 871px) {
+      display: none;
+    }
+  `}
 `
 
 export const IconContent = styled.button`
@@ -16,23 +24,30 @@ export const IconContent = styled.button`
   margin: 0px;
   display: inline-flex;
   min-height: 35px;
+  border-radius: 40px;
   border: none;
   cursor: pointer;
-  background-color: transparent;
   transition: background-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
   user-select: none;
   text-decoration: none;
   text-align: center;
+  background-color: rgb(247, 247, 247);
+  box-shadow: transparent 0px 0px 0px 1px inset;
   width: 35px;
   height: 35px;
   padding: 0px;
   align-items: center;
   justify-content: center;
 
+  &:hover {
+    background-color: ${({ isHome }) => isHome ? 'rgba(255,255,255,0.1)' : 'rgb(255, 255, 255)'};
+    box-shadow: transparent 0px 0px 0px 1px inset;
+  }
+
   svg {
     flex-shrink: 0;
     font-size: 30px;
-    color: #010002;
+    color: #333;
   }
 `
 
@@ -42,7 +57,7 @@ export const SidebarContent = styled.div`
   position: fixed;
   z-index: 1005;
   top: 0;
-  background-color: ${props => props.theme.colors.white};
+  background-color: ${props => props.theme.colors.backgroundPage};
   overflow-x: hidden;
   transition: 0.5s;
   padding-top: 60px;
@@ -73,7 +88,7 @@ export const MenuClose = styled.button`
   user-select: none;
   text-decoration: none;
   text-align: center;
-  background-color: ${({ isHome }) => isHome ? '#333' : 'rgb(247, 247, 247)'};
+  background-color: rgb(247, 247, 247);
   box-shadow: transparent 0px 0px 0px 1px inset;
   width: 35px;
   height: 35px;
@@ -82,14 +97,14 @@ export const MenuClose = styled.button`
   justify-content: center;
 
   &:hover {
-    background-color: ${({ isHome }) => isHome ? 'rgba(255,255,255,0.1)' : 'rgb(255, 255, 255)'};
+    background-color: rgb(255, 255, 255);
     box-shadow: transparent 0px 0px 0px 1px inset;
   }
 
   svg {
     flex-shrink: 0;
     font-size: 30px;
-    color: ${({ isHome }) => isHome ? 'rgb(255, 255, 255)' : '#333'};
+    color: #333;
   }
 `
 
@@ -104,7 +119,13 @@ export const MenuLink = styled.a`
   margin: 0px;
   text-align: inherit;
   display: block;
+  width: 100%;
+  background: ${props => props.theme.colors.backgroundPage};
   outline: none !important;
+
+  &:hover {
+    color: #f1f1f1;
+  }
 
   ${({ isCustomer }) => isCustomer && css`
     border-bottom: 1px solid black;
@@ -116,6 +137,30 @@ export const MenuLink = styled.a`
 
   @media (max-height: 450px) {
     font-size: 18px;
+  }
+`
+
+export const WrapperUserAccountContent = styled.div`
+  padding: 16px;
+  display: flex;
+  align-items: center;
+
+  img {
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
+  }
+
+  svg {
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
+  }
+
+  p {
+    font-size: 18px;
+    font-weight: 500;
+    color: ${props => props.theme.colors.primary};
   }
 `
 
@@ -142,7 +187,7 @@ export const MenuLinkIcon = styled.div`
     color: #000;
     width: 24px;
     height: 24px;
-    color: ${({ active, theme }) => active ? theme.colors.darkGreen : '#000'}
+    color: ${({ active, theme }) => active ? theme.colors.secundary : '#000'};
   }
 `
 
@@ -169,7 +214,7 @@ export const TextInfo = styled.span`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  color: ${({ active, theme }) => active ? theme.colors.darkGreen : '#000'}
+  color: ${({ active, theme }) => active ? theme.colors.secundary : '#000'};
 
   ${props => props.theme?.rtl && css`
     text-align: right;
@@ -203,70 +248,6 @@ export const MenuLinkSeparator = styled.div`
       border: none;
       height: 1px;
       background: rgb(231, 231, 231);
-    }
-  }
-`
-export const WrappAccountText = styled.div`
-  display: flex;
-  flex-direction: column;
-
-  span {
-    &:last-child {
-      color: ${props => props.theme.colors.darkGreen};
-    }
-  }
-`
-export const WrappUserAccountContent = styled.div`
-  max-width: 100%;
-  width: 100%;
-  display: grid;
-  grid-template-rows: auto auto auto;
-  grid-template-columns: auto 1fr;
-  column-gap: 20px;
-  padding: 16px;
-
-  img {
-    width: 50px;
-    height: 50px;
-    border-radius: 25px;
-  }
-
-  svg {
-    width: 50px;
-    height: 50px;
-    border-radius: 25px;
-  }
-`
-export const WrapDownloadAppLink = styled.div`
-  border-top: 1px solid #EEEEEE;
-  padding: 16px;
-  margin-top: 15px;
-`
-export const LogoWrap = styled.div`
-  border: 1px solid #EEEEEE;
-  border-radius: 5px;
-  padding: 3px 4px;
-`
-export const DownloadAppDescription = styled.div`
-  display: flex;
-  column-gap: 20px;
-  align-items: center;
-  margin-bottom: 15px;
-`
-export const DownloadButtonGroup = styled.div`
-  display: flex;
-  column-gap: 20px;
-
-  button {
-    padding-top: 5px;
-    padding-bottom: 5px;
-
-    display: flex;
-    align-items: center;
-    column-gap: 10px;
-
-    svg {
-      font-size: 20px;
     }
   }
 `

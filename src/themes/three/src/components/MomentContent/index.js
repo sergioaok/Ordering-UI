@@ -21,7 +21,6 @@ export const MomentContent = (props) => {
   currentDate.setHours(23)
   currentDate.setMinutes(59)
   const momentProps = {
-    onClose: props.onClose,
     maxDate: currentDate
   }
 
@@ -33,13 +32,11 @@ export const MomentContent = (props) => {
       {props.beforeElements?.map((BeforeElement, i) => (
         <React.Fragment key={i}>
           {BeforeElement}
-        </React.Fragment>
-      ))}
+        </React.Fragment>))}
       {props.beforeComponents?.map((BeforeComponent, i) => (
-        <BeforeComponent key={i} {...props} />
-      ))}
+        <BeforeComponent key={i} {...props} />))}
       <Container isLoading={orderState?.loading}>
-        <MomentControl {...momentProps} />
+        <MomentControl {...momentProps} onClose={props.onClose} />
         {orderState?.loading && (
           <Layer height={momentControl?.height && `${momentControl?.height}px`}>
             {(window.location.pathname !== '/search' || orderState?.options?.address?.location) && (
@@ -55,13 +52,11 @@ export const MomentContent = (props) => {
         )}
       </Container>
       {props.afterComponents?.map((AfterComponent, i) => (
-        <AfterComponent key={i} {...props} />
-      ))}
+        <AfterComponent key={i} {...props} />))}
       {props.afterElements?.map((AfterElement, i) => (
         <React.Fragment key={i}>
           {AfterElement}
-        </React.Fragment>
-      ))}
+        </React.Fragment>))}
     </>
   )
 }

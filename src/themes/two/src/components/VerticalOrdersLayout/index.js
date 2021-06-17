@@ -1,16 +1,15 @@
 import React from 'react'
 import { useLanguage, useUtils } from 'ordering-components'
-import BsDot from '@meronex/icons/bs/BsDot'
-import { Button } from '../../styles/Buttons'
-import { ProductItemAccordion } from '../ProductItemAccordion'
+import { useTheme } from 'styled-components'
+import { Button } from '../../../../../styles/Buttons'
 
 import {
   SingleCard,
   OrderPastContent,
+  PastLogo,
   WrapperBusinessTitle,
   Reorder,
-  WrappButton,
-  WrapProducts
+  WrappButton
 } from './styles'
 
 import { OrdersContainer, BusinessInformation } from '../OrdersOption/styles'
@@ -19,58 +18,58 @@ export const VerticalOrdersLayout = (props) => {
   const {
     orders,
     pagination,
-    onOrderClick,
+    onRedirectPage,
     loadMoreOrders,
+    getOrderStatus,
     handleReorder,
     reorderLoading,
     orderID
   } = props
 
+  const theme = useTheme()
   const [, t] = useLanguage()
-  const [{ parsePrice, parseDate }] = useUtils()
+  const [{ parseDate }] = useUtils()
 
   return (
     <>
+      {props.beforeElements?.map((BeforeElement, i) => (
+        <React.Fragment key={i}>
+          {BeforeElement}
+        </React.Fragment>))
+      }
+      {props.beforeComponents?.map((BeforeComponent, i) => (
+        <BeforeComponent key={i} {...props} />))
+      }
       <OrdersContainer id='orders-container'>
         {orders.map(order => (
           <SingleCard key={order.id} id='order-card'>
             <OrderPastContent>
+              {(order.business?.logo || theme.images?.dummies?.businessLogo) && (
+                <PastLogo>
+                  <img src={order.business?.logo || theme.images?.dummies?.businessLogo} alt='business-logo' width='55px' height='64px' loading='lazy' />
+                </PastLogo>
+              )}
               <BusinessInformation>
                 <WrapperBusinessTitle>
                   <h2>{order.business?.name}</h2>
                 </WrapperBusinessTitle>
-                <p>
-                  <span>{t('DELIVERD', 'Delivered')}: </span>
-                  <span>{order?.delivery_datetime_utc ? parseDate(order?.delivery_datetime_utc) : parseDate(order?.delivery_datetime, { utc: false })}</span>
-                  <BsDot />
-                  <span>{parsePrice(order?.total)}</span>
+                <p>{order?.delivery_datetime_utc ? parseDate(order?.delivery_datetime_utc) : parseDate(order?.delivery_datetime, { utc: false })}</p>
+                <p
+                  name='view_order'
+                  onClick={() => onRedirectPage({ page: 'order_detail', params: { orderId: order.uuid } })}
+                >
+                  {t('MOBILE_FRONT_BUTTON_VIEW_ORDER', 'View order')}
                 </p>
-                <p>
-                  {t('PRODUCTS_SELECTED', 'Products selected')}
-                </p>
-                <WrapProducts>
-                  {order.products.map(product => (
-                    <ProductItemAccordion
-                      key={product.id}
-                      product={product}
-                    />
-                  ))}
-                </WrapProducts>
               </BusinessInformation>
             </OrderPastContent>
             <Reorder>
+              <p>{getOrderStatus(order.status)?.value}</p>
               <Button
                 color='primary'
                 onClick={() => handleReorder(order.id)}
                 disabled={reorderLoading}
               >
                 {orderID === order.id && reorderLoading ? t('LOADING', 'Loading...') : t('REORDER', 'Reorder')}
-              </Button>
-              <Button
-                color='secondary'
-                onClick={() => onOrderClick({ page: 'order_detail', params: { orderId: order.uuid } })}
-              >
-                {t('MOBILE_FRONT_BUTTON_VIEW_ORDER', 'View order')}
               </Button>
             </Reorder>
           </SingleCard>
@@ -81,13 +80,20 @@ export const VerticalOrdersLayout = (props) => {
           <Button
             outline
             color='primary'
-            bgtransparent
             onClick={loadMoreOrders}
           >
             {t('LOAD_MORE_ORDERS', 'Load more orders')}
           </Button>
         </WrappButton>
       )}
+      {props.afterComponents?.map((AfterComponent, i) => (
+        <AfterComponent key={i} {...props} />))
+      }
+      {props.afterElements?.map((AfterElement, i) => (
+        <React.Fragment key={i}>
+          {AfterElement}
+        </React.Fragment>))
+      }
     </>
   )
 }

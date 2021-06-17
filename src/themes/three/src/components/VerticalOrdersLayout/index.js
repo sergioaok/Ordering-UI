@@ -1,23 +1,21 @@
 import React, { useState } from 'react'
 import { useLanguage, useUtils } from 'ordering-components'
+import { useTheme } from 'styled-components'
 import { Button } from '../../styles/Buttons'
-import { ProductItemAccordion } from '../ProductItemAccordion'
-import { Modal } from '../../../../../components/Modal'
-import { ReviewOrder } from '../ReviewOrder'
-import { Ticket } from '../Ticket'
+
 import {
-  OrdersContainer,
   SingleCard,
   OrderPastContent,
-  BusinessInformation,
+  PastHeaderImage,
   WrapperBusinessTitle,
   Reorder,
   WrappButton,
-  BusinessHeader,
-  ProductsContainer,
-  ViewOrderButton,
-  ReceiptWrapper
+  BusinessInformation
 } from './styles'
+
+import { OrdersContainer } from '../OrdersOption/styles'
+import { Modal } from '../../../../../components/Modal'
+import { ReviewOrder } from '../../../../../components/ReviewOrder'
 
 export const VerticalOrdersLayout = (props) => {
   const {
@@ -31,34 +29,16 @@ export const VerticalOrdersLayout = (props) => {
     orderID
   } = props
 
+  const theme = useTheme()
   const [, t] = useLanguage()
-  const [{ parseDate, optimizeImage }] = useUtils()
-  const [isReviewed, setIsReviewed] = useState(false)
+  const [{ parseDate }] = useUtils()
+  const [isReviewedOrderIds, setIsReviewedOrderIds] = useState([])
   const [orderSelected, setOrderSelected] = useState(null)
-  const [openModal, setOpenModal] = useState({})
+  const [openModal, setOpenModal] = useState(false)
+
   const handleOpenReview = (order) => {
     setOrderSelected(order)
-    handleOpenModal('review')
-  }
-
-  const handleOpenTicket = (order) => {
-    setOrderSelected(order)
-    handleOpenModal('ticket')
-  }
-
-  const handleCloseModal = (type) => {
-    setOpenModal({
-      ...openModal,
-      [type]: false
-    })
-    setOrderSelected(null)
-  }
-
-  const handleOpenModal = (type) => {
-    setOpenModal({
-      ...openModal,
-      [type]: true
-    })
+    setOpenModal(true)
   }
 
   return (
@@ -73,39 +53,22 @@ export const VerticalOrdersLayout = (props) => {
         {orders.map(order => (
           <SingleCard key={order.id} id='order-card'>
             <OrderPastContent>
-              {order.business?.header && (
-                <BusinessHeader bgimage={optimizeImage(order.business?.header, 'h_400,c_limit')} isClosed={!order.business?.open}>
-                  {!order.business?.open && <h1>{t('CLOSED', 'Closed')}</h1>}
-                </BusinessHeader>
+              {(order.business?.header || theme.images?.dummies?.businessLogo) && (
+                <PastHeaderImage>
+                  <img src={order.business?.header || theme.images?.dummies?.businessLogo} alt='business-logo' loading='lazy' />
+                </PastHeaderImage>
               )}
               <BusinessInformation>
                 <WrapperBusinessTitle>
-                  <h2>{order.business?.name}</h2>
+                  {order.business?.name}
                 </WrapperBusinessTitle>
-                <ReceiptWrapper>
-                  <p>{order?.delivery_datetime_utc ? parseDate(order?.delivery_datetime_utc) : parseDate(order?.delivery_datetime, { utc: false })}</p>
-                  <a
-                    onClick={() => handleOpenTicket(order)}
-                  >
-                    {t('SEE_RECEIPT', 'See Receipt')}
-                  </a>
-                </ReceiptWrapper>
-                <ProductsContainer>
-                  {order.products.map(product => (
-                    <ProductItemAccordion
-                      isOrdersView
-                      disableContentView
-                      key={product.id}
-                      product={product}
-                    />
-                  ))}
-                </ProductsContainer>
-                <ViewOrderButton
+                <p>{order?.delivery_datetime_utc ? parseDate(order?.delivery_datetime_utc) : parseDate(order?.delivery_datetime, { utc: false })}</p>
+                <p
                   name='view_order'
                   onClick={() => onRedirectPage({ page: 'order_detail', params: { orderId: order.uuid } })}
                 >
                   {t('MOBILE_FRONT_BUTTON_VIEW_ORDER', 'View order')}
-                </ViewOrderButton>
+                </p>
               </BusinessInformation>
             </OrderPastContent>
             <Reorder>
@@ -118,13 +81,13 @@ export const VerticalOrdersLayout = (props) => {
                 parseInt(order?.status) === 10 ||
                 parseInt(order?.status) === 11 ||
                 parseInt(order?.status) === 12
-              ) && !order.review && !isReviewed && (
+              ) && !order.review && !isReviewedOrderIds.includes(order?.id) && (
                 <Button
                   rectangle
-                  color='secundary'
+                  className='review'
                   onClick={() => handleOpenReview(order)}
                 >
-                  {t('REVIEW_ORDER', 'Review your Order')}
+                  {t('REVIEW_ORDER', 'Review Order')}
                 </Button>
               )}
               <Button
@@ -142,8 +105,8 @@ export const VerticalOrdersLayout = (props) => {
       {pagination.totalPages && pagination.currentPage < pagination.totalPages && (
         <WrappButton>
           <Button
-            outline
             rectangle
+            outline
             color='primary'
             onClick={loadMoreOrders}
           >
@@ -151,23 +114,16 @@ export const VerticalOrdersLayout = (props) => {
           </Button>
         </WrappButton>
       )}
-      {openModal.review && (
+      {openModal && (
         <Modal
-          open={openModal.review}
-          onClose={() => handleCloseModal('review')}
+          open={openModal}
+          onClose={() => setOpenModal(false)}
           title={orderSelected ? `${t('WRITE_A_REVIEW', 'Write a Review')} #${orderSelected?.id}` : t('LOADING', 'Loading...')}
         >
-          <ReviewOrder order={orderSelected} closeReviewOrder={() => handleCloseModal('review')} setIsReviewed={setIsReviewed} />
-        </Modal>
-      )}
-      {openModal.ticket && (
-        <Modal
-          padding='0'
-          open={openModal.ticket}
-          onClose={() => handleCloseModal('ticket')}
-        >
-          <Ticket
+          <ReviewOrder
             order={orderSelected}
+            closeReviewOrder={() => setOpenModal(false)}
+            setIsReviewed={() => setIsReviewedOrderIds([...isReviewedOrderIds, orderSelected.id])}
           />
         </Modal>
       )}

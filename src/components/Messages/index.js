@@ -178,6 +178,24 @@ const MessagesUI = (props) => {
         return 'ORDER_DELIVERY_COMPLETED_BY_DRIVER'
       case 12:
         return 'ORDER_DELIVERY_FAILED_BY_DRIVER'
+      case 13:
+        return 'PREORDER'
+      case 14:
+        return 'ORDER_NOT_READY'
+      case 15:
+        return 'ORDER_PICKEDUP_COMPLETED_BY_CUSTOMER'
+      case 16:
+        return 'ORDER_STATUS_CANCELLED_BY_CUSTOMER'
+      case 17:
+        return 'ORDER_NOT_PICKEDUP_BY_CUSTOMER'
+      case 18:
+        return 'ORDER_DRIVER_ALMOST_ARRIVED_BUSINESS'
+      case 19:
+        return 'ORDER_DRIVER_ALMOST_ARRIVED_CUSTOMER'
+      case 20:
+        return 'ORDER_CUSTOMER_ALMOST_ARRIVED_BUSINESS'
+      case 21:
+        return 'ORDER_CUSTOMER_ARRIVED_BUSINESS'
       default:
         return getTraduction(status)
     }
@@ -188,11 +206,15 @@ const MessagesUI = (props) => {
       case 0:
         return t('ADMIN', 'Admin')
       case 1:
-        return t('BUSINESS', 'Business')
+        return t('CITY_MANAGER', 'City Manager')
       case 2:
-        return t('DRIVER', 'Driver')
+        return t('BUSINESS', 'Business')
       case 3:
-        return t('CUSTOMER', 'Customer')
+          return t('CUSTOMER', 'Customer')
+      case 4:
+        return t('DRIVER', 'Driver')
+      case 5:
+        return t('DRIVER_MANAGER', 'Driver Manager')
     }
   }
 
@@ -217,6 +239,7 @@ const MessagesUI = (props) => {
   }
 
   const MapMessages = ({ messages }) => {
+    console.log('messages name: ', messages.messages[4].author.name);
     return (
       <>
         {props.beforeElements?.map((BeforeElement, i) => (
@@ -261,7 +284,11 @@ const MessagesUI = (props) => {
                 {message.type === 2 && user?.id === message.author_id && (
                   <MessageCustomer>
                     <BubbleCustomer>
-                      <strong><MyName>{message.author.name} ({getLevel(message.author.level)})</MyName></strong>
+                      <strong>
+                        <MyName>
+                          {message.author.name} ({order.customer_id === message.author.id ? getLevel(3) : getLevel(message.author.level)})
+                        </MyName>
+                      </strong>
                       {message.comment}
                       <TimeofSent>{getTimeAgo(message.created_at)}</TimeofSent>
                     </BubbleCustomer>
@@ -270,7 +297,11 @@ const MessagesUI = (props) => {
                 {message.type === 3 && user.id === message.author_id && (
                   <MessageCustomer>
                     <BubbleCustomer name='image'>
-                      <strong><MyName>{message.author.name} ({getLevel(message.author.level)})</MyName></strong>
+                      <strong>
+                        <MyName>
+                          {message.author.name} ({order.customer_id === message.author.id ? getLevel(3) : getLevel(message.author.level)})
+                        </MyName>
+                      </strong>
                       <ChatImage><img src={message.source} onClick={() => handleModalImage(message.source)} alt='chat-image' width='168px' height='300px' /></ChatImage>
                       {message.comment && (
                         <>
@@ -284,7 +315,11 @@ const MessagesUI = (props) => {
                 {message.type === 2 && user?.id !== message.author_id && (
                   <MessageBusiness>
                     <BubbleBusines>
-                      <strong><PartnerName>{message.author.name} ({getLevel(message.author.level)})</PartnerName></strong>
+                      <strong>
+                        <MyName>
+                          {message.author.name} ({order.customer_id === message.author.id ? getLevel(3) : getLevel(message.author.level)})
+                        </MyName>
+                      </strong>
                       {message.comment}
                       <TimeofSent>{getTimeAgo(message.created_at)}</TimeofSent>
                     </BubbleBusines>
@@ -293,7 +328,11 @@ const MessagesUI = (props) => {
                 {message.type === 3 && user.id !== message.author_id && (
                   <MessageBusiness>
                     <BubbleBusines name='image'>
-                      <strong><PartnerName>{message.author.name} ({getLevel(message.author.level)})</PartnerName></strong>
+                      <strong>
+                        <MyName>
+                          {message.author.name} ({order.customer_id === message.author.id ? getLevel(3) : getLevel(message.author.level)})
+                        </MyName>
+                      </strong>
                       <ChatImage><img src={message.source} onClick={() => handleModalImage(message.source)} alt='chat-image' width='168px' height='300px' /></ChatImage>
                       {message.comment && (
                         <>

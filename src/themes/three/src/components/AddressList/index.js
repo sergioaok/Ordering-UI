@@ -8,11 +8,13 @@ import FaRegBuilding from '@meronex/icons/fa/FaRegBuilding'
 import FaRegHeart from '@meronex/icons/fa/FaRegHeart'
 import IosRadioButtonOn from '@meronex/icons/ios/IosRadioButtonOn'
 import IosRadioButtonOff from '@meronex/icons/ios/IosRadioButtonOff'
-import ZoLocation from '@meronex/icons/zo/ZoLocation'
+
 import {
   AddressList as AddressListController,
   useLanguage,
-  useOrder
+  useOrder,
+  useCustomer,
+  useEvent
 } from 'ordering-components'
 
 import {
@@ -21,15 +23,15 @@ import {
   AddressItem,
   AddressItemActions,
   WrappNotAddresses,
-  FormActions
+  FormActions,
+  ContinueButton
 } from './styles'
 
 import { NotFoundSource } from '../../../../../components/NotFoundSource'
 import { Button } from '../../styles/Buttons'
 import { Modal } from '../../../../../components/Modal'
 import { AddressForm } from '../AddressForm'
-import { Confirm } from '../../../../../components/Confirm'
-
+import { Confirm } from '../Confirm'
 import { useTheme } from 'styled-components'
 import { scrollTo } from '../../../../../utils'
 
@@ -45,18 +47,21 @@ const AddressListUI = (props) => {
     isProductForm,
     onCancel,
     onAccept,
-    onDone,
     userId,
-    userCustomerSetup
+    userCustomerSetup,
+    isEnableContinueButton,
+    setCustomerModalOpen
   } = props
 
   const [, t] = useLanguage()
   const [orderState] = useOrder()
+  const [events] = useEvent()
 
   const [curAddress, setCurAddress] = useState(false)
   const [addressOpen, setAddressOpen] = useState(false)
   const [confirm, setConfirm] = useState({ open: false, content: null, handleOnAccept: null })
   const theme = useTheme()
+  const [{ user }] = useCustomer()
 
   const uniqueAddressesList = (addressList.addresses && addressList.addresses.filter(
     (address, i, self) =>
@@ -92,11 +97,19 @@ const AddressListUI = (props) => {
       ...addressList,
       addresses
     })
+    if (userCustomerSetup) {
+      handleSetAddress(address)
+      return
+    }
     setAddressOpen(false)
   }
 
   const handleSetAddress = (address) => {
-    if (address.id === orderState?.options?.address_id) return
+    if (checkAddress(address) && userCustomerSetup?.id === user?.id) {
+      events.emit('go_to_page', { page: 'search' })
+      setCustomerModalOpen && setCustomerModalOpen(false)
+      return
+    }
     setAddressOpen(false)
     handleSetDefault(address, userCustomerSetup)
   }
@@ -113,20 +126,21 @@ const AddressListUI = (props) => {
   }
 
   const checkAddress = (address) => {
-    if (!orderState?.options?.address) return true
-
     const props = ['address', 'address_notes', 'zipcode', 'location', 'internal_number']
     const values = []
+    if (userCustomerSetup) {
+      return address.default
+    }
     props.forEach(prop => {
-      if (address[prop]) {
+      if (address?.[prop]) {
         if (prop === 'location') {
-          values.push(address[prop].lat === orderState?.options?.address[prop]?.lat &&
-            address[prop].lng === orderState?.options?.address[prop]?.lng)
+          values.push(address?.[prop].lat === orderState?.options?.address?.[prop]?.lat &&
+            address?.[prop].lng === orderState?.options?.address?.[prop]?.lng)
         } else {
-          values.push(address[prop] === orderState?.options?.address[prop])
+          values.push(address?.[prop] === orderState?.options?.address?.[prop])
         }
       } else {
-        values.push(orderState?.options?.address[prop] === null || orderState?.options?.address[prop] === '')
+        values.push(orderState?.options?.address?.[prop] === null || orderState?.options?.address?.[prop] === '')
       }
     })
     return values.every(value => value)
@@ -147,22 +161,20 @@ const AddressListUI = (props) => {
       {props.beforeElements?.map((BeforeElement, i) => (
         <React.Fragment key={i}>
           {BeforeElement}
-        </React.Fragment>
-      ))}
+        </React.Fragment>))}
       {props.beforeComponents?.map((BeforeComponent, i) => (
-        <BeforeComponent key={i} {...props} />
-      ))}
+        <BeforeComponent key={i} {...props} />))}
       <AddressListContainer id='address_control' isLoading={actionStatus?.loading || orderState?.loading}>
         {
           (!isPopover || !addressOpen) && (
             <Button
-              className='add'
-              color='secundary'
               rectangle
+              className='add'
+              color={isEnableContinueButton && addressList?.addresses?.length > 0 ? 'secondary' : 'primary'}
               onClick={() => openAddress({})}
               disabled={orderState?.loading || actionStatus.loading}
             >
-              {(orderState?.loading || actionStatus.loading) ? t('LOADING', 'Loading') : <><ZoLocation /> {t('ADD_DELIVERY_ADDRESS', 'Add delivery address')}</>}
+              {(orderState?.loading || actionStatus.loading) ? t('LOADING', 'Loading') : t('ADD_ADDRESS', 'Add Address')}
             </Button>
           )
         }
@@ -205,6 +217,7 @@ const AddressListUI = (props) => {
           !orderState.loading &&
           !addressList.error &&
           addressList?.addresses?.length > 0 &&
+          typeof orderState.options?.address === 'object' &&
           ((!addressOpen && isPopover) || isModal) && (
             <AddressListUl id='list'>
               {uniqueAddressesList.map(address => (
@@ -234,11 +247,22 @@ const AddressListUI = (props) => {
                   </AddressItemActions>
                 </AddressItem>
               ))}
+              {isEnableContinueButton && uniqueAddressesList.map(address => address.default && (
+                <ContinueButton key={address.id}>
+                  <Button rectangle color='primary' onClick={() => handleSetAddress(address)}>
+                    {t('CONTINUE_WITH', 'Continue with')}: {address.address}
+                  </Button>
+                </ContinueButton>
+              ))}
             </AddressListUl>
           )
         }
 
-        {!(addressList.loading || actionStatus.loading || orderState.loading) && !addressList.error && addressList?.addresses?.length === 0 && !isProductForm && (
+        {!(addressList.loading || actionStatus.loading || orderState.loading) &&
+          !addressList.error &&
+          addressList?.addresses?.length === 0 &&
+          !isProductForm &&
+        (
           <WrappNotAddresses>
             <img src={theme.images?.general?.notFound} alt='Not Found' width='200px' height='112px' loading='lazy' />
             <h1>{t('NOT_FOUND_ADDRESS.', 'Sorry, You don\'t seem to have any addresses.')}</h1>
@@ -253,27 +277,23 @@ const AddressListUI = (props) => {
           )
         )}
 
+        {!(addressList.loading || actionStatus.loading || orderState.loading) && (typeof orderState.options?.address !== 'object') && !addressList.error && (
+          <NotFoundSource
+            content={t('NETWORK_ERROR', 'Network error, please reload the page')}
+          />
+        )}
+
         {(addressList.loading || actionStatus.loading || orderState.loading) && !isProductForm && (
           <AddressListUl>
             <Skeleton height={50} count={3} style={{ marginBottom: '10px' }} />
           </AddressListUl>
         )}
 
-        {onDone && !addressOpen && (
-          <Button
-            color='primary'
-            type='button'
-            disabled={(addressList.loading || actionStatus.loading || orderState.loading)}
-            onClick={() => onDone()}
-          >
-            {t('DONE', 'Done')}
-          </Button>
-        )}
-
-        {onCancel && onAccept && (
+        {onCancel && onAccept && typeof orderState.options?.address === 'object' && (
           <FormActions>
             <Button
               outline
+              rectangle
               type='button'
               disabled={(addressList.loading || actionStatus.loading || orderState.loading)}
               onClick={() => onCancel()}
@@ -281,6 +301,7 @@ const AddressListUI = (props) => {
               {t('CANCEL', 'Cancel')}
             </Button>
             <Button
+              rectangle
               disabled={(addressList.loading || actionStatus.loading || orderState.loading)}
               id='second-btn'
               color='primary'
@@ -303,13 +324,11 @@ const AddressListUI = (props) => {
         />
       </AddressListContainer>
       {props.afterComponents?.map((AfterComponent, i) => (
-        <AfterComponent key={i} {...props} />
-      ))}
+        <AfterComponent key={i} {...props} />))}
       {props.afterElements?.map((AfterElement, i) => (
         <React.Fragment key={i}>
           {AfterElement}
-        </React.Fragment>
-      ))}
+        </React.Fragment>))}
     </>
   )
 }

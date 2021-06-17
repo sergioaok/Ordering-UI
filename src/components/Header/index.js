@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { useLocation } from 'react-router-dom'
 import { useSession, useLanguage, useOrder, useEvent, useConfig, useCustomer } from 'ordering-components'
 import { useTheme } from 'styled-components'
 import FaUserCircle from '@meronex/icons/fa/FaUserCircle'
@@ -46,6 +47,7 @@ export const Header = (props) => {
     isCustomerMode
   } = props
 
+  const { pathname } = useLocation()
   const [events] = useEvent()
   const [, t] = useLanguage()
   const [{ auth }] = useSession()
@@ -56,7 +58,6 @@ export const Header = (props) => {
   const [customerState, { deleteUserCustomer }] = useCustomer()
 
   const clearCustomer = useRef(null)
-
   const [modalIsOpen, setModalIsOpen] = useState(false)
   const [customerModalOpen, setCustomerModalOpen] = useState(false)
   const [modalSelected, setModalSelected] = useState(null)
@@ -116,6 +117,10 @@ export const Header = (props) => {
 
   const handleGoToPage = (data) => {
     events.emit('go_to_page', data)
+    if (isCustomerMode && pathname.includes('/orders')) {
+      deleteUserCustomer(true)
+      refreshOrderOptions()
+    }
   }
 
   useEffect(() => {
@@ -189,6 +194,7 @@ export const Header = (props) => {
                       onClick={() => handleTogglePopover('addresses')}
                       onClose={() => handleClosePopover('addresses')}
                       isHome={isHome}
+                      isCustomerMode={isCustomerMode}
                     />
                   </>
                 )}

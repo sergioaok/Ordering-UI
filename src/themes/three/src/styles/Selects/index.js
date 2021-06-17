@@ -8,12 +8,12 @@ export const Option = styled.div`
   color: #333;
   cursor: pointer;
   &:hover {
-    background-color: ${darken(0.03, '#E2E2E2')};
+    background-color: ${darken(0.03, '#CCC')};
   }
   ${props => props.selected && css`
-    background-color: ${darken(0.07, '#E2E2E2')};
+    background-color: ${darken(0.07, '#CCC')};
     &:hover {
-      background-color: ${darken(0.07, '#E2E2E2')};
+      background-color: ${darken(0.07, '#CCC')};
     }
   `}
   svg {
@@ -35,12 +35,12 @@ export const Option = styled.div`
 
 export const Options = styled.div`
   position: absolute;
-  background-color: #E2E2E2;
+  background-color: #CCC;
   margin-top: 7px;
   z-index: 10000;
   border-width: 1px;
   border-style: solid;
-  border-color: #E2E2E2;
+  border-color: #CCC;
   border-radius: 15px;
   overflow: hidden;
   ${({ position }) => position?.toLowerCase() === 'left' && css`
@@ -96,15 +96,15 @@ export const Select = styled.div`
   line-height: 34px;
   border-width: 1px;
   border-style: solid;
-  border-color: #E2E2E2;
-  background-color: ${({ isHome }) => isHome ? 'rgba(247,247,247,0.3)' : '#E2E2E2'} !important;
-  color: ${({ isHome }) => isHome ? '#FFF' : '#333'} !important;
+  border-color: #CCC;
+  background-color: #CCC;
+  color: #333;
   position: relative;
   ${props => props.disabled && css`
     pointer-events: none;
   `}
   ${props => props.open && css`
-    background-color: ${darken(0.07, '#E2E2E2')};
+    background-color: ${darken(0.07, '#CCC')};
   `}
 `
 

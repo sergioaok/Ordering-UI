@@ -323,6 +323,7 @@ const AddressFormUI = (props) => {
           ? t(`VALIDATION_ERROR_${field.name}_REQUIRED`, `The field ${field.code} is required`)
           : null
       })
+      formMethods.setValue(field.name, formState.changes?.[field.name] ?? addressState.address?.[field.name] ?? '')
     })
   }, [formMethods])
 

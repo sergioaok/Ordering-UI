@@ -1,3 +1,4 @@
+import React from 'react'
 import styled, { css } from 'styled-components'
 
 export const BusinessContainer = styled.div`
@@ -20,9 +21,23 @@ export const BusinessContainer = styled.div`
     background-color: #F8F8F8;
   `}
 
-  ${props => props.bgimage && css`
+  ${props => props.bgimage && !props.isClosed && css`
     background-image: url(${props.bgimage});
   `}
+
+  ${props => props.bgimage && props.isClosed && css`
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${props.bgimage});
+  `}
+
+  h1 {
+    color: #FFF;
+    opacity: 0.5;
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0 10px;
+    padding: 0;
+  }
 
   @media (min-width: 490px) {
     justify-content: flex-start;
@@ -31,13 +46,53 @@ export const BusinessContainer = styled.div`
 
 export const BusinessContent = styled.div`
   display: flex;
-  max-height: 75px;
-  margin-left: 4.5%;
-  margin-right: 4.5%;
-  margin-bottom: 20px;
+  background-color: #FFF;
+  padding: 10px;
+  border-radius: 10px;
+  margin: 10px;
+  max-height: 90px;
+  width: 340px;
+
+  @media (min-width: 426px) {
+    margin: 15px;
+  }
 `
+
+export const WrapperBusinessLogo = styled.div`
+  max-width: 75px;
+  max-height: 75px;
+  height: 75px;
+  width: 75px;
+`
+
+const BusinessLogoStyled = styled.div`
+  display: flex;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  position: relative;
+  background-repeat: no-repeat, repeat;
+  background-size: cover;
+  object-fit: cover;
+  background-position: center;
+  min-height: 75px;
+  border-radius: 10px;
+`
+export const BusinessLogo = (props) => {
+  const style = {}
+  if (props.bgimage) {
+    style.backgroundImage = `url(${props.bgimage})`
+  }
+  return (
+    <BusinessLogoStyled {...props} style={style}>
+      {props.children}
+    </BusinessLogoStyled>
+  )
+}
+
 export const BusinessInfo = styled.div`
   display: flex;
+  width: calc(100% - 75px);
 `
 
 export const BusinessInfoItem = styled.div`
@@ -45,6 +100,10 @@ export const BusinessInfoItem = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  padding: 0px 5px 0px 16px;
+  ${props => props.theme?.rtl && css`
+    padding: 0px 16px 0px 5px;
+  `}
   div {
     font-size: 14px;
     display: flex;
@@ -62,9 +121,8 @@ export const BusinessInfoItem = styled.div`
       display: flex;
       align-items: center;
       margin: 0px;
-      text-transform: capitalize;
       overflow: hidden;
-      white-space: nowrap;
+      /* white-space: nowrap; */
       text-overflow: ellipsis;
 
       svg {
@@ -88,7 +146,6 @@ export const BusinessInfoItem = styled.div`
 
       &.bold {
         font-weight: 600;
-        font-size: 32px;
       }
 
       &.type {
@@ -101,29 +158,33 @@ export const BusinessInfoItem = styled.div`
     }
   }
 `
-export const BusinessBottomContainer = styled.div`
-  width: 91%;
-  margin: 0 auto;
-  padding: 20px 0;
 
-  > div {
-    display: flex;
-    align-items: center;
-    column-gap: 20px;
+export const MoreInfoContainer = styled.div`
+  display: flex;
+  align-items: center;
+  margin: 0 10px;
 
-    p {
-      margin: 0px;
-    }
-
-    a {
-      font-weight: 600;
-      text-decoration: underline;
-      cursor: pointer;
-    }
+  p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 60%;
   }
-  @media (max-width: 576px) {
-    > div {
-      flex-direction: column;
-    }
+
+  a {
+    text-decoration: underline;
+    cursor: pointer;
+    font-weight: 600;
+    color: ${props => props.theme.colors.primary};
+
+    ${props => props.theme?.rtl ? css`
+      margin-right: 15px;
+    ` : css`
+      margin-left: 15px;
+    `}
+  }
+
+  @media (min-width: 768px) {
+    margin: 0 15px;
   }
 `

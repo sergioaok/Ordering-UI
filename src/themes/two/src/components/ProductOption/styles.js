@@ -7,6 +7,7 @@ export const Container = styled.div`
 `
 
 export const WrapHeader = styled.div`
+  margin-top: 10px;
   padding: 15px 0px;
   display: flex;
   justify-content: space-between;
@@ -32,6 +33,7 @@ export const Title = styled.h3`
   font-size: 18px;
   display: flex;
   flex-direction: column;
+  margin: 0px;
 
   span {
     &:not(:first-child) {
@@ -43,31 +45,21 @@ export const Title = styled.h3`
 `
 
 export const Flag = styled.span`
-  display: flex;
-  align-items: center;
-  column-gap: 5px;
-  padding: 10px 15px;
   font-size: 13px;
   margin: 0px;
   text-transform: capitalize;
+  color: ${props => props.theme.colors?.primary};
   font-weight: 500;
-  
+  border-radius: 8px;
+
   @media (min-width: 381px) {
     font-size: 14px;
   }
-
-  color: #028389;
-  
-  ${({ error }) => error && css`
-    background: #FEFE58;
-    color: ${props => props.theme.colors.grayTextColor};
-  `}
 `
-
 export const OptionThumbnail = styled.div`
   display: inline-block;
   border-radius: 8px;
-  background-image: url(${({src}) => src});
+  background-image: url(${({ src }) => src});
   background-repeat: no-repeat, repeat;
   width: 40px;
   height: 40px;

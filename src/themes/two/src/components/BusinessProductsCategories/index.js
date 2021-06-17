@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Skeleton from 'react-loading-skeleton'
 import { BusinessProductsCategories as ProductsCategories } from 'ordering-components'
-import { AutoScroll } from '../AutoScroll'
-import { Conatiner, CategoriesContainer } from './styles'
-import { Tabs, Tab } from '../../styles/Tabs'
-import { CategoryMenuPopover } from '../CategoryMenuPopover'
+import { AutoScroll } from '../../../../../components/AutoScroll'
+
+import { CategoriesContainer } from './styles'
+import { Tabs, Tab } from '../../../../../styles/Tabs'
 
 const BusinessProductsCategoriesUI = (props) => {
   const {
@@ -13,24 +13,8 @@ const BusinessProductsCategoriesUI = (props) => {
     handlerClickCategory,
     categorySelected,
     featured,
-    openBusinessInformation,
-    allTime
+    openBusinessInformation
   } = props
-
-  const [openPopover, setOpenPopover] = useState({})
-
-  const handleTogglePopover = (type) => {
-    setOpenPopover({
-      ...openPopover,
-      [type]: !openPopover[type]
-    })
-  }
-  const handleClosePopover = (type) => {
-    setOpenPopover({
-      ...openPopover,
-      [type]: false
-    })
-  }
 
   const ProductCategories = () => {
     return (
@@ -39,7 +23,6 @@ const BusinessProductsCategoriesUI = (props) => {
           key={category.name}
           className={`category ${category.id === 'featured' ? 'special' : ''}`}
           active={categorySelected?.id === category.id}
-          borderBottom
           onClick={() => handlerClickCategory(category)}
         >
           {category.name}
@@ -49,18 +32,15 @@ const BusinessProductsCategoriesUI = (props) => {
   }
 
   return (
-    <Conatiner>
-      {!isSkeleton && (
-        <CategoryMenuPopover
-          open={openPopover.menulist}
-          onClick={() => handleTogglePopover('menulist')}
-          onClose={() => handleClosePopover('menulist')}
-          categories={categories}
-          categorySelected={categorySelected}
-          allTime={allTime}
-          handlerClickCategory={handlerClickCategory}
-        />
-      )}
+    <>
+      {props.beforeElements?.map((BeforeElement, i) => (
+        <React.Fragment key={i}>
+          {BeforeElement}
+        </React.Fragment>))
+      }
+      {props.beforeComponents?.map((BeforeComponent, i) => (
+        <BeforeComponent key={i} {...props} />))
+      }
       <CategoriesContainer featured={featured}>
         {!isSkeleton ? (
           <Tabs variant='primary'>
@@ -69,24 +49,30 @@ const BusinessProductsCategoriesUI = (props) => {
                 <ProductCategories />
               </>
             ) : (
-              <AutoScroll innerScroll>
+              <AutoScroll>
                 <ProductCategories />
               </AutoScroll>
             )}
           </Tabs>
         ) : (
-          <>
-            <Tabs variant='primary'>
-              {[...Array(4).keys()].map(i => (
-                <Tab key={i}>
-                  <Skeleton width={100} />
-                </Tab>
-              ))}
-            </Tabs>
-          </>
+          <Tabs variant='primary'>
+            {[...Array(4).keys()].map(i => (
+              <Tab key={i}>
+                <Skeleton width={100} />
+              </Tab>
+            ))}
+          </Tabs>
         )}
       </CategoriesContainer>
-    </Conatiner>
+      {props.afterComponents?.map((AfterComponent, i) => (
+        <AfterComponent key={i} {...props} />))
+      }
+      {props.afterElements?.map((AfterElement, i) => (
+        <React.Fragment key={i}>
+          {AfterElement}
+        </React.Fragment>))
+      }
+    </>
   )
 }
 

@@ -9,7 +9,6 @@ export const FormActions = styled.div`
   button {
     height: 45px;
     flex: 1;
-    border-radius: unset;
 
     &:last-child#submit-btn {
       margin-left: 10px;
@@ -44,9 +43,6 @@ export const FormControl = styled.form`
     margin: 10px 0px;
     height: 43px;
     width: 100%;
-    border: none;
-    border-bottom: 1px solid #DBDCDB;
-    background-color: #F6F6F6;
     &.internal_number,
     &.zipcode {
       width: 100%;
@@ -65,15 +61,13 @@ export const FormControl = styled.form`
 
   textarea {
     width: 100%;
-    border: none;
-    border-bottom: 1px solid #DBDCDB;
-    background-color: #F6F6F6;
   }
 
   .input-autocomplete {
     width: 100%;
-    border-radius: unset;
-    border: none;
+    background: #FFF;
+    border: 1px solid #BBB;
+    border-radius: 30px;
     font-size: 16px;
     padding: 7px 15px;
     outline: none;
@@ -137,6 +131,57 @@ export const WrapAddressInput = styled.div`
   }
 `
 
+export const AddressTagSection = styled.div`
+  width: 100%;
+  margin: 10px 0px;
+  display: flex;
+  justify-content: space-between;
+
+  button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 46px;
+    height: 46px;
+
+    img {
+      width: 22px;
+      height: 22px;
+    }
+
+    span {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 22px;
+    }
+  }
+
+  button.active {
+    border: 1px solid ${props => props.theme.colors.primary};
+    color: ${props => props.theme.colors.primary};
+  }
+`
+
+export const WrapperMap = styled.div`
+  width: 100%;
+  height: 250px;
+  > div {
+    position: relative !important;
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 15px;
+  }
+`
+
+export const ShowMap = styled.p`
+  text-align: center;
+  color: #000;
+  width: 100%;
+  font-weight: 600;
+  cursor: pointer
+`
+
 export const WrapperSkeleton = styled.div`
   display: flex;
   flex-direction: column;
@@ -144,13 +189,5 @@ export const WrapperSkeleton = styled.div`
 
   span {
     width: 100%;
-  }
-`
-
-export const WrapSaveButton = styled.div`
-  width: 100%;
-  button {
-    width: 100%;
-    height: 50px;
   }
 `

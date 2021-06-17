@@ -6,10 +6,11 @@ import {
   ModalActions,
   ModalTitle,
   ModalIcon,
-  ModalHeader
+  ModalHeader,
+  ModalBackHeader
 } from './styles'
 
-import { Button } from '../../styles/Buttons'
+import { Button } from '../../../../../styles/Buttons'
 
 const ModalUI = (props) => {
   const {
@@ -33,6 +34,11 @@ const ModalUI = (props) => {
   }
 
   useEffect(() => {
+    if (window.innerWidth > document.body.clientWidth) {
+      const scrollbarWidth = window.innerWidth - document.body.clientWidth
+      const bodyPaddingRight = window.document.body.style.paddingRight
+      document.body.style.paddingRight = props.open ? `${bodyPaddingRight + scrollbarWidth}px` : `${bodyPaddingRight}px`
+    }
     document.body.style.overflow = props.open ? 'hidden' : 'auto'
     if (props.open) {
       window.addEventListener('keydown', handleKeyDown)
@@ -47,8 +53,10 @@ const ModalUI = (props) => {
       height={props.height}
       padding={props.padding}
       isTransparent={isTransparent}
-      isProductForm={isProductForm}
     >
+      {isProductForm && (
+        <ModalBackHeader />
+      )}
       {!hideCloseDefault && (
         <ModalIcon>
           <MdClose onClick={() => onClose()} />

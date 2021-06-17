@@ -1,22 +1,18 @@
-import React, { useRef, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import IosMenu from '@meronex/icons/ios/IosMenu'
 import MdClose from '@meronex/icons/md/MdClose'
 import AiOutlineLogin from '@meronex/icons/ai/AiOutlineLogin'
 import AiOutlineUserAdd from '@meronex/icons/ai/AiOutlineUserAdd'
+import FaRegAddressCard from '@meronex/icons/fa/FaRegAddressCard'
 import FaRegListAlt from '@meronex/icons/fa/FaRegListAlt'
 import AiOutlineHome from '@meronex/icons/ai/AiOutlineHome'
-import AiFillShop from '@meronex/icons/ai/AiFillShop'
-import GiFoodTruck from '@meronex/icons/gi/GiFoodTruck'
-import FaCarSide from '@meronex/icons/fa/FaCarSide'
 import BiStore from '@meronex/icons/bi/BiStore'
-import VscAccount from '@meronex/icons/vsc/VscAccount'
-import HiOutlineShoppingBag from '@meronex/icons/hi/HiOutlineShoppingBag'
-import { useEvent, useLanguage, useOrder, useSession } from 'ordering-components'
+import FaUserCircle from '@meronex/icons/fa/FaUserCircle'
 
-import { useOutsideClick } from '../../../../../hooks/useOutsideClick'
+import { useEvent, useLanguage, useOrder } from 'ordering-components'
+
 import { useWindowSize } from '../../../../../hooks/useWindowSize'
-import { LogoutButton } from '../LogoutButton'
-import { LanguageSelector } from '../LanguageSelector'
+import { LogoutButton } from '../../../../../components/LogoutButton'
 
 import {
   Container,
@@ -28,14 +24,11 @@ import {
   MenuLinkIcon,
   MenuLinkText,
   TextInfo,
-  MenuLinkSeparator,
-  WrapLanguageSelector
+  MenuLinkSeparator
 } from './styles'
 
 export const SidebarMenu = (props) => {
-  const sideBarRef = useRef(null)
-  const { configTypes } = props
-  const [{ auth, user }] = useSession()
+  const { auth, isHideSignup, userCustomer } = props
   const [events] = useEvent()
   const [, t] = useLanguage()
   const [{ options }] = useOrder()
@@ -66,279 +59,196 @@ export const SidebarMenu = (props) => {
       }
     }
   }, [width])
-  
-  useOutsideClick(sideBarRef, () => {
-    actionSidebar(false)
-    setIsMenuOpen(false)
-  });
 
   return (
     <>
-      {(!isHome || (isHome && auth)) && (
-        <Container auth={auth}>
-          <IconContent
-            isHome={isHome}
-            auth={auth}
-            aria-label='menu'
-            onClick={() => actionSidebar(true)}
+      {props.beforeElements?.map((BeforeElement, i) => (
+        <React.Fragment key={i}>
+          {BeforeElement}
+        </React.Fragment>))}
+      {props.beforeComponents?.map((BeforeComponent, i) => (
+        <BeforeComponent key={i} {...props} />))}
+      <Container auth={auth}>
+        <IconContent
+          isHome={isHome}
+          aria-label='menu'
+          onClick={() => actionSidebar(true)}
+        >
+          <IosMenu />
+        </IconContent>
+        <SidebarContent
+          id='sidebar_menu'
+          isHome={isHome}
+        >
+          <MenuClose
+            aria-label='close'
+            onClick={() => actionSidebar(false)}
           >
-            <IosMenu />
-          </IconContent>
-          <SidebarContent
-            ref={sideBarRef}
-            id='sidebar_menu'
-            isHome={isHome}
-          >
-            <MenuClose
-              isHome={isHome}
-              aria-label='close'
-              onClick={() => actionSidebar(false)}
-            >
-              <MdClose />
-            </MenuClose>
-            {!(isHome && !options?.address?.location) && (
-              <>
-                <MenuLink
-                  isHome={isHome}
-                  onClick={() => handleGoToPage({ page: options?.address?.location ? 'delivery' : 'home' })}
+            <MdClose />
+          </MenuClose>
+
+          {userCustomer && (
+            <MenuLink isHome={isHome} isCustomer={userCustomer}>
+              <WrappContent>
+                <MenuLinkIcon
+                  active={false}
                 >
-                  <WrappContent>
-                    <MenuLinkIcon
-                      isHome={isHome}
-                      active={
-                        window.location.pathname === '/' ||
+                  <FaUserCircle />
+                </MenuLinkIcon>
+                <MenuLinkText>
+                  <TextInfo
+                    active={false}
+                  >
+                    {`${userCustomer?.name} ${userCustomer?.lastname}`}
+                  </TextInfo>
+                </MenuLinkText>
+                <MenuLinkSeparator>
+                  <div>
+                    <hr />
+                  </div>
+                </MenuLinkSeparator>
+              </WrappContent>
+            </MenuLink>
+          )}
+
+          <MenuLink
+            onClick={() => handleGoToPage({ page: options?.address?.location ? 'search' : 'home' })}
+          >
+            <WrappContent>
+              <MenuLinkIcon
+                active={
+                  window.location.pathname === '/' ||
+                  window.location.pathname === '/home' ||
+                  window.location.pathname === '/search'
+                }
+              >
+                {options?.address?.location ? (
+                  <BiStore />
+                ) : (
+                  <AiOutlineHome />
+                )}
+              </MenuLinkIcon>
+              <MenuLinkText>
+                <TextInfo
+                  active={
+                    window.location.pathname === '/' ||
                     window.location.pathname === '/home' ||
                     window.location.pathname === '/search'
-                      }
-                    >
-                      {options?.address?.location ? (
-                        <BiStore />
-                      ) : (
-                        <AiOutlineHome />
-                      )}
-                    </MenuLinkIcon>
-                    <MenuLinkText>
-                      <TextInfo
-                        isHome={isHome}
-                        active={
-                          window.location.pathname === '/' ||
-                      window.location.pathname === '/home' ||
-                      window.location.pathname === '/delivery'
-                        }
-                      >
-                        {options?.address?.location ? (
-                          t('DELIVERY', 'Delivery')
-                        ) : (
-                          t('HOME', 'Home')
-                        )}
-                      </TextInfo>
-                    </MenuLinkText>
-                  </WrappContent>
-                </MenuLink>
-                {configTypes.includes(2) && (
-                  <MenuLink
-                    isHome={isHome}
-                    onClick={() => handleGoToPage({ page: options?.address?.location ? 'pickup' : 'home' })}
-                  >
-                    <WrappContent>
-                      <MenuLinkIcon
-                        isHome={isHome}
-                        active={
-                          window.location.pathname === '/pickup'
-                        }
-                      >
-                        <HiOutlineShoppingBag />
-                      </MenuLinkIcon>
-                      <MenuLinkText>
-                        <TextInfo
-                          isHome={isHome}
-                          active={
-                            window.location.pathname === '/pickup'
-                          }
-                        >
-                          {t('PICKUP', 'Pickup')}
-                        </TextInfo>
-                      </MenuLinkText>
-                    </WrappContent>
-                  </MenuLink>
-                )}
-                {configTypes.includes(3) && (
-                  <MenuLink
-                    isHome={isHome}
-                    onClick={() => handleGoToPage({ page: options?.address?.location ? 'eatin' : 'home' })}
-                  >
-                    <WrappContent>
-                      <MenuLinkIcon
-                        isHome={isHome}
-                        active={
-                          window.location.pathname === '/eatin'
-                        }
-                      >
-                        <AiFillShop />
-                      </MenuLinkIcon>
-                      <MenuLinkText>
-                        <TextInfo
-                          isHome={isHome}
-                          active={
-                            window.location.pathname === '/eatin'
-                          }
-                        >
-                          {t('EAT_IN', 'Eat in')}
-                        </TextInfo>
-                      </MenuLinkText>
-                    </WrappContent>
-                  </MenuLink>
-                )}
-                {configTypes.includes(4) && (
-                  <MenuLink
-                    isHome={isHome}
-                    onClick={() => handleGoToPage({ page: options?.address?.location ? 'curbside' : 'home' })}
-                  >
-                    <WrappContent>
-                      <MenuLinkIcon
-                        isHome={isHome}
-                        active={
-                          window.location.pathname === '/curbside'
-                        }
-                      >
-                        <GiFoodTruck />
-                      </MenuLinkIcon>
-                      <MenuLinkText>
-                        <TextInfo
-                          isHome={isHome}
-                          active={
-                            window.location.pathname === '/curbside'
-                          }
-                        >
-                          {t('CURBSIDE', 'Curbside')}
-                        </TextInfo>
-                      </MenuLinkText>
-                    </WrappContent>
-                  </MenuLink>
-                )}
-                {configTypes.includes(5) && (
-                  <MenuLink
-                    isHome={isHome}
-                    onClick={() => handleGoToPage({ page: options?.address?.location ? 'drivethru' : 'home' })}
-                  >
-                    <WrappContent>
-                      <MenuLinkIcon
-                        isHome={isHome}
-                        active={
-                          window.location.pathname === '/drivethru'
-                        }
-                      >
-                        <FaCarSide />
-                      </MenuLinkIcon>
-                      <MenuLinkText>
-                        <TextInfo
-                          isHome={isHome}
-                          active={
-                            window.location.pathname === '/drivethru'
-                          }
-                        >
-                          {t('DRIVE_THRU', 'Drive thru')}
-                        </TextInfo>
-                      </MenuLinkText>
-                    </WrappContent>
-                  </MenuLink>
-                )}
-              </>
-            )}
+                  }
+                >
+                  {options?.address?.location ? (
+                    t('BUSINESSES', 'Businesses')
+                  ) : (
+                    t('HOME', 'Home')
+                  )}
+                </TextInfo>
+              </MenuLinkText>
+              <MenuLinkSeparator>
+                <div>
+                  <hr />
+                </div>
+              </MenuLinkSeparator>
+            </WrappContent>
+          </MenuLink>
 
-            {auth && (
-              <>
-                <MenuLink
-                  isHome={isHome}
-                  onClick={() => handleGoToPage({ page: 'orders' })}
-                >
-                  <WrappContent>
-                    <MenuLinkIcon
-                      isHome={isHome}
-                      active={
-                        window.location.pathname === '/profile/orders'
-                      }
-                    >
-                      <FaRegListAlt />
-                    </MenuLinkIcon>
-                    <MenuLinkText>
-                      <TextInfo
-                        isHome={isHome}
-                        active={
-                          window.location.pathname === '/profile/orders'
-                        }
-                      >
-                        {t('ORDERS', 'Orders')}
-                      </TextInfo>
-                    </MenuLinkText>
-                  </WrappContent>
-                </MenuLink>
-                <MenuLink
-                  isHome={isHome}
-                  onClick={() => handleGoToPage({ page: 'profile' })}
-                >
-                  <WrappContent>
-                    <MenuLinkIcon
-                      isHome={isHome}
+          {auth && (
+            <>
+              <MenuLink
+                onClick={() => handleGoToPage({ page: 'profile' })}
+              >
+                <WrappContent>
+                  <MenuLinkIcon
+                    active={
+                      window.location.pathname === '/profile'
+                    }
+                  >
+                    <FaRegAddressCard />
+                  </MenuLinkIcon>
+                  <MenuLinkText>
+                    <TextInfo
                       active={
                         window.location.pathname === '/profile'
                       }
                     >
-                      <VscAccount />
-                    </MenuLinkIcon>
-                    <MenuLinkText>
-                      <TextInfo
-                        isHome={isHome}
-                        active={
-                          window.location.pathname === '/profile'
-                        }
-                      >
-                        <span>{t('ACCOUNT', 'Account')}</span>
-                        <span>{user?.name} {user?.lastname}</span>
-                      </TextInfo>
-                    </MenuLinkText>
-                  </WrappContent>
-                </MenuLink>
-                <LogoutButton onCustomClick={() => actionSidebar(false)} />
-              </>
-            )}
-            {!auth && (
-              <>
-                <MenuLink
-                  isHome={isHome}
-                  onClick={() => handleGoToPage({ page: 'signin' })}
-                >
-                  <WrappContent>
-                    <MenuLinkIcon
-                      isHome={isHome}
+                      {t('PROFILE', 'Profile')}
+                    </TextInfo>
+                  </MenuLinkText>
+                  <MenuLinkSeparator>
+                    <div>
+                      <hr />
+                    </div>
+                  </MenuLinkSeparator>
+                </WrappContent>
+              </MenuLink>
+
+              <MenuLink
+                onClick={() => handleGoToPage({ page: 'orders' })}
+              >
+                <WrappContent>
+                  <MenuLinkIcon
+                    active={
+                      window.location.pathname === '/profile/orders'
+                    }
+                  >
+                    <FaRegListAlt />
+                  </MenuLinkIcon>
+                  <MenuLinkText>
+                    <TextInfo
+                      active={
+                        window.location.pathname === '/profile/orders'
+                      }
+                    >
+                      {t('ORDERS', 'Orders')}
+                    </TextInfo>
+                  </MenuLinkText>
+                  <MenuLinkSeparator>
+                    <div>
+                      <hr />
+                    </div>
+                  </MenuLinkSeparator>
+                </WrappContent>
+              </MenuLink>
+
+              <LogoutButton onCustomClick={() => actionSidebar(false)} />
+            </>
+          )}
+          {!auth && (
+            <>
+              <MenuLink
+                onClick={() => handleGoToPage({ page: 'signin' })}
+              >
+                <WrappContent>
+                  <MenuLinkIcon
+                    active={
+                      window.location.pathname === '/signin' ||
+                      window.location.pathname === '/login'
+                    }
+                  >
+                    <AiOutlineLogin />
+                  </MenuLinkIcon>
+                  <MenuLinkText>
+                    <TextInfo
                       active={
                         window.location.pathname === '/signin' ||
                         window.location.pathname === '/login'
                       }
                     >
-                      <AiOutlineLogin />
-                    </MenuLinkIcon>
-                    <MenuLinkText>
-                      <TextInfo
-                        isHome={isHome}
-                        active={
-                          window.location.pathname === '/signin' ||
-                          window.location.pathname === '/login'
-                        }
-                      >
-                        {t('SIGN_IN', 'Sign in')}
-                      </TextInfo>
-                    </MenuLinkText>
-                  </WrappContent>
-                </MenuLink>
-
+                      {t('SIGN_IN', 'Sign in')}
+                    </TextInfo>
+                  </MenuLinkText>
+                  <MenuLinkSeparator>
+                    <div>
+                      <hr />
+                    </div>
+                  </MenuLinkSeparator>
+                </WrappContent>
+              </MenuLink>
+              {!isHideSignup && (
                 <MenuLink
-                  isHome={isHome}
                   onClick={() => handleGoToPage({ page: 'signup' })}
                 >
                   <WrappContent>
                     <MenuLinkIcon
-                      isHome={isHome}
                       active={
                         window.location.pathname === '/signup'
                       }
@@ -347,7 +257,6 @@ export const SidebarMenu = (props) => {
                     </MenuLinkIcon>
                     <MenuLinkText>
                       <TextInfo
-                        isHome={isHome}
                         active={
                           window.location.pathname === '/signup'
                         }
@@ -355,18 +264,24 @@ export const SidebarMenu = (props) => {
                         {t('SIGNUP', 'Sign up')}
                       </TextInfo>
                     </MenuLinkText>
+                    <MenuLinkSeparator>
+                      <div>
+                        <hr />
+                      </div>
+                    </MenuLinkSeparator>
                   </WrappContent>
                 </MenuLink>
-              </>
-            )}
-
-            <MenuLinkSeparator isHome={isHome} />
-            <WrapLanguageSelector>
-              <LanguageSelector />
-            </WrapLanguageSelector>
-          </SidebarContent>
-        </Container>
-      )}
+              )}
+            </>
+          )}
+        </SidebarContent>
+      </Container>
+      {props.afterComponents?.map((AfterComponent, i) => (
+        <AfterComponent key={i} {...props} />))}
+      {props.afterElements?.map((AfterElement, i) => (
+        <React.Fragment key={i}>
+          {AfterElement}
+        </React.Fragment>))}
     </>
   )
 }

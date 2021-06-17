@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useOrder } from 'ordering-components'
-import BsChevronDown from '@meronex/icons/bs/BsChevronDown'
+import GoTriangleDown from '@meronex/icons/go/GoTriangleDown'
 
 import {
   Select as SelectInput,
@@ -79,14 +79,14 @@ export const Select = (props) => {
       disabled={orderState.loading && !notReload}
       onMouseUp={handleSelectClick}
     >
-      {!selectedOption && <Selected>{placeholder || ''}<Chevron><BsChevronDown /></Chevron></Selected>}
+      {!selectedOption && <Selected>{placeholder || ''}<Chevron><GoTriangleDown /></Chevron></Selected>}
       {selectedOption && (
         <Selected>
           <Header>
             {selectedOption.showOnSelected || selectedOption.content}
           </Header>
           <Chevron>
-            <BsChevronDown />
+            <GoTriangleDown />
           </Chevron>
         </Selected>
       )}
@@ -100,9 +100,6 @@ export const Select = (props) => {
                 selected={value === option.value}
                 onClick={() => handleChangeOption(option)}
               >
-                {/* {value === option.value && (
-                  <BsChevronDown />
-                )} */}
                 {option.content}
               </Option>
             ))

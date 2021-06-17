@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 import Skeleton from 'react-loading-skeleton'
 import FiMinusCircle from '@meronex/icons/fi/FiMinusCircle'
 import FiPlusCircle from '@meronex/icons/fi/FiPlusCircle'
-import HiOutlineChevronDown from '@meronex/icons/hi/HiOutlineChevronDown'
-import HiOutlineChevronUp from '@meronex/icons/hi/HiOutlineChevronUp'
+import IosArrowDown from '@meronex/icons/ios/IosArrowDown'
+
 import {
   ProductForm as ProductOptions,
   useSession,
@@ -14,13 +14,16 @@ import {
 
 import { scrollTo } from '../../../../../utils'
 import { useWindowSize } from '../../../../../hooks/useWindowSize'
+
 import { ProductIngredient } from '../../../../../components/ProductIngredient'
 import { ProductOption } from '../ProductOption'
 import { ProductOptionSubOption } from '../../../../../components/ProductOptionSubOption'
-import { LoginForm } from '../../../../../components/LoginForm'
-import { SignUpForm } from '../../../../../components/SignUpForm'
-import { ForgotPasswordForm } from '../../../../../components/ForgotPasswordForm'
+import { ProductShare } from '../../../../../components/ProductShare'
+import { LoginForm } from '../LoginForm'
+import { SignUpForm } from '../SignUpForm'
+import { ForgotPasswordForm } from '../ForgotPasswordForm'
 import { AddressList } from '../AddressList'
+
 import { Modal } from '../../../../../components/Modal'
 import { Button } from '../../styles/Buttons'
 
@@ -35,10 +38,10 @@ import {
   ProductComment,
   SkeletonBlock,
   WrapperSubOption,
+  SkuContent,
   ProductFormTitle,
   WrapperIngredients,
-  WrapSectionTitle,
-  WrapButton
+  IngredientHeader
 } from './styles'
 import { useTheme } from 'styled-components'
 import { TextArea } from '../../styles/Inputs'
@@ -46,6 +49,7 @@ import { NotFoundSource } from '../../../../../components/NotFoundSource'
 
 const ProductOptionsUI = (props) => {
   const {
+    businessSlug,
     editMode,
     isSoldOut,
     productObject,
@@ -71,9 +75,10 @@ const ProductOptionsUI = (props) => {
   const [{ parsePrice }] = useUtils()
   const theme = useTheme()
   const [modalPageToShow, setModalPageToShow] = useState('login')
-  const [openIngredient, setOpenIngredient] = useState(true)
 
   const userCustomer = JSON.parse(window.localStorage.getItem('user-customer'))
+  const [setActive, setActiveState] = useState('active')
+  const [setRotate, setRotateState] = useState('accordion__icon rotate')
 
   const closeModal = () => {
     setModalIsOpen(false)
@@ -94,7 +99,9 @@ const ProductOptionsUI = (props) => {
     }
     const myElement = document.getElementsByClassName('error')[0]
     const productContainer = document.getElementsByClassName('product-container')[0]
-
+    if (!myElement || !productContainer) {
+      return
+    }
     let topPos = myElement.offsetTop - productContainer.offsetTop
     if (windowSize.width <= 768) {
       const productImage = document.getElementById('product_image')
@@ -127,6 +134,13 @@ const ProductOptionsUI = (props) => {
     return classnames
   }
 
+  const toggleAccordion = () => {
+    setActiveState(setActive === '' ? 'active' : '')
+    setRotateState(
+      setActive === 'active' ? 'accordion__icon' : 'accordion__icon rotate'
+    )
+  }
+
   return (
     <>
       {props.beforeElements?.map((BeforeElement, i) => (
@@ -144,6 +158,13 @@ const ProductOptionsUI = (props) => {
           </SkeletonBlock>
         )}
 
+        {product && !loading && !error && (
+          <ProductShare
+            slug={businessSlug}
+            categoryId={product?.category_id}
+            productId={product?.id}
+          />
+        )}
         {
         props.beforeMidElements?.map((BeforeMidElements, i) => (
           <React.Fragment key={i}>
@@ -165,48 +186,58 @@ const ProductOptionsUI = (props) => {
               <ProductFormTitle>
                 <h1>{product?.name}</h1>
                 {product?.description && <p>{product?.description}</p>}
+                {product?.sku && product?.sku !== '-1' && product?.sku !== '1' && (
+                  <SkuContent>
+                    <h2>{t('SKU', 'Sku')}</h2>
+                    <p>{product?.sku}</p>
+                  </SkuContent>
+                )}
               </ProductFormTitle>
               <ProductEdition>
                 {product?.ingredients.length > 0 && (
-                  <WrapSectionTitle>
+                  <IngredientHeader
+                    className={`accordion ${setActive}`}
+                    onClick={() => toggleAccordion()}
+                  >
                     <SectionTitle>{t('INGREDIENTS', 'Ingredients')}</SectionTitle>
-                    <WrapButton onClick={() => setOpenIngredient(!openIngredient)}>
-                      {openIngredient ? <HiOutlineChevronDown /> : <HiOutlineChevronUp />}
-                    </WrapButton>
-                  </WrapSectionTitle>
+                    <span>
+                      <IosArrowDown className={`${setRotate}`} />
+                    </span>
+                  </IngredientHeader>
                 )}
-                {openIngredient && (
-                  <WrapperIngredients isProductSoldout={isSoldOut || maxProductQuantity <= 0}>
-                    {product?.ingredients.map(ingredient => (
-                      <ProductIngredient
-                        key={ingredient?.id}
-                        ingredient={ingredient}
-                        state={productCart.ingredients[`id:${ingredient?.id}`]}
-                        onChange={handleChangeIngredientState}
-                      />
-                    ))}
-                  </WrapperIngredients>
-                )}
+                <WrapperIngredients
+                  isProductSoldout={isSoldOut || maxProductQuantity <= 0}
+                  style={{ maxHeight: !setActive && '0px' }}
+                >
+                  {product?.ingredients.map(ingredient => (
+                    <ProductIngredient
+                      key={ingredient.id}
+                      ingredient={ingredient}
+                      state={productCart.ingredients[`id:${ingredient.id}`]}
+                      onChange={handleChangeIngredientState}
+                    />
+                  ))}
+                </WrapperIngredients>
                 {
                   product?.extras.map(extra => extra.options.map(option => {
-                    const currentState = productCart.options[`id:${option?.id}`] || {}
+                    const currentState = productCart.options[`id:${option.id}`] || {}
                     return (
-                      <div key={option?.id}>
+                      <div key={option.id}>
                         {
                           showOption(option) && (
                             <ProductOption
                               option={option}
                               currentState={currentState}
-                              error={errors[`id:${option?.id}`]}
+                              error={errors[`id:${option.id}`]}
                             >
-                              <WrapperSubOption className={isError(option?.id)}>
+                              <WrapperSubOption className={isError(option.id)}>
                                 {
                                   option.suboptions.map(suboption => {
-                                    const currentState = productCart.options[`id:${option?.id}`]?.suboptions[`id:${suboption?.id}`] || {}
-                                    const balance = productCart.options[`id:${option?.id}`]?.balance || 0
+                                    const currentState = productCart.options[`id:${option.id}`]?.suboptions[`id:${suboption.id}`] || {}
+                                    const balance = productCart.options[`id:${option.id}`]?.balance || 0
                                     return (
                                       <ProductOptionSubOption
-                                        key={suboption?.id}
+                                        key={suboption.id}
                                         onChange={handleChangeSuboptionState}
                                         balance={balance}
                                         option={option}
@@ -264,6 +295,7 @@ const ProductOptionsUI = (props) => {
 
                 {productCart && !isSoldOut && maxProductQuantity > 0 && auth && orderState.options?.address_id && (
                   <Button
+                    rectangle
                     className={`add ${(maxProductQuantity === 0 || Object.keys(errors).length > 0) ? 'disabled' : ''}`}
                     color='primary'
                     onClick={() => handleSaveProduct()}
@@ -283,6 +315,7 @@ const ProductOptionsUI = (props) => {
                 {auth && !orderState.options?.address_id && (
                   orderState.loading ? (
                     <Button
+                      rectangle
                       className='add'
                       color='primary'
                       disabled
@@ -301,6 +334,7 @@ const ProductOptionsUI = (props) => {
 
                 {(!auth || isSoldOut || maxProductQuantity <= 0) && (
                   <Button
+                    rectangle
                     className={`add ${!(productCart && !isSoldOut && maxProductQuantity > 0) ? 'soldout' : ''}`}
                     color='primary'
                     outline
@@ -315,7 +349,7 @@ const ProductOptionsUI = (props) => {
           </>
         )}
 
-        {modalIsOpen && (
+        {modalIsOpen && !auth && (
           <Modal
             open={modalIsOpen}
             onClose={() => closeModal()}

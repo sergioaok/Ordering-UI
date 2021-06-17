@@ -1,25 +1,29 @@
 import React, { useState } from 'react'
 import { ProductOption as ProductOptionController, useLanguage } from 'ordering-components'
-import HiOutlineChevronDown from '@meronex/icons/hi/HiOutlineChevronDown'
-import HiOutlineChevronUp from '@meronex/icons/hi/HiOutlineChevronUp'
+import IosArrowDown from '@meronex/icons/ios/IosArrowDown'
+
 import {
   Container,
   WrapHeader,
+  TitleContainer,
   Title,
   Flag,
-  WrapOptionTitle
+  OptionThumbnail,
+  WrapTitle,
+  WrapperOption
 } from './styles'
-import { WrapButton } from '../ProductForm/styles'
 
 const ProductOptionUI = (props) => {
   const {
     children,
-    option
+    option,
+    error
   } = props
 
   const [, t] = useLanguage()
 
-  const [openOption, setOpenOption] = useState(true)
+  const [setActive, setActiveState] = useState('active')
+  const [setRotate, setRotateState] = useState('accordion__icon rotate')
 
   let maxMin = `(${t('MIN', 'Min')}: ${option.min} / ${t('MAX', 'Max')}: ${option.max})`
   if (option.min === 1 && option.max === 1) {
@@ -30,40 +34,51 @@ const ProductOptionUI = (props) => {
     maxMin = `(${t('MIN', 'Min')}: ${option.min})`
   }
 
+  const toggleAccordion = () => {
+    setActiveState(setActive === '' ? 'active' : '')
+    setRotateState(
+      setActive === 'active' ? 'accordion__icon' : 'accordion__icon rotate'
+    )
+  }
+
   return (
     <>
       {props.beforeElements?.map((BeforeElement, i) => (
         <React.Fragment key={i}>
           {BeforeElement}
-        </React.Fragment>
-      ))}
+        </React.Fragment>))}
       {props.beforeComponents?.map((BeforeComponent, i) => (
-        <BeforeComponent key={i} {...props} />
-      ))}
+        <BeforeComponent key={i} {...props} />))}
       <Container>
-        <WrapHeader>
-          <WrapOptionTitle>
-            <Title>{option.name}</Title>
-            <Flag>{maxMin}</Flag>
-          </WrapOptionTitle>
-          <WrapButton onClick={() => setOpenOption(!openOption)}>
-            {openOption ? <HiOutlineChevronDown /> : <HiOutlineChevronUp />}
-          </WrapButton>
+        <WrapHeader
+          className={`accordion ${setActive} ${error && 'error'}`}
+          onClick={() => toggleAccordion()}
+        >
+          <TitleContainer>
+            {option.image && (
+              <OptionThumbnail src={option.image} />
+            )}
+            <WrapTitle>
+              <Title><span>{option.name}</span></Title>
+              <Flag error={error}>{maxMin}</Flag>
+            </WrapTitle>
+          </TitleContainer>
+          <span>
+            <IosArrowDown className={`${setRotate}`} />
+          </span>
         </WrapHeader>
-        {openOption && (
-          <>
-            {children}
-          </>
-        )}
+        <WrapperOption
+          style={{ maxHeight: !setActive && '0px' }}
+        >
+          {children}
+        </WrapperOption>
       </Container>
       {props.afterComponents?.map((AfterComponent, i) => (
-        <AfterComponent key={i} {...props} />
-      ))}
+        <AfterComponent key={i} {...props} />))}
       {props.afterElements?.map((AfterElement, i) => (
         <React.Fragment key={i}>
           {AfterElement}
-        </React.Fragment>
-      ))}
+        </React.Fragment>))}
     </>
   )
 }

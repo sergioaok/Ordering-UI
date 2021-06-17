@@ -17,7 +17,22 @@ export const Header = styled.div`
   width: 100%;
   position: relative;
   min-height: 200px;
+  button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: absolute;
+    z-index: 10;
+    top: 10px;
+    left: 10px;
+    color: #000;
 
+    svg {
+      width: 20px;
+      height: 20px;
+      margin-right: 10px
+    }
+  }
   @media (min-width: 768px) {
     min-height: 340px;
   }

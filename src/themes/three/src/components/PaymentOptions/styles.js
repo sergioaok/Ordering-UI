@@ -8,31 +8,27 @@ export const PaymentMethodsContainer = styled.div`
 `
 
 export const PaymentMethodsList = styled.div`
-  button {
-    width: 100%;
-    height: 50px;
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+
+  @media (min-width: 841px) {
+    justify-content: space-around;
   }
 `
 
 export const PayCard = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 15px 10px;
-  border-bottom: 1px solid ${props => props.theme.colors.secundary};
+  width: calc(50% - 12px);
+  height: 60px;
   cursor: pointer;
-
-  > div {
-    display: flex;
-    align-items: center;
-    column-gap: 20px;
-  }
-
-  ${({ selected }) => selected && css`
-    cursor: initial;
-    border-bottom: none;
-  `}
-
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  margin-right: 10px;
+  margin-top: 10px;
+  text-align: center;
 
   ${props => props.theme?.rtl && css`
     margin-left: 10px;
@@ -43,16 +39,34 @@ export const PayCard = styled.div`
     pointer-events: none;
   `}
 
-  svg {
-    font-size: 30px;
-  }
-
   svg path {
     fill: #000;
   }
 
+  @media (min-width: 351px) {
+    width: calc(33% - 12px);
+  }
+
+
+  @media (min-width: 1024px) {
+    width: calc(25% - 12px);
+  }
+
+  svg {
+    font-size: 30px;
+  }
+
   p {
     margin: 0px;
+    font-size: 12px;
+  }
+
+  &.active {
+    border: 1px solid ${props => props.theme.colors.primary};
+  }
+
+  &:not(.active) {
+    border: ${({ isSkeleton }) => isSkeleton ? '0' : '1px solid #EAEAEA'};
   }
 `
 

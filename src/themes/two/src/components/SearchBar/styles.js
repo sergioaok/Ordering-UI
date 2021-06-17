@@ -1,87 +1,69 @@
 import styled, { css } from 'styled-components'
 
 export const BusinessSearch = styled.div`
-  position: fixed;
-  z-index: 1200;
-  top: 10px;
-  right: 200px;
-  ${props => props.theme?.rtl && css`
-    right: initial;
-    left: 200px;
-  `}
-  
-  @media (max-width: 1200px) {
-    right: 150px;
-    ${props => props.theme?.rtl && css`
-      right: initial;
-      left: 150px;
-    `}
-  }
-
-  @media (max-width: 576px) {
-    right: 110px;
-    ${props => props.theme?.rtl && css`
-      right: initial;
-      left: 110px;
-    `}
-  }
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  position: relative;
 
   input {
     width: 100%;
-    border-radius: 40px;
+    border-radius: 30px;
     background-position: right 10px center;
     background-repeat: no-repeat;
     background-size: 15px;
     box-sizing: border-box;
-    padding: 7px 15px;
 
     ${props => props.theme?.rtl ? css`
-      padding-right: 40px;
+      padding-right: 50px;
     ` : css`
-      padding-left: 40px;
+      padding-left: 50px;
     `}
-    background-color: ${props => props.theme?.colors?.backgroundPage};
+    background-color: #F7F7F7;
+    border: none;
 
-    ${({ externalBusinessMap }) => !externalBusinessMap && css`
+    ${({ isCustomLayout }) => !isCustomLayout && css`
       justify-content: center;
-      input {
-        -webkit-transition: width 0.4s ease-in-out;
-        transition: width 0.4s ease-in-out; 
-      }
+      -webkit-transition: width 0.4s ease-in-out;
+      transition: width 0.4s ease-in-out; 
     `}
 
     @media (min-width: 681px) {
-      ${({ externalBusinessMap }) => !externalBusinessMap && css`
-        width: 240px;
+      width: 100%;
+      ${({ isCustomLayout }) => !isCustomLayout && css`
+        width: 200px;
+        &:focus {
+          width: 50%;
+        }
       `}
     }
 
-    @media (max-width: 576px) {
-      width: 42vw;
-    }
   }
 `
 
 export const DeleteContent = styled.span`
   position: absolute;
   font-weight: 300;
+  padding-top: 8px;
   color: #333;
   font-size: 14px;
-  left: 20px;
-  top: 12px;
-  ${props => props.theme?.rtl && css`
-    left: initial;
-    right: 20px;
+  border-radius: 25%;
+  max-height: 100%;
+
+  ${props => props.theme?.rtl ? css`
+    right: 15px;
+  ` : css`
+    left: 15px;
   `}
-  span{
+
+  svg {
     cursor: pointer;
+    color: #ccc;
+    font-size: 24px;
   }
+
   img{
     width: 20px;
-    transform: translate(-25%, 0%);
-    ${props => props.theme?.rtl && css`
-      transform: translate(25%, 0%);
-    `}
   }
 `
 export const SearchIcon = styled.div`

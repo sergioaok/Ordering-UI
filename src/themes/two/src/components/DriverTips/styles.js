@@ -1,7 +1,9 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 export const DriverTipContainer = styled.div`
   display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: space-around;
   flex-wrap: wrap;
   margin-top: 20px;
@@ -12,23 +14,19 @@ export const TipCard = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 100%;
+  border-radius: 8px;
   padding: 10px;
-  border: 1px solid ${props => props.theme.colors.primary};
+  border: 1px solid #EAEAEA;
   cursor: pointer;
   text-transform: capitalize;
   height: 30px;
   min-width: 30px;
   font-size: 14px;
+  padding: 5px 20px;
 
   &.active {
-    background-color: ${props => props.theme.colors.primary};
-    color: ${props => props.theme.colors.primaryContrast};
-  }
-
-  @media (min-width: 768px) {
-    border-radius: 16px;
-    padding: 5px 30px;
+    background-color: #000;
+    color: #FFF;
   }
 `
 
@@ -61,6 +59,8 @@ export const WrapperInput = styled.div`
     width: 65%;
     padding: 4px 15px;
     box-sizing: border-box;
+    flex: 1;
+    margin-right: 10px;
   }
 
   @media (min-width: 768px) {
@@ -73,4 +73,16 @@ export const WrapperInput = styled.div`
 export const DriverTipMessage = styled.p`
   color: ${props => props.theme.colors.primary};
   font-weight: 600;
+`
+
+export const WrapperTips = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-wrap: wrap;
+
+  > div {
+    margin: 5px;
+  }
 `

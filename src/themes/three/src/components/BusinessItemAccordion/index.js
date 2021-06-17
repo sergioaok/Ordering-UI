@@ -1,18 +1,18 @@
 import React, { useState, useRef, useEffect } from 'react'
 import IosArrowDown from '@meronex/icons/ios/IosArrowDown'
-// import FiClock from '@meronex/icons/fi/FiClock'
-// import BiStoreAlt from '@meronex/icons/bi/BiStoreAlt'
+import FiClock from '@meronex/icons/fi/FiClock'
+import BiStoreAlt from '@meronex/icons/bi/BiStoreAlt'
 import VscTrash from '@meronex/icons/vsc/VscTrash'
 import { useOrder, useLanguage, useUtils, useEvent } from 'ordering-components'
-
-// import { convertHoursToMinutes } from '../../../../../utils'
+import { useTheme } from 'styled-components'
+import { convertHoursToMinutes } from '../../../../../utils'
 
 import {
   AccordionSection,
   Accordion,
   AccordionContent,
-  // WrapperBusinessLogo,
-  // BusinessLogo,
+  WrapperBusinessLogo,
+  BusinessLogo,
   ContentInfo,
   BusinessInfo,
   BusinessTotal,
@@ -28,19 +28,20 @@ export const BusinessItemAccordion = (props) => {
     isClosed,
     moment,
     business,
-    // orderTotal,
+    orderTotal,
     isProducts,
-    // isValidProducts,
+    isValidProducts,
     isForceOpenAccordion,
-    // isCartOnProductsList,
+    isCartOnProductsList,
     handleClearProducts,
-    // handleStoreRedirect,
+    handleStoreRedirect,
     handleCartOpen
   } = props
 
+  const theme = useTheme()
   const [orderState] = useOrder()
   const [, t] = useLanguage()
-  // const [{ parsePrice }] = useUtils()
+  const [{ parsePrice }] = useUtils()
   const [events] = useEvent()
 
   const [setActive, setActiveState] = useState('')
@@ -120,26 +121,24 @@ export const BusinessItemAccordion = (props) => {
       {props.beforeElements?.map((BeforeElement, i) => (
         <React.Fragment key={i}>
           {BeforeElement}
-        </React.Fragment>
-      ))}
+        </React.Fragment>))}
       {props.beforeComponents?.map((BeforeComponent, i) => (
-        <BeforeComponent key={i} {...props} />
-      ))}
-      <AccordionSection isClosed={isClosed}>
+        <BeforeComponent key={i} {...props} />))}
+      <AccordionSection isClosed={isClosed} isCartOnProductsList={isCartOnProductsList}>
         <Accordion
           isClosed={isClosed}
           className={`accordion ${setActive}`}
           onClick={(e) => toggleAccordion(e)}
         >
           <BusinessInfo>
-            {/* {business?.logo && !isCartOnProductsList && (
+            {(business?.logo || theme.images?.dummies?.businessLogo) && !isCartOnProductsList && (
               <WrapperBusinessLogo>
-                <BusinessLogo bgimage={business?.logo} />
+                <BusinessLogo bgimage={business?.logo || theme.images?.dummies?.businessLogo} />
               </WrapperBusinessLogo>
-            )} */}
+            )}
             <ContentInfo className='info'>
               <h2>{business?.name}</h2>
-              {/* {orderState?.options?.type === 1 ? (
+              {orderState?.options?.type === 1 ? (
                 <span>
                   <FiClock />
                   {convertHoursToMinutes(business?.delivery_time)}
@@ -149,16 +148,16 @@ export const BusinessItemAccordion = (props) => {
                   <FiClock />
                   {convertHoursToMinutes(business?.pickup_time)}
                 </span>
-              )} */}
+              )}
             </ContentInfo>
           </BusinessInfo>
 
-          {/* {!isClosed && !!isProducts && (
+          {!isClosed && !!isProducts && (
             <BusinessTotal className='total' isCartOnProductsList={isCartOnProductsList}>
               {isValidProducts && orderTotal > 0 && <p>{parsePrice(orderTotal)}</p>}
               <p>{t('CART_TOTAL', 'Total')}</p>
             </BusinessTotal>
-          )} */}
+          )}
 
           {isClosed && (
             <BusinessTotal className='closed'>
@@ -173,14 +172,14 @@ export const BusinessItemAccordion = (props) => {
           )}
 
           <BusinessActions>
-            {/* {handleStoreRedirect && !isCartOnProductsList && (
+            {handleStoreRedirect && !isCartOnProductsList && (
               <span
                 ref={businessStore}
                 onClick={() => handleStoreRedirect(business?.slug)}
               >
                 <BiStoreAlt color='#CCC' />
               </span>
-            )} */}
+            )}
             {!isClosed && !!isProducts && (
               <>
                 {!isCartPending && (
@@ -207,13 +206,11 @@ export const BusinessItemAccordion = (props) => {
         </AccordionContent>
       </AccordionSection>
       {props.afterComponents?.map((AfterComponent, i) => (
-        <AfterComponent key={i} {...props} />
-      ))}
+        <AfterComponent key={i} {...props} />))}
       {props.afterElements?.map((AfterElement, i) => (
         <React.Fragment key={i}>
           {AfterElement}
-        </React.Fragment>
-      ))}
+        </React.Fragment>))}
     </>
   )
 }

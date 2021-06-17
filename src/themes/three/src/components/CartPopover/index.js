@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import HiOutlineShoppingBag from '@meronex/icons/hi/HiOutlineShoppingBag'
+import RiShoppingBagFill from '@meronex/icons/ri/RiShoppingBagFill'
 import { usePopper } from 'react-popper'
 import {
   HeaderItem,
@@ -75,15 +75,13 @@ export const CartPopover = (props) => {
       {props.beforeElements?.map((BeforeElement, i) => (
         <React.Fragment key={i}>
           {BeforeElement}
-        </React.Fragment>
-      ))}
+        </React.Fragment>))}
       {props.beforeComponents?.map((BeforeComponent, i) => (
-        <BeforeComponent key={i} {...props} />
-      ))}
+        <BeforeComponent key={i} {...props} />))}
       <div style={{ overflow: 'hidden' }}>
         <HeaderItem ref={referenceElement} onClick={props.onClick} name='cart-popover'>
-          <HiOutlineShoppingBag />
-          <p>{props.carts?.length}</p>
+          <RiShoppingBagFill />
+          {props.carts?.length > 0 && <p>{props.carts?.length}</p>}
         </HeaderItem>
         <PopoverBody className='cart-popover' ref={popperElement} style={popStyle} {...attributes.popper}>
           <CartContent
@@ -96,13 +94,11 @@ export const CartPopover = (props) => {
         </PopoverBody>
       </div>
       {props.afterComponents?.map((AfterComponent, i) => (
-        <AfterComponent key={i} {...props} />
-      ))}
+        <AfterComponent key={i} {...props} />))}
       {props.afterElements?.map((AfterElement, i) => (
         <React.Fragment key={i}>
           {AfterElement}
-        </React.Fragment>
-      ))}
+        </React.Fragment>))}
     </>
   )
 }

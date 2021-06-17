@@ -25,7 +25,8 @@ const BusinessProductsListUI = (props) => {
     featured,
     searchValue,
     isCartOnProductsList,
-    handleClearSearch
+    handleClearSearch,
+    errorQuantityProducts
   } = props
 
   const [, t] = useLanguage()
@@ -35,11 +36,9 @@ const BusinessProductsListUI = (props) => {
       {props.beforeElements?.map((BeforeElement, i) => (
         <React.Fragment key={i}>
           {BeforeElement}
-        </React.Fragment>
-      ))}
+        </React.Fragment>))}
       {props.beforeComponents?.map((BeforeComponent, i) => (
-        <BeforeComponent key={i} {...props} />
-      ))}
+        <BeforeComponent key={i} {...props} />))}
       <ProductsContainer>
         {category.id && (
           <ProductsListing>
@@ -137,7 +136,7 @@ const BusinessProductsListUI = (props) => {
         }
 
         {
-          !categoryState.loading && !isBusinessLoading && categoryState.products.length === 0 && (
+          !categoryState.loading && !isBusinessLoading && categoryState.products.length === 0 && !((searchValue && errorQuantityProducts) || (!searchValue && !errorQuantityProducts)) && (
             <WrapperNotFound>
               <NotFoundSource
                 content={!searchValue ? t('ERROR_NOT_FOUND_PRODUCTS_TIME', 'No products found at this time') : t('ERROR_NOT_FOUND_PRODUCTS', 'No products found, please change filters.')}
@@ -155,13 +154,11 @@ const BusinessProductsListUI = (props) => {
         )}
       </ProductsContainer>
       {props.afterComponents?.map((AfterComponent, i) => (
-        <AfterComponent key={i} {...props} />
-      ))}
+        <AfterComponent key={i} {...props} />))}
       {props.afterElements?.map((AfterElement, i) => (
         <React.Fragment key={i}>
           {AfterElement}
-        </React.Fragment>
-      ))}
+        </React.Fragment>))}
     </>
   )
 }

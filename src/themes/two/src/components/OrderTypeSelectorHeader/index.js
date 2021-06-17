@@ -1,64 +1,58 @@
 import React from 'react'
+import { OrderTypeControl, useLanguage } from 'ordering-components'
 import { Select } from '../../styles/Select'
+import FaCarSide from '@meronex/icons/fa/FaCarSide'
+import FaTruckPickup from '@meronex/icons/fa/FaTruckPickup'
+import MdcTruckDeliveryOutline from '@meronex/icons/mdc/MdcTruckDeliveryOutline'
+import AiFillShop from '@meronex/icons/ai/AiFillShop'
+import GiFoodTruck from '@meronex/icons/gi/GiFoodTruck'
 import MdRadioButtonChecked from '@meronex/icons/md/MdRadioButtonChecked'
 import MdRadioButtonUnchecked from '@meronex/icons/md/MdRadioButtonUnchecked'
-
-import { OrderTypeControl, useLanguage } from 'ordering-components'
 import {
   Option,
-  OrderTypeWrapper
+  OrderTypeWrapper,
+  SelectedOption,
+  ContentOption,
+  OrderTypeItem
 } from './styles'
 
 const OrderTypeSelectorHeaderUI = (props) => {
   const {
-    dropDownStyle,
-    toggle,
-    radioStyle,
+    isCustomStyle,
     handleChangeOrderType,
     typeSelected,
     defaultValue,
     configTypes,
     orderTypes
   } = props
-  const options = orderTypes.filter(type => configTypes?.includes(type.value))
+
   const defaultType = configTypes?.includes(typeSelected) ? null : configTypes?.[0]
 
   return (
     typeSelected !== undefined && (
-      <OrderTypeWrapper
-        radioStyle={radioStyle}
-        toggle={toggle}
-        dropDownStyle={dropDownStyle}
-      >
-        {dropDownStyle ? (
+      <OrderTypeWrapper>
+        {isCustomStyle ? (
+          <>
+            {orderTypes.filter(type => configTypes?.includes(type.value)).map(orderType => (
+              <OrderTypeItem
+                key={orderType.value}
+                onClick={() => handleChangeOrderType(orderType.value)}
+              >
+                {(orderType.value === defaultType || orderType.value === defaultValue || orderType.value === typeSelected) ? (
+                  <MdRadioButtonChecked />
+                ) : (
+                  <MdRadioButtonUnchecked />
+                )}
+                {orderType.content}
+              </OrderTypeItem>
+            ))}
+          </>
+        ) : (
           <Select
             options={orderTypes.filter(type => configTypes?.includes(type.value))}
             defaultValue={defaultType || defaultValue || typeSelected}
             onChange={(orderType) => handleChangeOrderType(orderType)}
           />
-        ) : (
-          <>
-            {options.map(type => (
-              <Option
-                key={type.value}
-                selected={type.value === defaultValue || type.value === typeSelected}
-                onClick={() => handleChangeOrderType(type.value)}
-                toggle={toggle}
-                radioStyle={radioStyle}
-              >
-                {radioStyle && (
-                  <>
-                    {type.value === typeSelected ? (
-                      <MdRadioButtonChecked />
-                    ) : (
-                      <MdRadioButtonUnchecked />
-                    )}
-                  </>
-                )}
-                {type?.content}
-              </Option>
-            ))}
-          </>
         )}
       </OrderTypeWrapper>
     )
@@ -74,23 +68,28 @@ export const OrderTypeSelectorHeader = (props) => {
     orderTypes: props.orderTypes || [
       {
         value: 1,
-        content: t('DELIVERY', 'Delivery')
+        content: <Option><ContentOption>{t('DELIVERY', 'Delivery')}</ContentOption></Option>,
+        showOnSelected: <Option><SelectedOption>{t('DELIVERY', 'Delivery')}</SelectedOption></Option>
       },
       {
         value: 2,
-        content: t('PICKUP', 'Pickup')
+        content: <Option><ContentOption>{t('PICKUP', 'Pickup')}</ContentOption></Option>,
+        showOnSelected: <Option><SelectedOption>{t('PICKUP', 'Pickup')}</SelectedOption></Option>
       },
       {
         value: 3,
-        content: t('EAT_IN', 'Eat in')
+        content: <Option><ContentOption>{t('EAT_IN', 'Eat in')}</ContentOption></Option>,
+        showOnSelected: <Option><SelectedOption>{t('EAT_IN', 'Eat in')}</SelectedOption></Option>
       },
       {
         value: 4,
-        content: t('CURBSIDE', 'Curbside')
+        content: <Option><ContentOption>{t('CURBSIDE', 'Curbside')}</ContentOption></Option>,
+        showOnSelected: <Option><SelectedOption>{t('CURBSIDE', 'Curbside')}</SelectedOption></Option>
       },
       {
         value: 5,
-        content: t('DRIVE_THRU', 'Drive thru')
+        content: <Option><ContentOption>{t('DRIVE_THRU', 'Drive thru')}</ContentOption></Option>,
+        showOnSelected: <Option><SelectedOption>{t('DRIVE_THRU', 'Drive thru')}</SelectedOption></Option>
       }
     ]
   }

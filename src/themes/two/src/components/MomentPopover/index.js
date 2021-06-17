@@ -1,8 +1,9 @@
 import React, { useRef, useEffect } from 'react'
-import { useOrder, useLanguage, useUtils, useConfig, useSession } from 'ordering-components'
+import { useOrder, useLanguage, useUtils, useConfig } from 'ordering-components'
 import { usePopper } from 'react-popper'
 import { HeaderItem, PopoverBody, PopoverArrow } from './styles'
 import { MomentContent } from '../MomentContent'
+import FaRegClock from '@meronex/icons/fa/FaRegClock'
 
 export const MomentPopover = (props) => {
   const { open } = props
@@ -10,7 +11,6 @@ export const MomentPopover = (props) => {
   const [orderStatus] = useOrder()
   const [, t] = useLanguage()
   const [{ parseDate }] = useUtils()
-  const [{ auth }] = useSession()
   const referenceElement = useRef()
   const popperElement = useRef()
   const arrowElement = useRef()
@@ -60,27 +60,39 @@ export const MomentPopover = (props) => {
     }
   }, [open])
 
-  const popStyle = { ...styles.popper, visibility: open ? 'visible' : 'hidden', width: '550px', maxHeight: '70vh', overflowY: 'auto' }
+  const popStyle = { ...styles.popper, visibility: open ? 'visible' : 'hidden', width: '450px', maxHeight: '70vh', overflowY: 'auto' }
   if (!open) {
     popStyle.transform = 'translate3d(0px, 0px, 0px)'
   }
 
   return (
     <div className='moment-popover' style={{ overflow: 'hidden' }}>
+      {props.beforeElements?.map((BeforeElement, i) => (
+        <React.Fragment key={i}>
+          {BeforeElement}
+        </React.Fragment>))}
+      {props.beforeComponents?.map((BeforeComponent, i) => (
+        <BeforeComponent key={i} {...props} />))}
       <HeaderItem
         ref={referenceElement}
         onClick={configs?.max_days_preorder?.value === -1 || configs?.max_days_preorder?.value === 0 ? null : props.onClick}
         isHome={props.isHome}
-        auth={auth}
       >
+        <FaRegClock />
         {orderStatus.options?.moment
-          ? parseDate(orderStatus.options?.moment, { outputFormat: configs?.format_time?.value === '12' ? 'MM/DD hh:mma' : 'MM/DD HH:mm' })
+          ? parseDate(orderStatus.options?.moment, { outputFormat: configs?.dates_moment_format?.value })
           : t('ASAP_ABBREVIATION', 'ASAP')}
       </HeaderItem>
       <PopoverBody ref={popperElement} style={popStyle} {...attributes.popper}>
         <MomentContent />
         <PopoverArrow key='arrow' ref={arrowElement} style={styles.arrow} />
       </PopoverBody>
+      {props.afterComponents?.map((AfterComponent, i) => (
+        <AfterComponent key={i} {...props} />))}
+      {props.afterElements?.map((AfterElement, i) => (
+        <React.Fragment key={i}>
+          {AfterElement}
+        </React.Fragment>))}
     </div>
   )
 }

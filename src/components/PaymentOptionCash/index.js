@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { useUtils, useLanguage } from 'ordering-components'
 
 import {
@@ -12,6 +12,7 @@ import { Input } from '../../styles/Inputs'
 
 export const PaymentOptionCash = (props) => {
   const {
+    defaultValue,
     orderTotal,
     onChangeData,
     setErrorCash
@@ -19,14 +20,29 @@ export const PaymentOptionCash = (props) => {
   const [, t] = useLanguage()
   const [{ parsePrice }] = useUtils()
 
-  const [value, setvalue] = useState(null)
+  const [value, setvalue] = useState(defaultValue)
+  const el = useRef()
+  let timeout = null
 
-  const handleChangeCash = (e) => {
-    let cash = parseFloat(e?.target?.value)
-    cash = isNaN(cash) ? null : cash
-    setvalue(cash)
-    onChangeData && onChangeData({ cash })
+  const onChangeCash = (e) => {
+    clearTimeout(timeout)
+    timeout = setTimeout(() => {
+      let cash = parseFloat(e?.target?.value)
+      cash = isNaN(cash) ? null : cash
+      setvalue(cash)
+      if (cash >= orderTotal || !cash) {
+        onChangeData && onChangeData({ cash })
+      }
+    }, 1000)
   }
+
+  useEffect(() => {
+    el.current.onkeyup = onChangeCash
+  }, [])
+
+  useEffect(() => {
+    el.current.value = value || ''
+  }, [value])
 
   useEffect(() => {
     if (value && parseFloat(value) < orderTotal) {
@@ -51,10 +67,10 @@ export const PaymentOptionCash = (props) => {
           <WrapperInput>
             <label>{t('NOT_EXACT_CASH_AMOUNT', 'Don\'t have exact amount? Let us know with how much will you pay')}</label>
             <Input
+              ref={el}
               name='cash'
               type='text'
               placeholder='0'
-              onChange={handleChangeCash}
             />
           </WrapperInput>
           {value && parseFloat(value) < orderTotal && (
@@ -72,4 +88,8 @@ export const PaymentOptionCash = (props) => {
       }
     </>
   )
+}
+
+PaymentOptionCash.defaultProps = {
+  defaultValue: null
 }

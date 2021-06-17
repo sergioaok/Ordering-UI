@@ -1,38 +1,57 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 export const AddressContainer = styled.div`
   display: flex;
   flex-direction: column;
+  margin-bottom: 10px;
 `
 
 export const Header = styled.div`
   display: flex;
-  justify-content: flex-start;
-`
-
-export const Text = styled.div`
-  display: flex;
-  flex-direction: column;
-  font-size: 14px;
-
-  p {
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #CCC;
+  margin-bottom: 20px;
+  button {
+    color: ${props => props.theme.colors.primary};
+    padding-left: 25px;
+    padding-right: 25px;
+  }
+  h4{
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    width: 100%;
-    font-weight: 500;
-  }
-  a {
-    cursor: pointer;
-    font-size: 14px;
-    text-decoration: underline;
-    font-weight: 600;
+    width: 70%;
+    margin: 10px 0;
+    font-size: 24px;
   }
 
-  @media (min-width: 425px) {
-    font-size: 18px;
-    span {
-      font-size: 18px;
-    }
+  svg {
+    color: #F2BB40;
+    margin-left: 5px;
+    font-size: 24px;
+    cursor: pointer;
+    ${props => props.theme?.rtl && css`
+      margin-right: 5px;
+      margin-left: initial;
+    `}
+  }
+`
+
+export const WrappMap = styled.div`
+  width: 100%;
+  margin: auto;
+`
+
+export const Map = styled.div`
+  font-size: 100%;
+
+  img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 15px;
+    -webkit-user-drag: none;
+    aspect-ratio: attr(width) / attr(height)
   }
 `

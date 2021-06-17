@@ -4,8 +4,6 @@ import styled, { css } from 'styled-components'
 export const HeroContainerStyled = styled.div`
   width: 100%;
   height: 100vh;
-  display: flex;
-  justify-content: center;
 
   button{
     padding-top: 5px;
@@ -16,8 +14,14 @@ export const HeroContainerStyled = styled.div`
     background-repeat: no-repeat, repeat;
     background-size: cover;
     object-fit: cover;
-    background-position: center;
+    background-position: inherit;
   `}
+
+  @media (min-width: 768px) {
+    ${({ bgimage }) => bgimage && css`
+      background-position: center;
+    `
+  }
 `
 
 export const HeroContainer = (props) => {
@@ -36,119 +40,127 @@ export const HeroContainer = (props) => {
 }
 
 export const ContentWrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 0px 20px 0px;
+  margin: 0 auto;
+
+  ${props => props.theme?.rtl && css`
     padding: 0px 20px 0px;
-    max-width: 600px;
+  `}
+
+  button {
+    width: 180px;
+  }
+
+  input {
+    width: 90%;
+    margin-bottom: 15px;
+  }
+
+  > img {
+    width: 200px;
+    height: 55px;
+  }
+
+  @media (min-width: 425px) {
+    input {
+      width: 97%;
+    }
+  }
+
+  @media (min-width: 768px) {
+    padding: 0px 40px 0px;
+    width: 60%;
 
     ${props => props.theme?.rtl && css`
-      padding: 0px 20px 0px;
-    `}
-
-    input {
-      width: 90%;
-      margin-bottom: 15px;
-    }
-
-    @media (min-width: 425px) {
-      input {
-        width: 97%;
-      }
-    }
-
-    @media (min-width: 768px) {
       padding: 0px 40px 0px;
+    `}
+  }
 
-      ${props => props.theme?.rtl && css`
-        padding: 0px 40px 0px;
-      `}
-    }
-
-    @media (min-width: 1200px) {
-      max-width: 800px;
-    }
+  @media (min-width: 992px) {
+    max-width: 700px;
+  }
 `
 
 export const Title = styled.h1`
-  margin: 0px;
-  font-size: 60px;
+  margin: 20px 0px 30px 0;
+  line-height: 1.3;
   text-align: center;
+  font-weight: 500;
   letter-spacing: 0px;
   color: #FFFFFF;
   text-shadow: 0px 3px 6px #00000029;
   opacity: 1;
+  font-size: 28px;
 
-  @media (max-width: 1200px){
-    font-size: 42px;
-  }
-  @media (max-width: 992px){
-    font-size: 32px;
-  }
+  ${props => props.theme?.rtl && css`
+    text-align: right;
+  `}
 
-  @media (max-width: 576px){
-    font-size: 29px;
-  }
-`
-export const AddressWrap = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: relative;
-`
-export const WrapAddressInput = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  i {
-    padding: 0px 10px;
+  @media (min-width: 768px) {
+    font-size: 38px;
   }
 
-  svg {
-    position: absolute;
-    color: #9A9A9A;
-    top: 21px;
-    left: 10px;
-    font-size: 20px;
-    ${props => props.theme?.rtl && css`
-      right: 10px;
-      left: initial;
-    `}
-  }
-
-  input {
-    background-position: left 10px center !important;
-    background-repeat: no-repeat !important;
-    background-size: 13px !important;
-    padding: 7px 15px 7px 30px !important;
-    ${props => props.theme?.rtl && css`
-      padding: 7px 30px 7px 15px !important;
-    `}
+  @media (min-width: 992px) {
+    font-size: 50px;
   }
 `
 
-export const WrapInput = styled.label`
-  width: 80%;
-  margin: 20px 0;
-  position: relative;
+export const WrapInput = styled.div`
+  max-width: 500px;
   cursor: pointer;
-  background: #fff;
-  height: 45px;
-  border-radius: 30px;
-
   display: flex;
   align-items: center;
+  background-color: ${props => props.theme.colors?.backgroundPage};
+  border-radius: 30px;
+  height: 40px;
+  width: 90%;
+  color: ${props => props.theme.colors?.darkGray};
+  position: relative;
 
-  svg {
-    font-size: 32px;
-    padding: 0 10px;
-    color: #ccc;
+  > svg {
+    margin: 0 15px;
+    font-size: 24px;
   }
 
-  div {
-    color: #ccc;
-  }  
+  @media (min-width: 768px) {
+    width: 80%;
+  }
+
+  @media (min-width: 992px) {
+    height: 50px;
+  }
+`
+
+export const WrappArrow = styled.span`
+  position: absolute;
+  border-radius: 100%;
+  background-color: ${props => props.theme.colors?.primary};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  width: 35px;
+  height: 35px;
+  margin: 0 3px;
+
+  ${props => props.theme?.rtl ? css`
+    left: 0px;
+  ` : css`
+    right: 0px;
+  `}
+
+  svg {
+    font-size: 24px;
+    color: #FFF;
+  }
+
+  @media (min-width: 992px) {
+    width: 45px;
+    height: 45px;
+  }
 `

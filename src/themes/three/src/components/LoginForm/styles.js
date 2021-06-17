@@ -1,35 +1,48 @@
 import styled, { css } from 'styled-components'
+import { darken } from 'polished'
 
 export const LoginContainer = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
   min-height: ${({ isPopup }) => isPopup ? '500px' : 'calc(100vh - 65px)'};
-  flex-direction: column;
-  padding-top: 65px;
 
-  button {
-    border-radius: unset;
-  }
+  flex-direction: column;
 
   @media (min-width: 768px) {
     flex-direction: row;
   }
 `
+
+export const Title = styled.h1`
+  font-size: 24px;
+  margin-bottom: 0;
+  margin-top: 10px;
+  font-weight: 400;
+  width: ${({ isPopup }) => isPopup ? '90%' : '80%'};
+  @media (min-width: 768px) {
+    font-size: 32px;
+  }
+`
+
 const Side = styled.div`
   display: flex;
   width: 100%;
 `
+
 export const FormSide = styled(Side)`
   flex-direction: column;
   align-items: center;
   margin: auto;
 
-  @media (min-width: 769px) {
-    ${({ isPopup }) => isPopup && css`
-      margin: 20px 0px;
-    `}
+  input.PhoneInputInput {
+    border-radius: unset;
+    margin: 10px 0;
   }
+
+  ${({ isPopup }) => isPopup && css`
+    margin: auto;
+  `}
 
   @media (min-width: 992px) {
     width: 45%;
@@ -42,12 +55,16 @@ export const FormSide = styled(Side)`
 `
 
 export const LoginWith = styled.div`
-  width: 80%;
+  width: ${({ isPopup }) => isPopup ? '90%' : '80%'};
   font-size: 14px;
   > div {
     > div {
       padding: 10px 0;
-      width: 50%;
+      ${props => props.theme?.rtl ? css`
+        margin-left: 20px;
+      ` : css`
+        margin-right: 20px;
+      `}
     }
   }
 
@@ -105,8 +122,12 @@ export const RedirectLink = styled.div`
   }
 
   a {
-    color: ${props => props.theme.colors?.darkGreen};
+    color: ${props => props.theme.colors.secundary};
     text-decoration: none;
+    &:hover,
+    &:visited {
+      color: ${props => props.theme.colors.secundary};
+    }
   }
 
   * {
@@ -142,6 +163,52 @@ export const RedirectLink = styled.div`
   }
 `
 
+export const SocialButtons = styled.div`
+   width: ${({ isPopup }) => isPopup ? '90%' : '80%'};
+   margin-top: 10px;
+
+  button {
+    border-radius: unset;
+    display: flex;
+    justify-content: start;
+    width: 100%;
+    padding: 5px 30px;
+    color: #000000;
+
+    img {
+      width: 30px;
+    }
+
+    div {
+      font-size: 0.8em;
+    }
+  }
+`
+
+export const SkeletonSocialWrapper = styled.div`
+  width: ${({ isPopup }) => isPopup ? '90%' : '80%'};
+  span{
+    margin-bottom: 10px
+  }
+`
+
+export const TogglePassword = styled.span`
+  position: absolute;
+  font-weight: 300;
+  padding: 10px 0;
+  color: #333;
+  font-size: 26px;
+  transform: translate(-150%, 10%);
+  max-height: 100%;
+  ${props => props.theme?.rtl && css`
+    transform: translate(150%, 10%);
+  `}
+  span{
+    cursor: pointer;
+  }
+ 
+`
+
 export const WrapperPassword = styled.div`
   position: relative;
   input{
@@ -150,21 +217,62 @@ export const WrapperPassword = styled.div`
     padding-right: 40px;
   }
 `
-export const WelcomeTitle = styled.h1`
-  font-size: 24px;
-  font-weight: 600;
-  width: 80%;
-`
-export const ReturnContainer = styled.div`
-  position: relative;
-  margin-top: 10px;
-`
-export const BackButton = styled.span`
-  cursor: pointer;
-  position: absolute;
-  top: 7px;
+export const OtpWrapper = styled.div`
+  .otp-container{
+    display: flex;
+    justify-content: space-evenly;
+    margin: 20px;
+    
+    .otp-input{
+      width: 30px;
+      height: 30px;
+      padding: 12px 20px;
+      border: 2px solid #CCC;
+      border-radius: 16px;
+      background-color: #FFF;
+      outline: none;
+      font-size: 20px;
+      font-weight: bold; 
 
-  svg {
-    font-size: 24px;
+      &:focus{
+        border-color: ${() => darken(0.07, '#CCC')} !important;
+      }
+
+      &::placeholder,
+      &::-webkit-input-placeholder {
+        color: #DBDCDB;
+      }
+      &:-ms-input-placeholder {
+        color: #DBDCDB;
+      }
+    }
   }
+`
+
+export const CountdownTimer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  margin: 20px;
+  
+  span {
+    &:first-child {
+      font-size: 30px;
+      font-weight: bold;
+      color: ${props => props.theme.colors.primary}
+    }
+    &:last-child {
+      font-size: 24px;
+      color: #DBDCDB;
+      cursor: pointer;
+      :hover {
+        color: ${() => darken(0.07, '#DBDCDB')} !important;
+      }
+      :active {
+        color: ${() => darken(0.09, '#DBDCDB')} !important;
+      }
+    }
+  }
+
 `

@@ -8,7 +8,11 @@ import FaCcStripe from '@meronex/icons/fa/FaCcStripe'
 import FaStripeS from '@meronex/icons/fa/FaStripeS'
 import GrStripe from '@meronex/icons/gr/GrStripe'
 import EnPaypal from '@meronex/icons/en/EnPaypal'
-import { PaymentOptions as PaymentOptionsController, useLanguage, useSession } from 'ordering-components'
+import {
+  PaymentOptions as PaymentOptionsController,
+  useLanguage,
+  useSession
+} from 'ordering-components'
 
 import { Modal } from '../Modal'
 import { PaymentOptionCash } from '../PaymentOptionCash'
@@ -68,17 +72,24 @@ const PaymentOptionsUI = (props) => {
     errorCash,
     isLoading,
     isDisabled,
-    paymethodSelected,
     paymethodData,
     paymethodsList,
-    isPaymethodNull,
+    setPaymethodData,
     handleOrderRedirect,
     handlePaymethodClick,
     handlePaymethodDataChange,
-    isCustomerMode
+    isCustomerMode,
+    isOpenMethod
   } = props
   const [, t] = useLanguage()
   const [{ token }] = useSession()
+
+  const paymethodSelected = props.paySelected || props.paymethodSelected
+
+  const handlePaymentMethodClick = (paymethod) => {
+    const isPopupMethod = ['stripe', 'stripe_direct', 'stripe_connect', 'stripe_redirect', 'paypal'].includes(paymethod?.gateway)
+    handlePaymethodClick(paymethod, isPopupMethod)
+  }
 
   useEffect(() => {
     if (paymethodsList.paymethods.length === 1) {
@@ -93,10 +104,10 @@ const PaymentOptionsUI = (props) => {
   }, [paymethodSelected])
 
   useEffect(() => {
-    !isPaymethodNull &&
-    handlePaymethodClick &&
-    handlePaymethodClick(isPaymethodNull)
-  }, [isPaymethodNull])
+    if (props.paySelected && props.paySelected?.data) {
+      setPaymethodData(props.paySelected?.data)
+    }
+  }, [props.paySelected])
 
   return (
     <>
@@ -116,7 +127,7 @@ const PaymentOptionsUI = (props) => {
                     <PayCard
                       isDisabled={isDisabled}
                       className={`card ${paymethodSelected?.id === paymethod.id ? 'active' : ''}`}
-                      onClick={() => handlePaymethodClick(paymethod)}
+                      onClick={() => handlePaymentMethodClick(paymethod)}
                     >
                       {getPayIcon(paymethod.id)}
                       <p>
@@ -154,6 +165,7 @@ const PaymentOptionsUI = (props) => {
         {paymethodSelected?.gateway === 'cash' && (
           <PaymentOptionCash
             orderTotal={cart.total}
+            defaultValue={paymethodSelected?.data?.cash}
             onChangeData={handlePaymethodDataChange}
             setErrorCash={props.setErrorCash}
           />
@@ -178,15 +190,15 @@ const PaymentOptionsUI = (props) => {
         {/* Paypal */}
         <Modal
           className='modal-info'
-          open={paymethodSelected?.gateway === 'paypal' && !paymethodData.id}
+          open={isOpenMethod.paymethod?.gateway === 'paypal' && !paymethodData.id}
           onClose={() => handlePaymethodClick(null)}
           title={t('PAY_WITH_PAYPAL', 'Pay with PayPal')}
         >
-          {paymethodSelected?.gateway === 'paypal' && (
+          {isOpenMethod.paymethod?.gateway === 'paypal' && (
             <PaymentOptionPaypal
-              clientId={paymethodSelected?.credentials?.client_id}
+              clientId={isOpenMethod.paymethod?.credentials?.client_id}
               body={{
-                paymethod_id: paymethodSelected.id,
+                paymethod_id: isOpenMethod.paymethod?.id,
                 amount: cart.total,
                 delivery_zone_id: cart.delivery_zone_id,
                 cartUuid: cart.uuid
@@ -205,16 +217,16 @@ const PaymentOptionsUI = (props) => {
         {/* Stripe */}
         <Modal
           className='modal-info'
-          open={paymethodSelected?.gateway === 'stripe' && !paymethodData.id}
+          open={isOpenMethod.paymethod?.gateway === 'stripe' && !paymethodData.id}
           onClose={() => handlePaymethodClick(null)}
           title={t('SELECT_A_CARD', 'Select a card')}
         >
-          {paymethodSelected?.gateway === 'stripe' && (
+          {isOpenMethod.paymethod?.gateway === 'stripe' && (
             <PaymentOptionStripe
-              paymethod={paymethodSelected}
+              paymethod={isOpenMethod.paymethod}
               businessId={props.businessId}
-              publicKey={paymethodSelected?.credentials?.publishable}
-              payType={paymethodsList?.name}
+              publicKey={isOpenMethod.paymethod?.credentials?.publishable}
+              payType={isOpenMethod.paymethod?.name}
               onSelectCard={handlePaymethodDataChange}
               onCancel={() => handlePaymethodClick(null)}
             />
@@ -224,16 +236,16 @@ const PaymentOptionsUI = (props) => {
         {/* Stripe Connect */}
         <Modal
           title={t('SELECT_A_CARD', 'Select a card')}
-          open={paymethodSelected?.gateway === 'stripe_connect' && !paymethodData.id}
+          open={isOpenMethod.paymethod?.gateway === 'stripe_connect' && !paymethodData.id}
           className='modal-info'
           onClose={() => handlePaymethodClick(null)}
         >
-          {paymethodSelected?.gateway === 'stripe_connect' && (
+          {isOpenMethod.paymethod?.gateway === 'stripe_connect' && (
             <PaymentOptionStripe
-              paymethod={paymethodSelected}
+              paymethod={isOpenMethod.paymethod}
               businessId={props.businessId}
-              publicKey={paymethodSelected?.credentials?.stripe?.publishable}
-              clientSecret={paymethodSelected?.credentials.publishable}
+              publicKey={isOpenMethod.paymethod?.credentials?.stripe?.publishable}
+              clientSecret={isOpenMethod.paymethod?.credentials.publishable}
               payType={paymethodsList?.name}
               onSelectCard={handlePaymethodDataChange}
               onCancel={() => handlePaymethodClick(null)}
@@ -244,14 +256,14 @@ const PaymentOptionsUI = (props) => {
         {/* Stripe direct */}
         <Modal
           title={t('ADD_CARD', 'Add card')}
-          open={paymethodSelected?.gateway === 'stripe_direct' && !paymethodData.id}
+          open={isOpenMethod.paymethod?.gateway === 'stripe_direct' && !paymethodData.id}
           className='modal-info'
           onClose={() => handlePaymethodClick(null)}
         >
-          {paymethodSelected?.gateway === 'stripe_direct' && (
+          {isOpenMethod.paymethod?.gateway === 'stripe_direct' && (
             <StripeElementsForm
               businessId={props.businessId}
-              publicKey={paymethodSelected?.credentials?.publishable}
+              publicKey={isOpenMethod.paymethod?.credentials?.publishable}
               handleSource={handlePaymethodDataChange}
               onCancel={() => handlePaymethodClick(null)}
             />
@@ -261,7 +273,7 @@ const PaymentOptionsUI = (props) => {
         {/* Stripe Redirect */}
         <Modal
           title={t('STRIPE_REDIRECT', 'Stripe Redirect')}
-          open={['stripe_redirect'].includes(paymethodSelected?.gateway) && !paymethodData.type}
+          open={isOpenMethod.paymethod?.gateway === 'stripe_redirect' && !paymethodData.type}
           className='modal-info'
           onClose={() => handlePaymethodClick(null)}
         >

@@ -36,7 +36,7 @@ export const OrderBill = styled.div`
       }
       td:nth-child(2) {
         font-weight: bold;
-        color: ${props => props.theme.colors.darkGreen};
+        color: #D81212;
       }
     }
   }

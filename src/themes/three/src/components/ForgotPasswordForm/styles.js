@@ -2,10 +2,9 @@ import styled, { css } from 'styled-components'
 
 export const ForgotPasswordContainer = styled.div`
   width: 100%;
-  height: ${({ isPopup }) => isPopup ? '100vh' : 'auto'};
+  height: ${({ isPopup }) => isPopup ? '100vh' : 'calc(100vh - 90px)'};
   display: flex;
   flex-direction: column;
-  padding-top: 65px;
 
   @media (min-width: 992px) {
     flex-direction: row;
@@ -21,11 +20,34 @@ const Side = styled.div`
 export const FormSide = styled(Side)`
   flex-direction: column;
   align-items: center;
-  margin-top: 30px;
+  margin: auto;
+
+  h1,
+  p {
+    width: ${({ isPopup }) => isPopup ? '90%' : '80%'};
+  }
+
+  p {
+    font-size: 12px;
+    margin-bottom: 0px;
+  }
+
+  h1 {
+    font-size: 24px;
+    font-weight: 400;
+    margin-bottom: 0px;
+  }
+  @media (min-width: 768px) {
+    h1 {
+      font-size: 28px;
+    }
+
+    p {
+      font-size: 16px;
+    }
+  }
 
   @media (min-width: 992px) {
-
-    margin: auto;
     width: 45%;
     font-size: ${({ isPopup }) => isPopup ? '12px' : '1em'};
   }
@@ -38,7 +60,6 @@ export const FormInput = styled.form`
 
   * {
     padding: 8px 20px;
-    margin: 10px;
   }
 
   input:not(:last-child) {
@@ -47,7 +68,7 @@ export const FormInput = styled.form`
   }
 
   button {
-    margin-top: 10px;
+    margin-top: 20px;
     padding: 5px;
   }
 `
@@ -71,8 +92,12 @@ export const RedirectLink = styled.div`
   }
 
   a {
-    color: ${props => props.theme.colors.darkGreen};
+    color: ${props => props.theme.colors.secundary};
     text-decoration: none;
+
+    &:visited {
+      color: ${props => props.theme.colors.secundary};
+    }
   }
 
   * {
@@ -105,14 +130,5 @@ export const RedirectLink = styled.div`
     ${({ isPopup }) => isPopup && css`
       font-size: 16px;
     `};
-  }
-`
-
-export const TitleContainer = styled.div`
-  width: 80%;
-  padding: 0 10px;
-  box-sizing: border-box;
-  p {
-    margin: 0px;
   }
 `

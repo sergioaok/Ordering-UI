@@ -10,7 +10,8 @@ export const AddressesPopover = (props) => {
   const {
     open,
     auth,
-    addressState
+    addressState,
+    isCustomerMode
   } = props
 
   const [events] = useEvent()
@@ -86,11 +87,9 @@ export const AddressesPopover = (props) => {
       {props.beforeElements?.map((BeforeElement, i) => (
         <React.Fragment key={i}>
           {BeforeElement}
-        </React.Fragment>))
-      }
+        </React.Fragment>))}
       {props.beforeComponents?.map((BeforeComponent, i) => (
-        <BeforeComponent key={i} {...props} />))
-      }
+        <BeforeComponent key={i} {...props} />))}
       <HeaderItem ref={referenceElement} onClick={props.onClick} isHome={props.isHome}>
         <FaMapMarkerAlt /> {orderState.options?.address?.address?.split(',')?.[0] || t('SELECT_AN_ADDRESS', 'Select an address')}
       </HeaderItem>
@@ -105,6 +104,7 @@ export const AddressesPopover = (props) => {
                   changeOrderAddressWithDefault
                   userId={isNaN(userCustomer?.id) ? null : userCustomer?.id}
                   onClosePopover={props.onClose}
+                  isCustomerMode={isCustomerMode}
                 />
               </>)}
             {!auth && (
@@ -123,13 +123,11 @@ export const AddressesPopover = (props) => {
         <PopoverArrow key='arrow' ref={arrowElement} style={styles.arrow} />
       </PopoverBody>
       {props.afterComponents?.map((AfterComponent, i) => (
-        <AfterComponent key={i} {...props} />))
-      }
+        <AfterComponent key={i} {...props} />))}
       {props.afterElements?.map((AfterElement, i) => (
         <React.Fragment key={i}>
           {AfterElement}
-        </React.Fragment>))
-      }
+        </React.Fragment>))}
     </div>
   )
 }

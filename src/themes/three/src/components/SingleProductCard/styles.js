@@ -6,24 +6,27 @@ export const CardContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: calc(100% - 42px);
+  box-sizing: border-box;
+  width: calc(100% - 20px);
   padding: 10px;
   margin: 10px;
   cursor: pointer;
   position: relative;
-  border: 1px solid ${props => props.theme.colors.secundary};
+  border: 1px solid ${props => props.theme.colors?.lightGray};
+
   background: ${({ soldOut }) => soldOut ? '#B8B8B8' : '#FFF'};
+
   ${({ isCartOnProductsList }) => isCartOnProductsList ? css`
     @media (min-width: 993px) {
-      width: calc(50% - 42px);
+      width: calc(50% - 20px);
     }
   ` : css`
     @media (min-width: 681px) {
-      width: calc(50% - 42px);
+      width: calc(50% - 20px);
     }
 
     @media (min-width: 993px) {
-      width: calc(33% - 42px);
+      width: calc(33.33% - 20px);
     }
   `}
 `
@@ -68,6 +71,7 @@ export const CardInfo = styled.div`
     ${props => props.theme?.rtl && css`
       text-align: right;
     `}
+    color: ${props => props.theme.colors?.darkGray};
 
     display: -webkit-box;
     -webkit-box-orient: vertical;
@@ -82,6 +86,10 @@ export const CardInfo = styled.div`
 
   p, span {
     font-size: 13px;
+  }
+
+  @media (min-width: 992px) {
+    width: calc(100% - 130px);
   }
 
   @media (min-width: 1024px) {
@@ -104,11 +112,12 @@ export const WrapLogo = styled.div`
   max-height: 75px;
   height: 75px;
   width: 75px;
-  margin-right: 5px;
-  ${props => props.theme?.rtl && css`
-    margin-left: 5px;
-    margin-right: 0px;
-  `}
+  @media (min-width: 1024px) {
+    max-width: 120px;
+    max-height: 120px;
+    height: 120px;
+    width: 120px;
+  }
 `
 
 const CardLogoStyled = styled.div`
@@ -119,7 +128,11 @@ const CardLogoStyled = styled.div`
   background-position: center;
   object-fit: cover;
   min-height: 75px;
-  border-radius: 10px;
+  border-radius: 5px;
+
+  @media (min-width: 1024px) {
+    min-height: 120px;
+  }
 `
 export const CardLogo = (props) => {
   const style = {}

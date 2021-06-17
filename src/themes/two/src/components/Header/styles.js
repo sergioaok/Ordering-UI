@@ -1,44 +1,65 @@
 import styled, { css } from 'styled-components'
+import { Select } from '../../styles/Selects'
 
 export const Header = styled.div`
-  top: 0px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   width: 100%;
-  background-color: transparent;
-  height: 60px;
-  ${({ isHome }) => isHome && css`
+  background-color: #FFF;
+  border-bottom: 1px solid #CCC;
+
+  ${props => props.home ? css`
+    background-color: transparent;
     position: absolute;
-  `}
-  ${({ isHome }) => !isHome && css`
-    border-bottom: 1px solid ${props => props.theme.colors.secondary};
-    position: fixed;
-    top: 0px;
-    background-color: #fff;
-    z-index: 1100;
-  `}
-  ${({ isAuthPage }) => isAuthPage && css`
-    @media (max-width: 576px) {
-      display: none;
+    border-bottom: none;
+
+    & ${Select} {
+      color: #FFF !important;
+      background-color: transparent !important;
+    }
+  `
+  : css`
+    & ${Select} {
+      color: #191919 !important;
+      background-color: transparent !important;
     }
   `}
+
+  ${Select} {
+    margin: 0 5px;
+    border: none;
+
+    p, div {
+      font-size: 16px;
+    }
+    > div:first-child {
+      padding: 0px;
+    }
+
+    #list {
+      background: #FFF;
+      border-radius: 8px;
+    }
+  }
 `
 
 export const InnerHeader = styled.div`
   display: flex;
   color: #FFF;
-  width: 91%;
-  margin: 0px auto;
-  position: relative;
   justify-content: space-between;
+  width: 98%;
+  margin: 10px auto;
+  position: relative;
 `
 
 export const LogoHeader = styled.div`
-  cursor: pointer;
   img {
+    cursor: pointer;
+    width: 35px;
+    height: 45px;
     margin: 0;
     vertical-align: middle;
+    margin-left: 10px;
 
     ${props => props.theme?.rtl && css`
       margin-right: 10px;
@@ -46,80 +67,39 @@ export const LogoHeader = styled.div`
     `}
 
     @media (min-width: 768px) {
-      width: 173px;
+      width: 150px;
     }
-  }
-
-  img:nth-child(1) {
-    display: none;
   }
 
   @media (min-width: 768px) {
-    img:nth-child(1) {
-      display: block;
-    }
-    img:nth-child(2) {
-      display: none;
-    }
+    z-index: 10;
+    position: absolute;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
-
-  ${({ isHome }) => isHome && css`
-    img:nth-child(1) {
-      display: block;
-    }
-    img:nth-child(2) {
-      display: none;
-    }
-  `}
 `
 
-export const CenterHeader = styled.div`
-  position: absolute;
-  width: 100%;
-  height: 100%;
+export const LeftHeader = styled.div`
+  align-self: center;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1;
-  top: 0px;
-
-  @media (max-width: 992px) {
-    ${({ isHome }) => !isHome && css`
-      position: relative;
-      flex: 1;
-      justify-content: flex-start;
-    `}
-  }
-
-  @media (max-width: 576px) {
-    ${({ isHome }) => isHome && css`
-      top: 70px;
-    `}
-  }
 `
 
 export const RightHeader = styled.div`
   align-self: center;
   display: flex;
-  z-index: 2;
+  align-items: center;
+  z-index: 100;
 `
 
 export const Menu = styled.div`
   display: flex;
   align-items: center;
-
-  &.left-header {
-    > :first-child {
-      margin-left: 15px;
-      ${props => props.theme?.rtl && css`
-        margin-right: 15px;
-        margin-left: 0;
-      `}
-    }
-  }
+  z-index: 100;
 
   > *:not(:last-child) {
-    margin: 0 15px;
+    margin: 0 7px;
   }
 
   .moment-popover,
@@ -141,17 +121,20 @@ export const MenuItem = styled.div`
 
 export const MenuLink = styled.a`
   text-decoration: none;
-  font-size: 14px;
-  padding: 7px 20px;
+  font-size: 16px;
+  padding: 10px;
   color: #FFF;
   cursor: pointer;
-  border: 1px solid #c31d20;
-  background-color: #c31d20;
-  border-radius: 100px;
 
   ${({ highlight }) => highlight && css`
-    background-color: #fff;
-    color: ${props => props.theme.colors.grayTextColor};
+    background-color: #FFF;
+    color: ${props => props.theme.colors?.darkGray};
+    border-radius: 100px;
+    padding: 5px 15px;
+  `}
+
+  ${({ home }) => !home && css`
+    color: ${props => props.theme.colors?.darkBlack};
   `}
 `
 
@@ -163,36 +146,54 @@ export const SubMenu = styled(InnerHeader)`
   box-sizing: border-box;
   margin: 0px;
 
-  @media (min-width: 821px) {
+  @media (min-width: 993px) {
     display: none;
   }
 `
-export const LeftHeader = styled.div`
-  display: flex;
-  align-items: center;
-  z-index: 3;
-`
-export const ToText = styled.p`
-  color: ${props => props.theme.colors.darkTextColor};
-  text-transform: lowercase;
-  padding: 0 10px;
-`
-export const WrapMomentAndAddress = styled.div`
-  display: flex;
-  align-items: center;
-`
-export const HeaderMobileViewBottom = styled.div`
-  background: #fff;
-  border-bottom: 1px solid ${props => props.theme.colors.secondary};
-  width: 100vw;
-  height: 60px;
-  margin-top: 60px;
+
+export const CustomerInfo = styled.div`
+  display: none;
+  cursor: pointer;
+
+  @media (min-width: 450px) {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    span {
+      display: flex;
+      align-items: center;
+      height: 30px;
+      p {
+        color: ${props => props.isHome ? '#FFF' : '#333'};
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 50px;
+
+        @media (min-width: 768px) {
+          max-width: 70px;
+        }
+      }
+      svg {
+        color: ${props => props.theme.colors.primary};
+        font-size: 30px;
+        margin-right: 5px;
+      }
+    }
+  }
 `
 
-export const HeaderMobileViewInnerBottom = styled.div`
-  width: 91%;
-  margin: 0px auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+export const UserEdit = styled.div`
+  > :first-child{
+     margin-bottom: 20px;  
+  }
+`
+
+export const ToTitle = styled.span`
+  color: #191919;
+  text-transform: lowercase;
+  ${({ home }) => home && css`
+    color: #FFF;
+  `}
 `

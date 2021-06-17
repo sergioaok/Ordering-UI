@@ -1,98 +1,370 @@
-import React from 'react'
-import {
-  useLanguage,
-  useEvent
-} from 'ordering-components'
+import React, { useEffect, useState, useCallback } from 'react'
+import FiMap from '@meronex/icons/fi/FiMap'
+import IosArrowDown from '@meronex/icons/ios/IosArrowDown'
+import IosRadioButtonOn from '@meronex/icons/ios/IosRadioButtonOn'
+import IosRadioButtonOff from '@meronex/icons/ios/IosRadioButtonOff'
+
+import { Button } from '../../styles/Buttons'
+import { NotFoundSource } from '../../../../../components/NotFoundSource'
+
+import { Modal } from '../../../../../components/Modal'
+import { Alert } from '../Confirm'
+import { AddressForm } from '../AddressForm'
+import { AddressList } from '../AddressList'
+import { SearchBar } from '../../../../../components/SearchBar'
+
+import { BusinessTypeFilter } from '../../../../../components/BusinessTypeFilter'
+import { BusinessController } from '../BusinessController'
+import { OrdersOption } from '../../../../../components/OrdersOption'
+import { BusinessesMap } from '../../../../../components/BusinessesMap'
 import { useTheme } from 'styled-components'
-import { BusinessTypeFilter } from '../BusinessTypeFilter'
-import { FeaturedBuinessesListing } from '../FeaturedBuinessesListing'
-import { AllBusinessesListing } from '../AllBusinessesListing'
-import { SearchBar } from '../SearchBar'
+import {
+  useOrder,
+  useSession,
+  useLanguage,
+  BusinessList as BusinessListController
+} from 'ordering-components'
+
 import {
   BusinessContainer,
+  BusinessListContainer,
+  BusinessList,
+  ErrorMessage,
+  WrapperSearch,
+  BusinessesTitle,
   AdviceContainer,
   AdviceInnerContainer,
   AdviceLeftContent,
   AdviceRightContent,
-  WrapImage,
   AdviceDescriptionContainer,
+  WrapImage,
   WrapBusinessTypeFilter,
-  FeaturedBusinessContainer,
-  SectionTitle
+  WrapBusinessSort,
+  BusinessSortContainer,
+  BusinessSortHeader,
+  BusinessSortContent,
+  BusinessSortItem
 } from './styles'
-export const BusinessesListing = (props) => {
-  const theme = useTheme()
-  const [, t] = useLanguage()
-  const [events] = useEvent()
 
-  const handleGoToPage = (search) => {
-    events.emit('go_to_page', {
-      page: 'filter',
-      search: `?${search}`
+const PIXELS_TO_SCROLL = 600
+
+const BusinessesListingUI = (props) => {
+  const {
+    businessesList,
+    paginationProps,
+    searchValue,
+    getBusinesses,
+    isCustomLayout,
+    onRedirectPage,
+    handleChangeSearch,
+    handleChangeBusinessType,
+    handleBusinessClick,
+    orderByValue,
+    handleChangeOrderBy
+  } = props
+  const [, t] = useLanguage()
+  const [orderState] = useOrder()
+  const [{ auth }] = useSession()
+
+  const theme = useTheme()
+
+  const [modals, setModals] = useState({ listOpen: false, formOpen: false })
+  const [alertState, setAlertState] = useState({ open: false, content: [] })
+  const [activeMap, setActiveMap] = useState(false)
+  const [mapErrors, setMapErrors] = useState('')
+  const [setActive, setActiveState] = useState('active')
+  const [setRotate, setRotateState] = useState('accordion__icon rotate')
+  const userCustomer = JSON.parse(window.localStorage.getItem('user-customer'))
+
+  const businessesIds = isCustomLayout &&
+    businessesList.businesses &&
+    businessesList.businesses?.map(business => business.id)
+
+  const businessSortTypes = [
+    { value: null, content: t('PICKED_FOR_YOU_(DEFAULT)', 'Picked for you (default)') },
+    { value: 'name', content: t('NAME)', 'Name') },
+    { value: 'rating', content: t('RATING', 'Rating') },
+    { value: 'distance', content: t('DISTANCE', 'Distance') },
+    { value: 'minimun', content: t('MINIMUM_PURCHASE', 'Minimum purchase') },
+    { value: 'newest', content: t('NEWER_STORE', 'Newer store') }
+  ]
+
+  const handleScroll = useCallback(() => {
+    const innerHeightScrolltop = window.innerHeight + document.documentElement?.scrollTop + PIXELS_TO_SCROLL
+    const badScrollPosition = innerHeightScrolltop < document.documentElement?.offsetHeight
+    const hasMore = !(paginationProps.totalPages === paginationProps.currentPage)
+    if (badScrollPosition || businessesList.loading || !hasMore) return
+    getBusinesses()
+  }, [businessesList, paginationProps])
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [handleScroll])
+
+  const handleClickAddress = (e) => {
+    if (auth) {
+      setModals({ ...modals, listOpen: true })
+    } else {
+      setModals({ ...modals, formOpen: true })
+    }
+  }
+
+  const handleFindBusinesses = () => {
+    if (!orderState?.options?.address?.location) {
+      setAlertState({ open: true, content: [t('SELECT_AN_ADDRESS_TO_SEARCH', 'Select or add an address to search')] })
+      return
+    }
+    setModals({ listOpen: false, formOpen: false })
+  }
+
+  const toggleMap = () => {
+    setActiveMap(!activeMap)
+  }
+
+  const handleCloseAlerts = () => {
+    setAlertState({ open: false, content: [] })
+    setMapErrors('')
+  }
+
+  const handleMapErrors = (errKey) => {
+    setAlertState({
+      open: true,
+      content: [t(errKey, mapErrors[errKey])]
     })
   }
-  const handleChangeBusinessType = (businessType) => {
-    handleGoToPage(`category=${businessType}`)
+  const toggleAccordion = () => {
+    setActiveState(setActive === '' ? 'active' : '')
+    setRotateState(
+      setActive === 'active' ? 'accordion__icon' : 'accordion__icon rotate'
+    )
   }
+
+  useEffect(() => {
+    if (mapErrors) {
+      handleMapErrors(mapErrors)
+      setActiveMap(false)
+    }
+  }, [mapErrors])
+
+  const getCustomArray = (list) => {
+    const isArray = Array.isArray(list)
+    return isArray ? list : Object.values(list)
+  }
+
   return (
     <>
       {props.beforeElements?.map((BeforeElement, i) => (
         <React.Fragment key={i}>
           {BeforeElement}
-        </React.Fragment>
-      ))}
+        </React.Fragment>))}
       {props.beforeComponents?.map((BeforeComponent, i) => (
-        <BeforeComponent key={i} {...props} />
-      ))}
-      <SearchBar
-        isCustomMode
-        isEnterKeyLoad
-        placeholder={t('SEARCH_BUSINESSES', 'Search Businesses')}
-        onSearch={(val) => handleGoToPage(`search=${val}`)}
-      />
+        <BeforeComponent key={i} {...props} />))}
+      <AdviceContainer>
+        <AdviceInnerContainer>
+          <AdviceLeftContent>
+            <h1>{t('CRAVE_IT', 'Crave it? Get it.')}</h1>
+            <p>{t('SEARCH_FAVORITE_RESTAURANT', 'Search for a favorite restaurant, cuisine, or dish.')}</p>
+          </AdviceLeftContent>
+          <AdviceRightContent>
+            <AdviceDescriptionContainer>
+              <p>
+                {t('ADVICE_FRONT_TITLE', 'Start the year with energy, enjoy our food ...')}
+              </p>
+            </AdviceDescriptionContainer>
+            <WrapImage bgimage={theme?.images?.general?.advice} />
+          </AdviceRightContent>
+        </AdviceInnerContainer>
+      </AdviceContainer>
       <BusinessContainer>
-        <AdviceContainer>
-          <AdviceInnerContainer>
-            <AdviceLeftContent>
-              <h1>{t('CRAVE_IT', 'Crave it? Get it.')}</h1>
-              <p>{t('SEARCH_FAVORITE_RESTAURANT', 'Search for a favorite restaurant, cuisine, or dish.')}</p>
-            </AdviceLeftContent>
-            <AdviceRightContent>
-              <AdviceDescriptionContainer>
-                <p>
-                  {t('ADVICE_FRONT_TITLE', 'Start the year with energy, enjoy our food ...')}
-                </p>
-              </AdviceDescriptionContainer>
-              <WrapImage bgimage={theme?.images?.general?.advice} />
-            </AdviceRightContent>
-          </AdviceInnerContainer>
-        </AdviceContainer>
         <WrapBusinessTypeFilter>
           <BusinessTypeFilter
+            images={props.images}
+            businessTypes={props.businessTypes}
+            defaultBusinessType={props.defaultBusinessType}
             handleChangeBusinessType={handleChangeBusinessType}
           />
         </WrapBusinessTypeFilter>
-        <FeaturedBusinessContainer>
-          <SectionTitle>
-            {t('FEATURED_BUSINESSES_NEAR_YOU', 'Featured Businesses Near You')}
-          </SectionTitle>
-          <FeaturedBuinessesListing
-            {...props}
-            defaultShowNumber={3}
+
+        <WrapperSearch isCustomLayout={isCustomLayout}>
+          <SearchBar
+            lazyLoad
+            search={searchValue}
+            isCustomLayout={isCustomLayout}
+            placeholder={t('SEARCH_BUSINESSES', 'Search Businesses')}
+            onSearch={handleChangeSearch}
           />
-        </FeaturedBusinessContainer>
-        <AllBusinessesListing
-          {...props}
+          {isCustomLayout && (
+            <FiMap onClick={toggleMap} />
+          )}
+        </WrapperSearch>
+
+        {activeMap && (
+          <BusinessesMap
+            businessList={businessesList.businesses}
+            userLocation={orderState?.options?.address?.location}
+            setErrors={setMapErrors}
+          />
+        )}
+
+        {isCustomLayout && onRedirectPage && (
+          <>
+            <OrdersOption
+              horizontal
+              isBusinessesPage
+              onRedirectPage={onRedirectPage}
+              titleContent={t('CARTS', 'Carts')}
+              businessesIds={businessesIds}
+              customArray={
+                getCustomArray(
+                  orderState.carts)?.filter(cart => cart.products.length > 0
+                )
+              }
+            />
+            <OrdersOption
+              horizontal
+              asDashboard
+              isBusinessesPage
+              businessesIds={businessesIds}
+              onRedirectPage={onRedirectPage}
+              userCustomerId={userCustomer?.id}
+            />
+          </>
+        )}
+
+        {isCustomLayout && businessesList?.businesses?.length > 0 && (
+          <BusinessesTitle>
+            {t('BUSINESSES', 'Businesses')}
+          </BusinessesTitle>
+        )}
+
+        <BusinessListContainer>
+          <WrapBusinessSort>
+            <BusinessSortContainer>
+              <h2>{t('ALL_STORES', 'All stores')}</h2>
+              <BusinessSortHeader
+                className={`accordion ${setActive}`}
+                onClick={() => toggleAccordion()}
+              >
+                <span>{t('SORT', 'Sort')}</span>
+                <IosArrowDown className={`${setRotate}`} />
+              </BusinessSortHeader>
+              <BusinessSortContent
+                style={{ maxHeight: !setActive && '0px' }}
+              >
+                {businessSortTypes.map(type => (
+                  <BusinessSortItem
+                    key={type.value}
+                    onClick={() => handleChangeOrderBy(type.value)}
+                  >
+                    {orderByValue === type.value ? <IosRadioButtonOn /> : <IosRadioButtonOff />}
+                    {type.content}
+                  </BusinessSortItem>
+                ))}
+              </BusinessSortContent>
+            </BusinessSortContainer>
+          </WrapBusinessSort>
+
+          <BusinessList>
+            {
+              !businessesList.loading && businessesList.businesses.length === 0 && (
+                <NotFoundSource
+                  content={t('NOT_FOUND_BUSINESSES', 'No businesses to delivery / pick up at this address, please change filters or change address.')}
+                >
+                  <Button
+                    outline
+                    color='primary'
+                    onClick={() => handleClickAddress()}
+                  >
+                    {t('CHANGE_ADDRESS', 'Select other Address')}
+                  </Button>
+                </NotFoundSource>
+              )
+            }
+            {
+              businessesList.businesses?.map((business) => (
+                <BusinessController
+                  key={business.id}
+                  className='card'
+                  business={business}
+                  handleCustomClick={handleBusinessClick}
+                  orderType={orderState?.options?.type}
+                />
+              ))
+            }
+            {businessesList.loading && (
+              [...Array(paginationProps.nextPageItems ? paginationProps.nextPageItems : 8).keys()].map(i => (
+                <BusinessController
+                  key={i}
+                  className='card'
+                  business={{}}
+                  isSkeleton
+                  orderType={orderState?.options?.type}
+                />
+              ))
+            )}
+            {businessesList.error && businessesList.error.length > 0 && businessesList.businesses.length === 0 && (
+              businessesList.error.map((e, i) => (
+                <ErrorMessage key={i}>{t('ERROR', 'ERROR')}: [{e?.message || e}]</ErrorMessage>
+              ))
+            )}
+          </BusinessList>
+        </BusinessListContainer>
+
+        <Modal
+          title={t('ADDRESS_FORM', 'Address Form')}
+          open={modals.formOpen}
+          onClose={() => setModals({ ...modals, formOpen: false })}
+        >
+          <AddressForm
+            useValidationFileds
+            address={orderState?.options?.address || {}}
+            onClose={() => setModals({ ...modals, formOpen: false })}
+            onCancel={() => setModals({ ...modals, formOpen: false })}
+            onSaveAddress={() => setModals({ ...modals, formOpen: false })}
+          />
+        </Modal>
+
+        <Modal
+          title={t('ADDRESSES', 'Address List')}
+          open={modals.listOpen}
+          width='70%'
+          onClose={() => setModals({ ...modals, listOpen: false })}
+        >
+          <AddressList
+            isModal
+            changeOrderAddressWithDefault
+            userId={isNaN(userCustomer?.id) ? null : userCustomer?.id}
+            onCancel={() => setModals({ ...modals, listOpen: false })}
+            onAccept={() => handleFindBusinesses()}
+          />
+        </Modal>
+
+        <Alert
+          title={!mapErrors ? t('SEARCH', 'Search') : t('BUSINESSES_MAP', 'Businesses Map')}
+          content={alertState.content}
+          acceptText={t('ACCEPT', 'Accept')}
+          open={alertState.open}
+          onClose={() => handleCloseAlerts()}
+          onAccept={() => handleCloseAlerts()}
+          closeOnBackdrop={false}
         />
       </BusinessContainer>
       {props.afterComponents?.map((AfterComponent, i) => (
-        <AfterComponent key={i} {...props} />
-      ))}
+        <AfterComponent key={i} {...props} />))}
       {props.afterElements?.map((AfterElement, i) => (
         <React.Fragment key={i}>
           {AfterElement}
-        </React.Fragment>
-      ))}
+        </React.Fragment>))}
     </>
   )
+}
+
+export const BusinessesListing = (props) => {
+  const businessListingProps = {
+    ...props,
+    UIComponent: BusinessesListingUI
+  }
+
+  return <BusinessListController {...businessListingProps} />
 }

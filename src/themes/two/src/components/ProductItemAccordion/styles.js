@@ -7,16 +7,20 @@ export const AccordionSection = styled.div`
   width: 100%;
   padding: 10px 0px;
   background: #FFF;
+
+  ${({ isOrderDetails }) => !isOrderDetails && css`
+    border-bottom: 1px solid #D9D9D9;
+  `}
 `
 
 const AccordionStyled = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   justify-content: space-between;
   cursor: initial;
   transition: background-color 0.6s ease;
-  margin: 0 10px;
+  margin: 0px 10px;
 
   .rotate {
     transform: rotate(180deg);
@@ -29,6 +33,10 @@ const AccordionStyled = styled.div`
       margin-right: auto;
       margin-left: initial;
     `}
+  }
+
+  @media (min-width: 411px){
+    flex-direction: row;
   }
 
 `
@@ -102,7 +110,11 @@ export const ContentInfo = styled.div`
   width: 55%;
 
   @media (min-width: 411px) {
-    flex: 1;
+    width: calc(65% - 60px);
+
+    ${({ isOrderDetails }) => isOrderDetails && css`
+      width: 65%;
+    `}
   }
 
   ${props => props.theme?.rtl && css`
@@ -111,9 +123,13 @@ export const ContentInfo = styled.div`
   `}
 
   h3 {
-     font-size: 18px;
+    font-size: 14px;
     margin: 0px;
     font-weight: 600;
+
+    ${({ isOrderDetails }) => isOrderDetails && css`
+      font-weight: 400;
+    `}
   }
 
   span {
@@ -123,7 +139,7 @@ export const ContentInfo = styled.div`
 
     p {
       margin: 0px;
-       font-size: 18px;
+      font-size: 14px;
     }
 
     div {
@@ -145,9 +161,13 @@ export const ContentInfo = styled.div`
     }
   }
 
-  @media (max-width: 576px) {
+  @media (min-width: 577px) {
     h3 {
-      font-size: 14px;
+      font-size: 18px;
+
+      ${({ isOrderDetails }) => isOrderDetails && css`
+        font-size: 16px;
+      `}
     }
   }
 `
@@ -156,12 +176,17 @@ export const AccordionContent = styled.div`
   overflow: hidden;
   transition: max-height 0.6s ease;
   width: 100%;
-  padding-left: 43px;
+  margin: auto;
+  color: ${props => props.theme.colors?.darkGray};
+
+  @media (min-width: 481px) {
+    width: 80%;
+  }
 `
 
 export const AccordionText = styled.div`
   font-weight: 400;
-  font-size: 18px;
+  font-size: 14px;
   padding: 18px;
 `
 
@@ -182,7 +207,7 @@ export const ProductComment = styled.div`
     margin: 0px 20px 0px 40px;
     text-overflow: ellipsis;
     white-space: nowrap;
-    overflow-x: hidden;
+    overflow: hidden;
     ${props => props.theme?.rtl && css`
       margin: 0px 40px 0px 20px
     `}
@@ -192,7 +217,7 @@ export const ProductComment = styled.div`
 export const ProductInfo = styled.div`
   display: flex;
   align-items: center;
-  width: 80%;
+  width: 100%;
 
   h1,
   h3 {
@@ -204,6 +229,10 @@ export const ProductInfo = styled.div`
   p {
     font-size: 20px;
     margin: 0px 5px;
+  }
+
+  @media (min-width: 411px) {
+    width: 80%;
   }
 
   @media (min-width: 481px) {
@@ -233,19 +262,10 @@ export const ProductError = styled.div`
 
 export const ProductActions = styled.div`
   display: flex;
-  flex-direction: column;
-  padding-left: 50px;
-  ${props => props.theme?.rtl && css`
-    padding-left: 0px;
-    padding-right: 50px;
-  `}
+  justify-content: flex-end;
 `
 
 export const ProductActionsEdit = styled.span`
-  cursor: pointer;
-  color: ${props => props.theme.colors.primary};
-  font-weight: 500;
-  font-size: 13px;
   svg {
     font-size: 20px;
     margin-right: 5px;
@@ -258,8 +278,13 @@ export const ProductActionsEdit = styled.span`
 `
 
 export const ProductActionsDelete = styled(ProductActionsEdit)`
+  display: none;
   svg {
     margin-right: 0px;
+  }
+
+  @media (min-width: 411px){
+    display: block;
   }
 `
 
@@ -277,12 +302,11 @@ export const ProductPrice = styled.div`
 
   p,
   span {
-     font-size: 18px;
+    font-size: 14px;
   }
 
   span {
     font-weight: 500;
-    white-space: nowrap;
   }
 
   p {
@@ -293,23 +317,38 @@ export const ProductPrice = styled.div`
     cursor: pointer;
   }
 
-  @media (max-width: 576px) {
-    p,
-    span {
-      font-size: 14px;
+  @media (min-width: 512px) {
+    span,
+    p {
+      font-size: 18px;
     }
+
+    ${({ isOrderDetails }) => isOrderDetails && css`
+      span,
+      p {
+        font-size: 16px;
+      }
+    `}
   }
 `
 
 export const ProductSelect = styled.select`
   max-width: 55px;
   height: 50px;
-  border: 0;
+  border: none;
   background-color: transparent;
   font-size: 17px;
   outline: none;
   margin-right: 5px;
   cursor: pointer;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  -ms-progress-appearance: none;
+
+  background-image: url('https://res.cloudinary.com/dq4bhnmtt/image/upload/q_50/v1613334826/bzydg4yrmrz0hzihtsxs.png');
+  background-repeat: no-repeat, repeat;
+  background-position: right .7em top 50%, 0 0;
+  background-size: .65em auto, 100%;
 
   ${props => props.theme?.rtl && css`
     margin-left: 5px;
@@ -323,11 +362,9 @@ export const ProductNotAvailable = styled.span`
 
 export const ProductOptionsList = styled.ul`
   list-style-type: none;
-  padding: 0px;
-  margin: 0px;
 
   .suboption {
-    margin-left: 25px;
+    margin-left: -25px;
     ${props => props.theme?.rtl && css`
       margin-right: -25px;
       margin-left: 0px;
@@ -341,12 +378,10 @@ export const ProductOptionsList = styled.ul`
   p {
     font-weight: 400;
     margin: 0px;
-    font-size: 13px;
   }
 
   li span {
     font-weight: 300;
-    font-size: 13px;
   }
 
   li.ingredient {

@@ -9,17 +9,8 @@ export const AddressListContainer = styled.div`
     pointer-events: none;
   `}
 
-  > button {
-    &: first-child {
-      display: flex;
-      column-gap: 10px;
-      align-items: center;
-    }
-  }
-
-  button {
+  button.add {
     height: 50px;
-    border-radius: unset;
   }
 `
 
@@ -166,5 +157,17 @@ export const FormActions = styled.div`
       `}
       }
     }
+  }
+`
+
+export const ContinueButton = styled.div`
+  width: 100%;
+  position: sticky;
+  bottom: 1px;
+  
+  button {
+    width: 100%;
+    white-space: nowrap;
+    height: 50px;
   }
 `

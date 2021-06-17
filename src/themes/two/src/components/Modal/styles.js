@@ -15,7 +15,7 @@ export const ModalDialog = styled.div`
   width: 100vw;
   border-radius: 0px;
   box-sizing: border-box;
-  margin-top: ${({ isProductForm }) => !isProductForm && 'auto'};
+  margin-top: auto;
   margin-bottom: auto;
   height: ${({ height }) => height || '100%'};;
   max-height: 100vh;
@@ -79,21 +79,35 @@ export const ModalOrderTypes = styled.div`
 `
 export const ModalIcon = styled.span`
   position: fixed;
-  right: 5px;
+  left: 15px;
   top: 6px;
   font-size: 30px;
   cursor: pointer;
-  z-index: 1000;
+  z-index: 2;
   ${props => props.theme?.rtl && css`
-    left: 5px;
-    right: initial;
+    right: 15px;
+    left: initial;
   `}
   svg{
     background: rgba(255,255,255,0.5);
     border-radius: 50%;
+    color: #494949;
+    font-size: 24px;
   }
 
   @media(min-width: 769px){
     position: absolute;
+  }
+`
+
+export const ModalBackHeader = styled.div`
+  height: 50px;
+  background-color: white;
+  width: 100%;
+  position: fixed;
+  z-index: 2;
+
+  @media (min-width: 769px) {
+    display: none;
   }
 `

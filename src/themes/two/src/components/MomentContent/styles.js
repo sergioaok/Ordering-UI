@@ -17,7 +17,7 @@ export const Layer = styled.div`
   ${({ nobg }) => !nobg && css`
     background-color: rgba(255, 255, 255, 0.7);
   `}
-  position: absolute;
+  position: fixed;
   top: 0;
   width: 100%;
   height: ${({ height }) => height || '100vh'};

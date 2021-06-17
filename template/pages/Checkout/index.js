@@ -19,6 +19,7 @@ export const CheckoutPage = (props) => {
   }
 
   const actionsBeforePlace = async (paymethod, cart) => {
+    console.log('actionsBeforePlace', paymethod, cart)
     if (stripePayments.includes(paymethod.gateway)) {
       try {
         const stripe = await loadStripe(paymethod.paymethod?.credentials?.publishable)
@@ -81,6 +82,8 @@ export const CheckoutPage = (props) => {
         if (result?.error) {
           setErrors([...errors, result?.error?.message])
         }
+      }).catch((e) => {
+        setErrors([...errors, e?.message || e?.toString()])
       })
     }
   }

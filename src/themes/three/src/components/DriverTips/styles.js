@@ -1,18 +1,13 @@
 import styled from 'styled-components'
 
 export const DriverTipContainer = styled.div`
-  margin-top: 20px;
-  p {
-    font-size: 12px;
-    margin-top: 0px;
-    color: ${props => props.theme.colors.darkGray};
-  }
-`
-
-export const WrapDriverTip = styled.div`
   display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: space-around;
   flex-wrap: wrap;
+  margin-top: 20px;
+  width: 100%;
 `
 
 export const TipCard = styled.div`
@@ -23,9 +18,11 @@ export const TipCard = styled.div`
   cursor: pointer;
   text-transform: capitalize;
   height: 30px;
-  width: 30px;
+  min-width: 30px;
   font-size: 14px;
-  background-color: ${props => props.theme.colors.secundary};
+  padding: 5px 20px;
+  background-color: ${props => props.theme.colors?.lightGray};
+  color: ${props => props.theme.colors.primary};
 
   &.active {
     background-color: ${props => props.theme.colors.primary};
@@ -34,5 +31,62 @@ export const TipCard = styled.div`
 
   @media (min-width: 768px) {
     padding: 5px 30px;
+  }
+`
+
+export const FormDriverTip = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`
+
+export const DriverTipLabel = styled.label`
+  font-size: 16px;
+  align-self: flex-start;
+
+  ${props => props.theme?.rtl && css`
+    margin-left: 20px;
+    margin-right: 0;
+  `}
+`
+
+export const WrapperInput = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-top: 10px;
+
+  input {
+    width: 65%;
+    padding: 4px 15px;
+    box-sizing: border-box;
+    flex: 1;
+    margin-right: 10px;
+  }
+
+  @media (min-width: 768px) {
+    input {
+      width: 80%;
+    }
+  }
+`
+
+export const DriverTipMessage = styled.p`
+  color: ${props => props.theme.colors.primary};
+  font-weight: 600;
+`
+
+export const WrapperTips = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-wrap: wrap;
+
+  > div {
+    margin: 5px;
   }
 `

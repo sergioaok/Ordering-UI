@@ -5,36 +5,60 @@ export const Container = styled.div`
 
   ${({ variant }) => variant === 'cart' && css`
     span {
-      background-color: ${props => props.theme.colors.primary};
-      padding: 8px 15px;
-      border-radius: 5px;
-
       display: flex;
-      align-items: center;
-      column-gap: 15px;
+      align-items: flex-end;
+      position: relative;
       p {
-      color: #fff;
-      margin: 0px;
+        position: absolute;
+        height: 15px;
+        width: 15px;
+        margin: 0;
+        background: ${props => props.theme.colors.primary};
+        border-radius: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 10px;
+        ${props => props.theme?.rtl ? css`
+          left: 0;
+        ` : css`
+          right: 0;
+        `}
       }
       svg {
-        color: #fff;
-        font-size: 24px;
+        color: ${props => props.theme.colors.primary};
+        font-size: 30px;
       }
     }
   `}
 
   ${({ variant }) => variant === 'address' && css`
-    font-weight: 500;
     color: ${props => props.theme.colors.primary};
     display: flex;
     align-items: center;
+
+    svg {
+      margin-right: 5px;
+      ${props => props.theme?.rtl && css`
+        margin-left: 5px;
+        margin-right: 0px;
+      `}
+    }
+
   `}
 
   ${({ variant }) => variant === 'moment' && css`
-    font-weight: 500;
     color: ${props => props.theme.colors.primary};
     display: flex;
     align-items: center;
+
+    svg {
+      margin-right: 5px;
+      ${props => props.theme?.rtl && css`
+        margin-left: 5px;
+        margin-right: 0;
+      `}
+    }
   `}
 
   ${({ isHome }) => isHome && css`

@@ -1,23 +1,26 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 export const HeaderItem = styled.div`
   cursor: pointer;
+  background-color: ${props => props.theme.colors.primary};
+  border-radius: 20px;
+  color: ${props => props.theme.colors.primaryContrast};
   display: flex;
   align-items: center;
-  justify-content: center;
-  column-gap: 10px;
-  background-color: ${props => props.theme.colors.primary};
   padding: 5px 10px;
-  border-radius: 20px;
 
   svg {
-    color: ${props => props.theme.colors.white};
     font-size: 20px;
   }
-
+  
   p {
     margin: 0px;
-    color: ${props => props.theme.colors.white};
+
+    ${props => props.theme?.rtl ? css`
+      margin-right: 10px;
+    ` : css`
+      margin-left: 10px;
+    `}
   }
 `
 

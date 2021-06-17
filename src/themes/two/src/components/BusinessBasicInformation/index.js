@@ -1,161 +1,136 @@
 import React from 'react'
 import Skeleton from 'react-loading-skeleton'
-import AiFillStar from '@meronex/icons/ai/AiFillStar'
-import BsDot from '@meronex/icons/bs/BsDot'
-import { useUtils, useOrder, useLanguage, useConfig } from 'ordering-components'
-import { OrderTypeSelectorHeader } from '../OrderTypeSelectorHeader'
+import ZoLocation from '@meronex/icons/zo/ZoLocation'
+import FaStar from '@meronex/icons/fa/FaStar'
+import BsExclamationCircle from '@meronex/icons/bs/BsExclamationCircle'
 import { useTheme } from 'styled-components'
 
-import { convertHoursToMinutes } from '../../../../../utils'
+import { Modal } from '../../../../../components/Modal'
+import { BusinessInformation } from '../../../../../components/BusinessInformation'
+import { useUtils, useOrder, useLanguage } from 'ordering-components'
 
 import {
   BusinessContainer,
+  BusinessHeader,
+  BusinessContent,
   WrapperBusinessLogo,
   BusinessLogo,
   BusinessInfo,
-  BusinessInfoItem,
-  BusinessName,
-  BusinessDetail,
-  WrapperBottom,
-  DeliveryAndMin,
-  GroupAndSelector
+  BusinessInfoItem
 } from './styles'
+
+const types = ['food', 'laundry', 'alcohol', 'groceries']
 
 export const BusinessBasicInformation = (props) => {
   const {
     isSkeleton,
-    businessState
+    businessState,
+    setOpenBusinessInformation,
+    openBusinessInformation
   } = props
   const { business, loading } = businessState
 
   const theme = useTheme()
   const [orderState] = useOrder()
   const [, t] = useLanguage()
-  const [configState] = useConfig()
-  const configTypes = configState?.configs?.order_types_allowed?.value.split('|').map(value => Number(value)) || []
+  const [{ parsePrice, parseDistance, optimizeImage }] = useUtils()
 
-  const [{ parsePrice, optimizeImage }] = useUtils()
+  const getBusinessType = () => {
+    if (Object.keys(business).length <= 0) return t('GENERAL', 'General')
+    const _types = []
+    types.forEach(type => business[type] && _types.push(
+      t(`BUSINESS_TYPE_${type?.replace(/\s/g, '_')?.toUpperCase()}`, type)
+    ))
+    return _types.join(', ')
+  }
 
   return (
     <>
-      <BusinessContainer bgimage={business?.header} isSkeleton={isSkeleton} id='container'>
-        <WrapperBusinessLogo>
-          {!loading ? (
-            <BusinessLogo bgimage={optimizeImage(business?.logo || theme.images?.dummies?.businessLogo, 'h_200,c_limit')} />
-          ) : (
-            <Skeleton height={90} width={90} />
-          )}
-        </WrapperBusinessLogo>
-      </BusinessContainer>
-
-      <BusinessInfo className='info'>
-        <BusinessInfoItem>
-          <BusinessName>
+      {props.beforeElements?.map((BeforeElement, i) => (
+        <React.Fragment key={i}>
+          {BeforeElement}
+        </React.Fragment>))}
+      {props.beforeComponents?.map((BeforeComponent, i) => (
+        <BeforeComponent key={i} {...props} />))}
+      <BusinessContainer>
+        <BusinessHeader bgimage={business?.header} isSkeleton={isSkeleton} id='container' isClosed={!business?.open}>
+          {!business?.open && <h1>{t('CLOSED', 'Closed')}</h1>}
+          <WrapperBusinessLogo>
             {!loading ? (
-              <>{business?.name}</>
+              <BusinessLogo bgimage={optimizeImage(business?.logo || theme.images?.dummies?.businessLogo, 'h_200,c_limit')} />
             ) : (
-              <Skeleton width={100} />
+              <Skeleton height={90} width={90} />
             )}
-          </BusinessName>
-          <BusinessDetail>
-            {!loading ? (
-              <>
-                {orderState?.options.type === 1 && (
-                  <>
-                    <p>{parsePrice(business?.delivery_price || 0)} {t('DELIVERY', 'delivery')}</p>
-                    <BsDot />
-                  </>
+          </WrapperBusinessLogo>
+        </BusinessHeader>
+        <BusinessContent>
+          <BusinessInfo className='info'>
+            <BusinessInfoItem>
+              <div>
+                {!loading ? (
+                  <p className='bold'>{business?.name}</p>
+                ) : (
+                  <Skeleton width={100} />
                 )}
-              </>
-            ) : (
-              <Skeleton width={200} />
-            )}
-            {!loading ? (
-              <p>
-                {business?.reviews?.total}
-                <AiFillStar />
-              </p>
-            ) : (
-              <Skeleton width={100} />
-            )}
-            {!loading ? (
-              <>
-                <p>
-                  ({business?.reviews?.reviews.length} {t('RATINGS', 'ratings')})
-                </p>
-                <BsDot />
-              </>
-            ) : (
-              <Skeleton width={150} />
-            )}
-            {!loading ? (
-              <>
-                {orderState?.options?.type === 1 ? (
+              </div>
+              <div>
+                {!loading ? (
+                  <p className='type'>{getBusinessType()}</p>
+                ) : (
+                  <Skeleton width={100} />
+                )}
+                {!loading ? (
                   <p>
-                    {convertHoursToMinutes(business?.delivery_time)}
+                    <FaStar className='start' />
+                    {business?.reviews?.total}
                   </p>
                 ) : (
+                  <Skeleton width={100} />
+                )}
+
+                {!loading ? (
                   <p>
-                    {convertHoursToMinutes(business?.pickup_time)}
+                    <ZoLocation />
+                    {parseDistance(business?.distance || 0)}
+                  </p>
+                ) : (
+                  <Skeleton width={70} />
+                )}
+
+                {!loading && (
+                  <p>
+                    <BsExclamationCircle
+                      className='popup'
+                      onClick={() => setOpenBusinessInformation(true)}
+                    />
                   </p>
                 )}
-              </>
-            ) : (
-              <Skeleton width={70} />
-            )}
-          </BusinessDetail>
-        </BusinessInfoItem>
-      </BusinessInfo>
-      <WrapperBottom>
-        <DeliveryAndMin>
-          {orderState?.options.type === 1 && (
-            <div className='delivery'>
-              {!loading ? (
-                <>
-                  <p>
-                    {business && parsePrice(business?.delivery_price || 0)}
-                  </p>
-                  <p>{t('DELIVERY_FEE', 'Delivery fee')}</p>
-                </>
-              ) : (
-                <>
-                  <p>
-                    <Skeleton width={70} />
-                  </p>
-                  <p>
-                    <Skeleton width={70} />
-                  </p>
-                </>
-              )}
-            </div>
-          )}
-          <div>
-            {!loading ? (
-              <>
-                <p>{convertHoursToMinutes(business?.delivery_time)}</p>
-                <p>{t('MINUTES', 'Minutes')}</p>
-              </>
-            ) : (
-              <>
-                <p>
-                  <Skeleton width={70} />
-                </p>
-                <p>
-                  <Skeleton width={70} />
-                </p>
-              </>
-            )}
-          </div>
-        </DeliveryAndMin>
-        {!loading && (
-          <GroupAndSelector>
-            <OrderTypeSelectorHeader
-              configTypes={configTypes}
-              toggle
-            />
-          </GroupAndSelector>
-        )}
-      </WrapperBottom>
+              </div>
+            </BusinessInfoItem>
+          </BusinessInfo>
+        </BusinessContent>
+        <Modal
+          width='70%'
+          open={openBusinessInformation}
+          onClose={setOpenBusinessInformation}
+          padding='0'
+          hideCloseDefault
+          isTransparent
+        >
+          <BusinessInformation
+            business={business}
+            getBusinessType={getBusinessType}
+            optimizeImage={optimizeImage}
+            onClose={setOpenBusinessInformation}
+          />
+        </Modal>
+      </BusinessContainer>
+      {props.afterComponents?.map((AfterComponent, i) => (
+        <AfterComponent key={i} {...props} />))}
+      {props.afterElements?.map((AfterElement, i) => (
+        <React.Fragment key={i}>
+          {AfterElement}
+        </React.Fragment>))}
     </>
   )
 }

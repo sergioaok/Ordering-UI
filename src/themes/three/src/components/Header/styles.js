@@ -1,28 +1,42 @@
 import styled, { css } from 'styled-components'
-export const HeaderContainer = styled.div`
-  background-color: ${props => props.theme.colors.backgroundPage};
-  border-bottom: 1px solid ${props => props.theme.colors.secundary};
-  position: fixed;
+import { Select } from '../../styles/Selects'
+
+export const Header = styled.div`
+  display: flex;
+  flex-direction: column;
   width: 100%;
-  z-index: 1001;
-  box-sizing: border-box;
+  border-bottom: 1px solid #F2F2F2;
+
+  ${props => props.home ? css`
+    background-color: #FFF;
+
+  & ${Select} {
+    background-color: transparent;
+    color: ${props => props.theme.colors.primary};
+  }
+  `
+  : css`
+    & ${SubMenu}{
+      div{
+        color: #333;
+      }
+    }
+  `}
+
+  #select-input {
+    color: ${props => props.theme.colors.primary} !important;
+  }
 `
+
 export const InnerHeader = styled.div`
-  width: 91%;
-  margin: 10px auto;
   display: flex;
-  align-items: center;
+  width: 100%;
+  color: #FFF;
   justify-content: space-between;
+  width: 98%;
+  margin: 10px auto;
 `
-export const LeftHeader = styled.div`
-  display: flex;
-  align-items: center;
-`
-export const RightHeader = styled.div`
-  display: flex;
-  align-items: center;
-  column-gap: 10px;
-`
+
 export const LogoHeader = styled.div`
   cursor: pointer;
 
@@ -39,7 +53,7 @@ export const LogoHeader = styled.div`
     `}
 
     @media (min-width: 768px) {
-      width: 170px;
+      width: 150px;
     }
   }
 
@@ -56,55 +70,115 @@ export const LogoHeader = styled.div`
     }
   }
 `
-export const Menu = styled.div`
+
+export const LeftHeader = styled.div`
+  align-self: center;
+  display: flex;
 `
-export const DeliverDetailsContainer = styled.div`
-  ${({ isSearchBarVisiable }) => isSearchBarVisiable && css`
-    margin-right: 260px;
-    ${props => props.theme?.rtl && css`
-      margin-right: initial;
-      margin-left: 260px;
-    `}
+
+export const RightHeader = styled.div`
+  align-self: center;
+  display: flex;
+`
+
+export const Menu = styled.div`
+  display: flex;
+  align-items: center;
+
+  &.left-header {
+    > :first-child {
+      margin-left: 15px;
+      ${props => props.theme?.rtl && css`
+        margin-right: 15px;
+        margin-left: 0;
+      `}
+    }
+  }
+
+  > *:not(:last-child) {
+    margin: 0 5px;
+  }
+
+  .moment-popover,
+  .address-popover {
+    display: none;
+  }
+
+  @media (min-width: 821px) {
+    .moment-popover,
+    .address-popover {
+      display: flex;
+    }
+  }
+`
+
+export const MenuItem = styled.div`
+  display: flex;
+`
+
+export const MenuLink = styled.a`
+  text-decoration: none;
+  font-size: 16px;
+  padding: 10px;
+  color: #333;
+  cursor: pointer;
+
+  ${({ highlight }) => highlight && css`
+    background-color: ${props => props.theme.colors?.lightGray};
+    color: ${props => props.theme.colors.primary};
+    border-radius: 100px;
+    padding: 5px 15px;
   `}
 `
-export const DeliveryDetailsInfoWrap = styled.div`
-  display: flex;
-  justify-content: space-around;
-  padding: 10px 0;
-  border-top: 1px solid ${props => props.theme.colors.secundary};
-`
-export const DeliveryDetailsInfo = styled.div`
-  display: flex;
-  align-items: center;
-  column-gap: 5px;
-  cursor: pointer;
 
-  p {
-    margin: 0px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 150px;
+export const SubMenu = styled(InnerHeader)`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  padding: 0px 20px 7px;
+  box-sizing: border-box;
+  margin: 0px;
+
+  @media (min-width: 821px) {
+    display: none;
   }
 `
 
-export const CartContainer = styled.div`
+export const CustomerInfo = styled.div`
+  display: none;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  column-gap: 10px;
-  background-color: ${props => props.theme.colors.primary};
-  padding: 5px 10px;
-  border-radius: 20px;
 
-  svg {
-    color: ${props => props.theme.colors.white};
-    font-size: 20px;
+  @media (min-width: 450px) {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    span {
+      display: flex;
+      align-items: center;
+      height: 30px;
+      p {
+        color: ${props => props.isHome ? '#FFF' : '#333'};
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 50px;
+
+        @media (min-width: 768px) {
+          max-width: 70px;
+        }
+      }
+      svg {
+        color: ${props => props.theme.colors.primary};
+        font-size: 30px;
+        margin-right: 5px;
+      }
+    }
   }
+`
 
-  p {
-    margin: 0px;
-    color: ${props => props.theme.colors.white};
+export const UserEdit = styled.div`
+  > :first-child{
+     margin-bottom: 20px;  
   }
 `

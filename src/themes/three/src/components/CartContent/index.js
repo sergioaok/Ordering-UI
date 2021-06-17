@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useTheme } from 'styled-components'
 import { useLanguage, useEvent } from 'ordering-components'
-import { Container, NotCarts, ModalContainer } from './styles'
+import { Container, NotCarts } from './styles'
+
 import { Cart } from '../Cart'
-import { Modal } from '../../../../../components/Modal'
-import { Button } from '../../styles/Buttons'
 
 export const CartContent = (props) => {
   const {
@@ -17,9 +16,8 @@ export const CartContent = (props) => {
   const [, t] = useLanguage()
   const theme = useTheme()
   const [events] = useEvent()
+
   const [currentCartUuid, setCurrentCartUuid] = useState(null)
-  const [cartsRemoved, setCartsRemoved] = useState(false)
-  const [openModal, setOpenModal] = useState(false)
 
   const handleAddProduct = (product, cart) => {
     setCurrentCartUuid(cart?.uuid)
@@ -38,42 +36,17 @@ export const CartContent = (props) => {
     }
   }, [])
 
-  const handleRemoveProduct = () => {
-    setCartsRemoved(true)
-  }
-
-  const handleGoToPage = (data) => {
-    setOpenModal(false)
-    events.emit('go_to_page', data)
-  }
-
-  useEffect(() => {
-    events.on('cart_product_removed', handleRemoveProduct)
-    return () => events.off('cart_product_removed', handleRemoveProduct)
-  }, [])
-
-  useEffect(() => {
-    if (!cartsRemoved) return
-    if (!carts || carts.length === 0) {
-      setCartsRemoved(false)
-      setOpenModal(true)
-    }
-  }, [carts, cartsRemoved])
-
   return (
     <>
       {props.beforeElements?.map((BeforeElement, i) => (
         <React.Fragment key={i}>
           {BeforeElement}
-        </React.Fragment>
-      ))}
+        </React.Fragment>))
+      }
       {props.beforeComponents?.map((BeforeComponent, i) => (
-        <BeforeComponent key={i} {...props} />
-      ))}
+        <BeforeComponent key={i} {...props} />))
+      }
       <Container>
-        {carts?.length > 0 && (
-          <h1>{t('YOUR_ORDER', 'Your order')}</h1>
-        )}
         {isOrderStateCarts && carts?.length > 0 &&
           carts.map(cart => (
             <React.Fragment key={cart.uuid}>
@@ -87,7 +60,6 @@ export const CartContent = (props) => {
                   currentCartUuid={currentCartUuid}
                   isProducts={cart.products.length}
                   onClickCheckout={props.onClose}
-                  handleRemoveAllProducts={() => setCartsRemoved(true)}
                 />
               )}
             </React.Fragment>
@@ -99,30 +71,14 @@ export const CartContent = (props) => {
           </NotCarts>
         )}
       </Container>
-      <Modal
-        open={openModal}
-        onClose={() => setOpenModal(false)}
-      >
-        <ModalContainer>
-          <h1>{t('ALL_ITEMS_REMOVED', 'All items removed')}</h1>
-          <p>{t('NOT_PICKY', 'You are not picky, you only have a delicate taste')}</p>
-          <Button
-            rectangle
-            color='primary'
-            onClick={() => handleGoToPage({ page: 'search' })}
-          >
-            {t('SEE_BUSINESSES', 'See businesses')}
-          </Button>
-        </ModalContainer>
-      </Modal>
       {props.afterComponents?.map((AfterComponent, i) => (
-        <AfterComponent key={i} {...props} />
-      ))}
+        <AfterComponent key={i} {...props} />))
+      }
       {props.afterElements?.map((AfterElement, i) => (
         <React.Fragment key={i}>
           {AfterElement}
-        </React.Fragment>
-      ))}
+        </React.Fragment>))
+      }
     </>
   )
 }

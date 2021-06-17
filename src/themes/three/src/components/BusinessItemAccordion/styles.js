@@ -9,6 +9,11 @@ export const AccordionSection = styled.div`
   box-shadow: 0px 3px 6px #00000029;
   opacity: 1;
 
+  ${({ isCartOnProductsList }) => isCartOnProductsList && css`
+    position: sticky;
+    top: 20px;
+  `}
+
   &:last-child {
     border-bottom: 0;
     margin-bottom: 10px;
@@ -173,7 +178,7 @@ export const BusinessInfo = styled.div`
 `
 
 export const BusinessTotal = styled.div`
-  width: ${({ isCartOnProductsList }) => isCartOnProductsList ? '30%' : '25%' };
+  width: ${({ isCartOnProductsList }) => isCartOnProductsList ? '30%' : '25%'};
   display: none;
   flex-direction: column;
   align-items: center;

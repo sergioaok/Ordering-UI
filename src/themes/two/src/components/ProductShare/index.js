@@ -1,57 +1,89 @@
-import React from 'react'
-import { ProductShare as ProductShareController, useLanguage } from 'ordering-components'
-import { useTheme } from 'styled-components'
-import { Input } from '../../styles/Inputs'
-import { Button } from '../../styles/Buttons'
-import BsArrowLeft from '@meronex/icons/bs/BsArrowLeft'
+import React, { useEffect, useRef } from 'react'
+import FiShare2 from '@meronex/icons/fi/FiShare2'
+import { ProductShare as ProductShareController } from 'ordering-components'
+
 import {
-  Container,
-  WrapImage,
-  WrapShareLink
+  IconShare,
+  ShareButtons
 } from './styles'
+
+import { Button } from '../../../../../styles/Buttons'
 
 const ProductShareUI = (props) => {
   const {
+    updateShowValue,
+    showShareButton,
     urlToShare,
-    onCancel
+    btnText,
+    withBtn
   } = props
 
-  const theme = useTheme()
-  const [, t] = useLanguage()
+  const iconElement = useRef()
+  const contentElement = useRef()
 
-  const copyShareUrlToClipboard = () => {
-    var copyText = document.getElementById('shareLink')
-    copyText.select()
-    copyText.setSelectionRange(0, 99999)
-    document.execCommand('copy')
+  const handleClickOutside = (e) => {
+    const outsideIcon = !iconElement.current?.contains(e.target)
+    const outsideButtonsShare = !contentElement.current?.contains(e.target)
+    if (outsideIcon && outsideButtonsShare) {
+      updateShowValue && updateShowValue(false)
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener('mouseup', handleClickOutside)
+    return () => window.removeEventListener('mouseup', handleClickOutside)
+  }, [])
+
+  const handleClickShare = () => {
+    updateShowValue(!showShareButton)
   }
 
   return (
-    <Container>
-      <a onClick={() => onCancel()}>
-        <BsArrowLeft />
-      </a>
-      <WrapImage>
-        <img src={theme.images.general.gift} width='40' height='40' alt='gift' />
-      </WrapImage>
-      <WrapShareLink>
-        <p>{t('SHARE_YOUR_LINK', 'Share Your Link')}</p>
-        <div>
-          <Input
-            id='shareLink'
-            type='text'
-            value={urlToShare}
-            readOnly
-          />
+    <>
+      {props.beforeElements?.map((BeforeElement, i) => (
+        <React.Fragment key={i}>
+          {BeforeElement}
+        </React.Fragment>))
+      }
+      {props.beforeComponents?.map((BeforeComponent, i) => (
+        <BeforeComponent key={i} {...props} />))
+      }
+      <IconShare ref={iconElement} name='icon-share'>
+        {withBtn ? (
           <Button
+            outline
             color='primary'
-            onClick={() => copyShareUrlToClipboard()}
+            onClick={handleClickShare}
           >
-            {t('COPY_LINK', 'Copy Link')}
+            <FiShare2 />
+            {btnText}
           </Button>
-        </div>
-      </WrapShareLink>
-    </Container>
+        ) : (
+          <FiShare2 onClick={handleClickShare} />
+        )}
+        <ShareButtons
+          ref={contentElement}
+          className='a2a_kit a2a_kit_size_32 a2a_floating_style a2a_vertical_style'
+          data-a2a-url={urlToShare}
+          showShareButton={showShareButton}
+        >
+          <a className='a2a_button_copy_link' />
+          <a className='a2a_button_facebook' />
+          <a className='a2a_button_whatsapp' />
+          <a className='a2a_button_twitter' />
+          <a className='a2a_button_email' />
+          <a className='a2a_dd' href='https://www.addtoany.com/share' />
+        </ShareButtons>
+      </IconShare>
+      {props.afterComponents?.map((AfterComponent, i) => (
+        <AfterComponent key={i} {...props} />))
+      }
+      {props.afterElements?.map((AfterElement, i) => (
+        <React.Fragment key={i}>
+          {AfterElement}
+        </React.Fragment>))
+      }
+    </>
   )
 }
 

@@ -2,10 +2,6 @@ import styled from 'styled-components'
 
 export const Container = styled.div`
   padding: 0px 20px;
-  
-  h1 {
-    font-size: 24px;
-  }
 
   div:not(:last-child) {
     padding-bottom: 5px;
@@ -36,21 +32,5 @@ export const NotCarts = styled.div`
     opacity: 0.5;
     text-align: center;
     font-size: 24px;
-  }
-`
-
-export const ModalContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  h1 {
-    margin: 0px;
-  }
-
-  button {
-    height: 45px;
-    width: 100%;
-    margin-top: 20px;
   }
 `

@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { useForm } from 'react-hook-form'
-import { Alert } from '../Confirm'
+import { Alert } from '../../../../../components/Confirm'
 import {
   ForgotPasswordForm as ForgotPasswordController,
   useLanguage
@@ -9,13 +9,11 @@ import {
   ForgotPasswordContainer,
   FormSide,
   FormInput,
-  FormTitle,
-  InputGroup,
   RedirectLink
 } from './styles'
 
 import { Input } from '../../styles/Inputs'
-import { Button } from '../../styles/Buttons'
+import { Button } from '../../../../../styles/Buttons'
 
 const ForgotPasswordUI = (props) => {
   const {
@@ -23,25 +21,45 @@ const ForgotPasswordUI = (props) => {
     handleButtonForgotPasswordClick,
     formState,
     formData,
-    isPopup,
-    elementLinkToLogin
+    elementLinkToLogin,
+    isPopup
   } = props
 
-  const { handleSubmit, register, errors } = useForm()
+  const formMethods = useForm()
   const [alertState, setAlertState] = useState({ open: false, title: '', content: [], success: false })
   const [, t] = useLanguage()
+  const emailInput = useRef(null)
+
+  const onSubmit = () => {
+    setAlertState({ ...alertState, success: true })
+    handleButtonForgotPasswordClick()
+  }
+
+  const closeAlert = () => {
+    setAlertState({
+      ...alertState,
+      open: false,
+      content: []
+    })
+  }
+
+  const handleChangeInputEmail = (e) => {
+    hanldeChangeInput({ target: { name: 'email', value: e.target.value.toLowerCase().replace(/[&,()%";:ç?<>{}\\[\]\s]/g, '') } })
+    formMethods.setValue('email', e.target.value.toLowerCase().replace(/[&,()%";:ç?<>{}\\[\]\s]/g, ''))
+    emailInput.current.value = e.target.value.toLowerCase().replace(/[&,()%";:ç?<>{}\\[\]\s]/g, '')
+  }
 
   useEffect(() => {
-    if (Object.keys(errors).length > 0) {
+    if (Object.keys(formMethods.errors).length > 0) {
       setAlertState({
         ...alertState,
         success: false,
         open: true,
         title: t('ERROR_UNKNOWN', 'An error has ocurred'),
-        content: Object.values(errors).map(error => error.message)
+        content: Object.values(formMethods.errors).map(error => error.message)
       })
     }
-  }, [errors])
+  }, [formMethods.errors])
 
   useEffect(() => {
     if (!formState.loading && formState.result?.error) {
@@ -63,78 +81,91 @@ const ForgotPasswordUI = (props) => {
     }
   }, [formState.loading])
 
-  const onSubmit = () => {
-    setAlertState({ ...alertState, success: true })
-    handleButtonForgotPasswordClick()
-  }
-
-  const closeAlert = () => {
-    setAlertState({
-      ...alertState,
-      open: false,
-      content: []
+  useEffect(() => {
+    formMethods.register('email', {
+      required: t('VALIDATION_ERROR_EMAIL_REQUIRED', 'The field Email is required').replace('_attribute_', t('EMAIL', 'Email')),
+      pattern: {
+        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+        message: t('INVALID_ERROR_EMAIL', 'Invalid email address').replace('_attribute_', t('EMAIL', 'Email'))
+      }
     })
-  }
+  }, [formMethods])
+
   return (
-    <ForgotPasswordContainer isPopup={isPopup}>
-      <FormSide isPopup={isPopup}>
-        <FormTitle>
-          {t('TITLE_FORGOT_PASSWORD', 'Forgot your password?')}
-        </FormTitle>
-        <p>{t('SUBTITLE_FORGOT_PASSWORD', 'Enter your email addres and we\'ll send you a link to reset your password.')}</p>
-        <FormInput
-          noValidate
-          isPopup={isPopup}
-          onSubmit={handleSubmit(onSubmit)}
-        >
-          <InputGroup>
-            <label>{t('EMAIL', 'Email')}</label>
+    <>
+      {props.beforeElements?.map((BeforeElement, i) => (
+        <React.Fragment key={i}>
+          {BeforeElement}
+        </React.Fragment>))}
+      {props.beforeComponents?.map((BeforeComponent, i) => (
+        <BeforeComponent key={i} {...props} />))}
+      <ForgotPasswordContainer isPopup={isPopup}>
+        <FormSide isPopup={isPopup}>
+          <h1>{t('TITLE_FORGOT_PASSWORD', 'Forgot your password?')}</h1>
+          <FormInput
+            noValidate
+            isPopup={isPopup}
+            onSubmit={formMethods.handleSubmit(onSubmit)}
+          >
+            {props.beforeMidElements?.map((BeforeMidElements, i) => (
+              <React.Fragment key={i}>
+                {BeforeMidElements}
+              </React.Fragment>))}
+            {props.beforeMidComponents?.map((BeforeMidComponents, i) => (
+              <BeforeMidComponents key={i} {...props} />))}
             <Input
               type='email'
               name='email'
               aria-label='email'
               placeholder={t('EMAIL', 'Email')}
-              tabindex='1'
-              ref={register({
-                required: t('VALIDATION_ERROR_EMAIL_REQUIRED', 'The field Email is required').replace('_attribute_', t('EMAIL', 'Email')),
-                pattern: {
-                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                  message: t('INVALID_ERROR_EMAIL', 'Invalid email address').replace('_attribute_', t('EMAIL', 'Email'))
-                }
-              })}
-              onChange={(e) => hanldeChangeInput(e)}
+              ref={(e) => {
+                emailInput.current = e
+              }}
+              onChange={handleChangeInputEmail}
               autoComplete='off'
             />
-          </InputGroup>
-          <Button
-            color={alertState.success ? 'secondary' : 'primary'}
-            type='subm(it'
-            disabled={(alertState.success && formState.result.result) || formState.loading}
-          >
-            {formState.loading
-              ? t('LOADING', 'Loading...')
-              : alertState.success && formState.result.result
-                ? t('LINK_SEND_FORGOT_PASSWORD', 'Link Sent')
-                : t('FRONT_RECOVER_PASSWORD', 'Recover Password')}
-          </Button>
-        </FormInput>
-        {elementLinkToLogin && (
-          <RedirectLink register isPopup={isPopup}>
-            <span>{t('SIGN_IN_MESSAGE', 'Do you want to sign in?')}</span>
-            {elementLinkToLogin}
-          </RedirectLink>
-        )}
-      </FormSide>
-      <Alert
-        title={t('LOGIN', 'Login')}
-        content={alertState.content}
-        acceptText={t('ACCEPT', 'Accept')}
-        open={alertState.open}
-        onClose={() => closeAlert()}
-        onAccept={() => closeAlert()}
-        closeOnBackdrop={false}
-      />
-    </ForgotPasswordContainer>
+            {
+              props.afterMidElements?.map((MidElement, i) => (
+                <React.Fragment key={i}>
+                  {MidElement}
+                </React.Fragment>))
+            }
+            {
+              props.afterMidComponents?.map((MidComponent, i) => (
+                <MidComponent key={i} {...props} />))
+            }
+            <Button color={formState.loading || alertState.success ? 'secondary' : 'primary'} type='submit' disabled={formState.loading || alertState.success}>
+              {formState.loading
+                ? t('LOADING', 'Loading...')
+                : alertState.success && formState.result.result
+                  ? t('LINK_SEND_FORGOT_PASSWORD', 'Link Sent')
+                  : t('FRONT_RECOVER_PASSWORD', 'Recover Password')}
+            </Button>
+          </FormInput>
+          {elementLinkToLogin && (
+            <RedirectLink register isPopup={isPopup}>
+              <span>{t('SIGN_IN_MESSAGE', 'Do you want to sign in?')}</span>
+              {elementLinkToLogin}
+            </RedirectLink>
+          )}
+        </FormSide>
+        <Alert
+          title={alertState.title}
+          content={alertState.content}
+          acceptText={t('ACCEPT', 'Accept')}
+          open={alertState.open}
+          onClose={() => closeAlert()}
+          onAccept={() => closeAlert()}
+          closeOnBackdrop={false}
+        />
+      </ForgotPasswordContainer>
+      {props.afterComponents?.map((AfterComponent, i) => (
+        <AfterComponent key={i} {...props} />))}
+      {props.afterElements?.map((AfterElement, i) => (
+        <React.Fragment key={i}>
+          {AfterElement}
+        </React.Fragment>))}
+    </>
   )
 }
 

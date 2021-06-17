@@ -21,7 +21,6 @@ export const ProductsListing = styled.div`
 export const WrapAllCategories = styled.div`
   h3 {
     margin-left: 10px;
-    font-size: 24px;
     ${props => props.theme?.rtl && css`
       margin-right: 10px;
       margin-left: 0;

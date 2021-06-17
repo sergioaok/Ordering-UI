@@ -1,16 +1,14 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { CouponControl as CouponController, useLanguage } from 'ordering-components'
 
 import {
-  CouponContainer,
-  WrapPromoCodeApply
+  CouponContainer
 } from './styles'
 
 import { Input } from '../../styles/Inputs'
 import { Button } from '../../styles/Buttons'
 
-import { Confirm } from '../../../../../components/Confirm'
-import { Modal } from '../../../../../components/Modal'
+import { Confirm } from '../Confirm'
 
 const CouponControlUI = (props) => {
   const {
@@ -24,7 +22,6 @@ const CouponControlUI = (props) => {
   } = props
 
   const [, t] = useLanguage()
-  const [openPromoModal, setOpenPromoModal] = useState(false)
 
   const onRemoveCoupon = () => {
     setConfirm({
@@ -46,53 +43,58 @@ const CouponControlUI = (props) => {
     onChangeInputCoupon('')
   }
 
-  const handleApply = () => {
-    handleButtonApplyClick()
-    setOpenPromoModal(false)
-  }
-
   return (
-    <CouponContainer>
-      {couponDefault ? (
-        <a onClick={() => onRemoveCoupon()}>
-          {t('REMOVE_COUPON', 'Remove Coupon')}
-        </a>
-      ) : (
-        <a onClick={() => setOpenPromoModal(true)}>{t('ADD_PROMO_CODE', 'Add promo code')}</a>
-      )}
-
-      <Modal
-        title={t('DO_YOU_HAVE_PROMO_CODE', 'Do you have a promo code?')}
-        open={openPromoModal}
-        onClose={() => setOpenPromoModal(false)}
-      >
-        <WrapPromoCodeApply>
-          <Input
-            placeholder={t('DISCOUNT_COUPON', 'Discount coupon')}
-            onChange={(e) => onChangeInputCoupon(e.target.value)}
-            autoComplete='off'
-          />
-          <Button
-            color='primary'
-            rectangle
-            disabled={!couponInput}
-            onClick={() => handleApply()}
-          >
-            {t('APPLY', 'Apply')}
+    <>
+      {props.beforeElements?.map((BeforeElement, i) => (
+        <React.Fragment key={i}>
+          {BeforeElement}
+        </React.Fragment>))
+      }
+      {props.beforeComponents?.map((BeforeComponent, i) => (
+        <BeforeComponent key={i} {...props} />))
+      }
+      <CouponContainer>
+        {couponDefault ? (
+          <Button onClick={() => onRemoveCoupon()}>
+            {t('REMOVE_COUPON', 'Remove Coupon')} {couponDefault}
           </Button>
-        </WrapPromoCodeApply>
-      </Modal>
-      <Confirm
-        title={t('COUPON', 'Coupon')}
-        content={confirm?.content}
-        acceptText={t('ACCEPT', 'Accept')}
-        open={confirm?.open}
-        onClose={handleClose}
-        onCancel={!confirm?.error ? () => setConfirm({ ...confirm, open: false, error: false }) : null}
-        onAccept={handleOnAccept}
-        closeOnBackdrop={false}
-      />
-    </CouponContainer>
+        ) : (
+          <>
+            <Input
+              placeholder={t('DISCOUNT_COUPON', 'Discount coupon')}
+              onChange={(e) => onChangeInputCoupon(e.target.value)}
+              autoComplete='off'
+            />
+            <Button
+              rectangle
+              color='primary'
+              disabled={!couponInput}
+              onClick={handleButtonApplyClick}
+            >
+              {t('APPLY', 'Apply')}
+            </Button>
+          </>
+        )}
+        <Confirm
+          title={t('COUPON', 'Coupon')}
+          content={confirm?.content}
+          acceptText={t('ACCEPT', 'Accept')}
+          open={confirm?.open}
+          onClose={handleClose}
+          onCancel={!confirm?.error ? () => setConfirm({ ...confirm, open: false, error: false }) : null}
+          onAccept={handleOnAccept}
+          closeOnBackdrop={false}
+        />
+      </CouponContainer>
+      {props.afterComponents?.map((AfterComponent, i) => (
+        <AfterComponent key={i} {...props} />))
+      }
+      {props.afterElements?.map((AfterElement, i) => (
+        <React.Fragment key={i}>
+          {AfterElement}
+        </React.Fragment>))
+      }
+    </>
   )
 }
 

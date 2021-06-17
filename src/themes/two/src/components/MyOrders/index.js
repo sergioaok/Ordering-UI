@@ -1,17 +1,33 @@
 import React from 'react'
-import { useLanguage } from 'ordering-components'
 import { Container } from './styles'
+
+import { ProfileOptions } from '../UserProfileForm/ProfileOptions'
 import { OrdersOption } from '../OrdersOption'
 
 export const MyOrders = (props) => {
-  const [, t] = useLanguage()
   return (
-    <Container>
-      <h1>
-        {t('ORDERS', 'Orders')}
-      </h1>
-      <OrdersOption {...props} activeOrders horizontal />
-      <OrdersOption {...props} />
-    </Container>
+    <>
+      {props.beforeElements?.map((BeforeElement, i) => (
+        <React.Fragment key={i}>
+          {BeforeElement}
+        </React.Fragment>))
+      }
+      {props.beforeComponents?.map((BeforeComponent, i) => (
+        <BeforeComponent key={i} {...props} />))
+      }
+      <ProfileOptions value='orders' />
+      <Container>
+        <OrdersOption {...props} activeOrders horizontal />
+        <OrdersOption {...props} />
+      </Container>
+      {props.afterComponents?.map((AfterComponent, i) => (
+        <AfterComponent key={i} {...props} />))
+      }
+      {props.afterElements?.map((AfterElement, i) => (
+        <React.Fragment key={i}>
+          {AfterElement}
+        </React.Fragment>))
+      }
+    </>
   )
 }

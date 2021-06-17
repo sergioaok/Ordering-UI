@@ -1,29 +1,31 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import Skeleton from 'react-loading-skeleton'
-import { Modal } from '../Modal'
+import { Container, Header, SideForm, UserData } from './styles'
+
 import {
   UserFormDetails as UserFormController,
   useLanguage,
   useSession
 } from 'ordering-components'
-import { UserFormDetailsUI } from '../UserFormDetails'
-import { Container, Header, UserData } from './styles'
+
+import { UserFormDetailsUI } from '../../../../../components/UserFormDetails'
+import { Modal } from '../../../../../components/Modal'
 
 const UserDetailsUI = (props) => {
   const {
-    userData: externalUserData,
     isEdit,
     formState,
+    cleanFormState,
+    cartStatus,
     toggleIsEdit,
     validationFields,
     isUserDetailsEdit,
-    externalLoading
+    isCustomerMode
   } = props
 
   const [, t] = useLanguage()
   const [{ user }] = useSession()
-  const [openModal, setOpenModal] = useState(false)
-  const userData = externalUserData || formState.result?.result || user
+  const userData = props.userData || formState.result?.result || user
 
   useEffect(() => {
     if (isUserDetailsEdit) {
@@ -31,9 +33,20 @@ const UserDetailsUI = (props) => {
     }
   }, [isUserDetailsEdit])
 
+  const toggleEditState = () => {
+    toggleIsEdit()
+    cleanFormState({ changes: {} })
+  }
+
   return (
     <>
-      {(validationFields.loading || formState.loading || externalLoading) && (
+      {props.beforeElements?.map((BeforeElement, i) => (
+        <React.Fragment key={i}>
+          {BeforeElement}
+        </React.Fragment>))}
+      {props.beforeComponents?.map((BeforeComponent, i) => (
+        <BeforeComponent key={i} {...props} />))}
+      {(validationFields.loading || formState.loading) && (
         <UserData>
           <Skeleton width={250} height={25} />
           <Skeleton width={180} height={25} />
@@ -41,13 +54,13 @@ const UserDetailsUI = (props) => {
         </UserData>
       )}
 
-      {!(validationFields.loading || formState.loading || externalLoading) && (
+      {!(validationFields.loading || formState.loading) && (
         <Container>
           <Header className='user-form'>
-            <h1>{t('CUSTOMER_DETAILS', 'Customer details')}</h1>
-            <span onClick={() => setOpenModal(true)}>
-              {t('CHANGE', 'Change')}
-            </span>
+            <h1>{t('CUSTOMER_DETAILS', 'Customer Details')}</h1>
+            {cartStatus !== 2 && (
+              <a onClick={() => toggleIsEdit()}>{t('CHANGE', 'Change')}</a>
+            )}
           </Header>
 
           <UserData>
@@ -70,17 +83,20 @@ const UserDetailsUI = (props) => {
       )}
 
       <Modal
-        title={t('EDIT_PHONE_NUMBER', 'Edit phone number')}
-        open={openModal}
-        onClose={() => setOpenModal(false)}
+        open={isEdit}
+        onClose={() => toggleEditState()}
+        title={t('CUSTOMER_DETAILS', 'Customer Details')}
       >
-        <UserFormDetailsUI
-          isCheckout
-          {...props}
-          onCancel={() => setOpenModal(false)}
-          closeModal={() => setOpenModal(false)}
-        />
+        <SideForm>
+          <UserFormDetailsUI {...props} isCustomerMode={isCustomerMode} />
+        </SideForm>
       </Modal>
+      {props.afterComponents?.map((AfterComponent, i) => (
+        <AfterComponent key={i} {...props} />))}
+      {props.afterElements?.map((AfterElement, i) => (
+        <React.Fragment key={i}>
+          {AfterElement}
+        </React.Fragment>))}
     </>
   )
 }

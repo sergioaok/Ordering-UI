@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import Skeleton from 'react-loading-skeleton'
 import { OrderList, useLanguage, useOrder } from 'ordering-components'
-import { HorizontalOrdersLayout } from '../../../../../components/HorizontalOrdersLayout'
+
+import { HorizontalOrdersLayout } from '../HorizontalOrdersLayout'
 import { VerticalOrdersLayout } from '../VerticalOrdersLayout'
 import { NotFoundSource } from '../../../../../components/NotFoundSource'
 
@@ -30,7 +31,8 @@ const OrdersOptionUI = (props) => {
     loadMoreOrders,
     titleContent,
     customArray,
-    onRedirectPage
+    onRedirectPage,
+    businessesIds
   } = props
 
   const [, t] = useLanguage()
@@ -43,9 +45,11 @@ const OrdersOptionUI = (props) => {
     : theme.images?.general?.emptyPastOrders
 
   const orders = customArray || values
+  const isShowTitles = businessesIds
+    ? orders && orders.length > 0 && !orders.map(order => businessesIds && businessesIds.includes(order.business_id)).every(i => !i)
+    : orders.length > 0
 
   const [ordersSorted, setOrdersSorted] = useState([])
-
   const [reorderLoading, setReorderLoading] = useState(false)
 
   const handleReorder = async (orderId) => {
@@ -54,7 +58,9 @@ const OrdersOptionUI = (props) => {
       const { error, result } = await reorder(orderId)
       if (!error) {
         onRedirectPage && onRedirectPage({ page: 'checkout', params: { cartUuid: result.uuid } })
+        return
       }
+      setReorderLoading(false)
     } catch (err) {
       setReorderLoading(false)
     }
@@ -75,7 +81,16 @@ const OrdersOptionUI = (props) => {
       { key: 9, value: t('PICK_UP_COMPLETED_BY_DRIVER', 'Pick up completed by driver') },
       { key: 10, value: t('PICK_UP_FAILED_BY_DRIVER', 'Pick up Failed by driver') },
       { key: 11, value: t('DELIVERY_COMPLETED_BY_DRIVER', 'Delivery completed by driver') },
-      { key: 12, value: t('DELIVERY_FAILED_BY_DRIVER', 'Delivery Failed by driver') }
+      { key: 12, value: t('DELIVERY_FAILED_BY_DRIVER', 'Delivery Failed by driver') },
+      { key: 13, value: t('PREORDER', 'PreOrder') },
+      { key: 14, value: t('ORDER_NOT_READY', 'Order not ready') },
+      { key: 15, value: t('ORDER_PICKEDUP_COMPLETED_BY_CUSTOMER') },
+      { key: 16, value: t('ORDER_STATUS_CANCELLED_BY_CUSTOMER', 'Order cancelled by customer') },
+      { key: 17, value: t('ORDER_NOT_PICKEDUP_BY_CUSTOMER', 'Order not picked up by customer') },
+      { key: 18, value: t('ORDER_DRIVER_ALMOST_ARRIVED_BUSINESS', 'Driver almost arrived to business') },
+      { key: 19, value: t('ORDER_DRIVER_ALMOST_ARRIVED_CUSTOMER', 'Driver almost arrived to customer') },
+      { key: 20, value: t('ORDER_CUSTOMER_ALMOST_ARRIVED_BUSINESS', 'Customer almost arrived to business') },
+      { key: 21, value: t('ORDER_CUSTOMER_ARRIVED_BUSINESS', 'Customer arrived to business') }
     ]
 
     const objectStatus = orderStatus.find((o) => o.key === status)
@@ -101,7 +116,7 @@ const OrdersOptionUI = (props) => {
         </React.Fragment>))}
       {props.beforeComponents?.map((BeforeComponent, i) => (
         <BeforeComponent key={i} {...props} />))}
-      {(orders.length > 0 || !isBusinessesPage) && (
+      {(isShowTitles || !isBusinessesPage) && (
         <>
           <OptionTitle isBusinessesPage={isBusinessesPage}>
             <h1>
@@ -134,9 +149,6 @@ const OrdersOptionUI = (props) => {
                     <Skeleton />
                   </SkeletonMap>
                   <SkeletonContent activeOrders={horizontal}>
-                    <div>
-                      <Skeleton width={70} height={70} />
-                    </div>
                     <SkeletonText>
                       <Skeleton width={100} />
                       <Skeleton width={80} />
@@ -152,16 +164,14 @@ const OrdersOptionUI = (props) => {
           ) : (
             [...Array(3)].map((item, i) => (
               <SkeletonOrder key={i}>
-                <SkeletonContent vertical>
-                  <SkeletonInformation vertical>
+                <SkeletonContent>
+                  <SkeletonInformation verticalOrders>
                     <div>
-                      <Skeleton width={200} height={120} />
+                      <Skeleton width={250} height={125} />
                     </div>
-                    <SkeletonText>
-                      <Skeleton width={100} />
-                      <Skeleton width={150} />
-                      <Skeleton width={80} />
-                      <Skeleton width={80} />
+                    <SkeletonText verticalOrders>
+                      <Skeleton width={130} height={25} />
+                      <Skeleton width={120} />
                       <Skeleton width={80} />
                     </SkeletonText>
                   </SkeletonInformation>
@@ -179,6 +189,7 @@ const OrdersOptionUI = (props) => {
       {!loading && !error && orders.length > 0 && (
         horizontal ? (
           <HorizontalOrdersLayout
+            businessesIds={businessesIds}
             orders={ordersSorted}
             pagination={pagination}
             onRedirectPage={onRedirectPage}

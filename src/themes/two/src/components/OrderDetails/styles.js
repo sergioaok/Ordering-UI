@@ -1,195 +1,331 @@
+import React from 'react'
 import styled, { css } from 'styled-components'
 
 export const Container = styled.div`
+  display: flex;
+  flex-direction: column;
   width: 100%;
   margin-top: 20px;
-  padding-top: 60px;
+
+  @media (min-width: 992px) {
+    margin-top: 40px;
+  }
 `
 
 export const WrapperContainer = styled.div`
-  width: ${({ isLoading }) => isLoading ? '100%' : '91%'};
-  margin: auto;
-  display: flex;
-
-  @media (max-width: 992px) {
-    flex-direction: column-reverse;
-  }
-`
-
-export const Content = styled.div`
-  flex: 1;
+  width: 91%;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  margin: 10px 0px;
-  padding: 0 10px;
+  min-height: calc(100vh - 300px);
+
+  @media (min-width: 992px) {
+    flex-direction: row;
+    justify-content: space-between;
+  }
 `
 
-export const BusinessInfo = styled.div`
-  h1 {
-    cursor: pointer;
-    width: 100%;
-    font-size: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    color: ${props => props.theme.colors.darkTextColor};
+export const LeftContainer = styled.div`
+  box-sizing: border-box;
+  @media (min-width: 992px) {
+    width: calc(100% - 450px);
+    padding: 10px 20px 40px 20px;
   }
+`
 
-  p {
-    color: ${props => props.theme.colors.grayTextColor};
-    margin-bottom: 0px;
-  }
+export const RightContainer = styled.div`
+  box-sizing: border-box;
+  padding: 20px 0;
+  border-top: 1px solid #E7E7E7;
 
-  @media (max-width: 992px) {
-    h1 {
-      font-size: 18px;
-    }
+  @media (min-width: 992px) {
+    border-top: none;
+    width: 450px;
+    padding: 10px 20px 20px 20px;
+    ${props => props.theme?.rtl ? css`
+      border-right: 1px solid #E7E7E7;
+    ` : css`
+      border-left: 1px solid #E7E7E7;
+    `}
   }
+`
+
+export const RightInnerContainer = styled.div`
+  position: sticky;
+  top: 20px;
 `
 
 export const OrderInfo = styled.div`
-  padding: 0 30px;
-  border-bottom: 1px solid ${props => props.theme.colors.secondary};
+  border-bottom: 1px solid #E7E7E7;
+  padding-bottom: 20px;
+  display: flex;
+  flex-direction: column;
 
-  @media (max-width: 1200px) {
-    padding: 0 10px;
+  > div:first-child {
+    flex: 1;
+  }
+  
+  @media (min-width: 768px) {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+`
+
+export const OrderBusiness = styled.div`
+  border-bottom: 1px solid #E7E7E7;
+  padding-bottom: 20px;
+  padding-top: 20px;
+  display: block;
+`
+
+export const BusinessHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  h1 {
+    flex: 1;
+    margin: 0 0 5px 0;
+    font-size: 18px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    ${props => props.theme?.rtl ? css`
+      margin-left: 5px;
+    ` : css`
+      margin-right: 5px;
+    `}
+  }
+`
+
+export const BusinessInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  h1,
+  p {
+    margin: 3px 0px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  h1 {
+    font-size: 18px;
+  }
+  p {
+    font-size: 14px;
+    color: ${props => props.theme.colors?.darkGray};
+  }
+`
+
+export const ActionsBlock = styled.div`
+  > * {
+    ${props => props.theme?.rtl ? css`
+      margin-left: 5px;
+    ` : css`
+      margin-right: 5px;
+    `}
+  }
+  display: flex;
+  span {
+    font-size: 12px;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  svg {
+    cursor: pointer;
+    font-size: 24px;
   }
 `
 
 export const OrderData = styled.div`
+  h1, p {
+    margin: 0px;
+  }
   h1 {
-    width: 100%;
-    font-size: 32px;
+    margin-bottom: 5px;
+    font-size: 24px;
+  }
+  p {
+    font-size: 14px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  p:nth-child(1) {
+    opacity: 0.8;
+  }
+  p.date {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    color: ${props => props.theme.colors.darkTextColor};
-    span {
-      &:not(:first-child) {
-        color: ${props => props.theme.colors.primary};
-        font-size: 24px;
-        cursor: pointer;
-      }
-    }
+    color: ${props => props.theme.colors?.darkGray};
   }
 
-  p {
-    color: ${props => props.theme.colors.grayTextColor};
-  }
-
-  .order-data-section {
-    max-width: 600px;
-    display: flex;
-    justify-content: space-between;
-    margin: 20px 0;
-
-    > dl dd {
-      padding: 0 10px;
-    }
-  }
-
-  @media (max-width: 992px) {
+  @media (min-width: 992px) {
     h1 {
-      font-size: 24px;
-    }
-
-    .order-data-section {
-      flex-direction: column;
+      font-size: 32px;
     }
   }
 `
-export const OrderBusiness = styled(OrderInfo)`
-`
 
-export const StatusBar = styled.div`
-  position: relative;
+const StatusBarStyled = styled.div`
   height: 7px;
-  margin: 25px 0px 40px;
+  margin: 20px 0px 10px;
+  border-radius: 7px;
   background: ${props => `linear-gradient(to right, ${props.theme.colors.primary} ${props.percentage}%, ${props.theme.colors.disabled} ${props.percentage}%)`};
   ${props => props.theme?.rtl && css`
     background: linear-gradient(to left, ${props.theme.colors.primary} ${props.percentage}%, ${props.theme.colors.disabled} ${props.percentage}%)
   `}
+`
 
-  > div {
-    position: absolute;
-    top: -8px;
-    width: 100%;
-    display: flex;
+export const StatusBar = (props) => {
+  return (
+    <StatusBarStyled
+      {...props}
+    >
+      {props.children}
+    </StatusBarStyled>
+  )
+}
 
-    div {
-      width: calc(100% / 3);
-      text-align: right;
-    }
+export const OrderStatus = styled.div`
+  > span {
+    color: ${props => props.theme.colors.darkGray};
+    font-size: 14px;
   }
 `
 
-export const Step = styled.span`
-  background: #fff;
-  padding: 0 5px;
-  svg {
-    color: ${props => props.theme.colors.disabled};
-    font-size: 24px;
-  }
-
-  ${({ active }) => active && css`
-    svg {
-      color: ${props => props.theme.colors.primary};
-    }
-  `}
+export const SectionTitle = styled.h1`
+  margin: 0px;
+  font-size: 20px;
 `
 
-export const OrderCustomer = styled(OrderInfo)`
+export const OrderCustomer = styled.div`
+  padding: 20px 0;
+
   h1 {
-    font-size: 24px;
-    margin-bottom: 0px;
-  }
-
-  p {
-    color: ${props => props.theme.colors.grayTextColor};
+    margin: 0 0 5px 0;
     font-size: 18px;
   }
 
-  @media (max-width: 992px) {
-    h1 {
-      font-size: 18px;
-    }
+  p {
+    font-size: 14px;
+    margin: 0 0 3px 0;
+    color: ${props => props.theme.colors?.darkGray};
+  }
+`
 
-    p {
-      font-size: 14px;
-    }
+export const PhotoBlock = styled.img`
+  border-radius: 8px;
+  object-fit: cover;
+  margin: 0 10px;
+  ${props => props.theme?.rtl && css`
+    margin-left: 10px;
+    margin-right: 0;
+  `}
+`
+
+export const InfoBlock = styled.div`
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-transform: capitalize;
+  h1,
+  span {
+    margin: 0px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  h1 {
+    font-size: 18px;
+  }
+
+  span {
+    font-size: 14px;
+    color: ${props => props.theme.colors?.darkGray};
   }
 `
 
 export const Map = styled.div`
-  width: 60%;
-  height: calc(100vh - 120px);
+  width: 100%;
+  height: 50vh;
   margin-bottom: 10px;
 
   > div {
     position: relative !important;
     width: 100% !important;
     height: 100% !important;
-    border-radius: 15px;
-  }
-
-  ${({ isSkeleton }) => isSkeleton && css`
-    padding-top: 37px;
-  `}
-
-  @media (max-width: 992px) {
-    height: 30vh;
-    min-height: 200px;
-    width: 100%;
+    border-radius: 8px;
   }
 `
+
+export const OrderDriver = styled.div`
+  display: flex;
+  margin: 10px 0px 20px;
+  width: 100%;
+
+  div.photo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+      width: 70px;
+      height: 70px;
+      margin: 0 10px;
+      ${props => props.theme?.rtl && css`
+        margin-left: 10px;
+        margin-right: 0;
+      `}
+    }
+  }
+  justify-content: space-between;
+  align-items: center;
+`
+
+export const WrapperDriver = styled.div`
+  display: flex;
+  width: 100%;
+
+  div.photo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+      width: 60px;
+      height: 60px;
+      margin: 0px 10px;
+      ${props => props.theme?.rtl && css`
+        margin-left: 10px;
+        margin-right: 0;
+      `}
+    }
+  }
+
+`
+
+export const OrderProducts = styled.div`
+  padding: 15px 0;
+  border-bottom: 1px solid #E7E7E7;
+`
+
 export const OrderBill = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
+  padding-top: 15px;
   table {
-    padding: 0 30px;
     width: 100%;
     font-size: 12px;
+    td {
+      font-size: 16px;
+    }
     td span {
       unicode-bidi: bidi-override;
     }
@@ -202,25 +338,14 @@ export const OrderBill = styled.div`
   }
 
   table.total {
-    border-top: 1px solid #BFBFBF;
+    border-top: 1px solid #E7E7E7;
     margin-top: 15px;
     tr {
-      font-size: 20px;
-      td:nth-child(1) {
+      td {
+        font-size: 16px;
         font-weight: bold;
         padding-top: 10px;
       }
-      td:nth-child(2) {
-        font-weight: bold;
-        color: ${props => props.theme.colors.primary};
-        padding-top: 10px;
-      }
-    }
-  }
-
-  @media (max-width: 1200px) {
-    table {
-      padding: 0 10px;
     }
   }
 
@@ -232,93 +357,101 @@ export const OrderBill = styled.div`
 `
 
 export const ReviewsAction = styled.div`
-  margin: 30px 0 20px;
-  padding: 20px;
-  cursor: pointer;
-  background: #F7F7F7;
   width: 100%;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  p {
-    margin: 0px;
+  justify-content: center;
+  margin: 20px 0px;
+
+  button {
+    width: 100%;
+    padding: 5px 20px;
+    color: #FFF;
+    cursor: pointer;
   }
-  >div {
-    > div {
-      display: flex;
-      column-gap: 5px;
-  
-      svg {
-        color: ${props => props.theme.colors.grayTextColor};
-      }
+
+  @media (min-width: 480px) {
+    button {
+      width: 70%;
     }
   }
-
-  svg {
-    font-size: 24px;
-  }
-  
 `
 
-export const SkeletonBlock = styled.div`
-  width: ${({ width }) => width && `${width}%`};
-  border-radius: 16px;
-  margin-bottom: 30px;
-`
-
-export const SkeletonBlockWrapp = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 20px;
-  line-height: 40px;
-  width: 100%;
-`
-
-export const ShareOrder = styled(OrderInfo)`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: 20px;
-  padding-bottom: 20px;
-  cursor: pointer;
-
-  svg {
-    font-size: 24px;
-  }
-
-  > div {
+export const FootActions = styled.div`
+  a {
     display: flex;
     align-items: center;
-    column-gap: 10px;
-
-    p {
-      margin: 0px;
-      font-size: 18px;
-      span {
-        &:not(:first-child) {
-          font-weight: 500;
-          padding: 0 5px;
-        }
-      }
-    }
+    text-decoration: none;
+    color: ${props => props.theme.colors.primary};
+    cursor: pointer;
+    font-weight: bold;
   }
 
-  @media (max-width: 992px) {
+  padding-top: 10px;
+
+  @media (min-width: 768px) {
+    padding-top: 0px;
+
+    ${props => props.theme?.rtl ? css`
+      margin-right: 10px;
+    ` : css`
+      margin-left: 10px;
+    `}
+  }
+`
+
+export const ShareOrder = styled.div`
+  padding: 20px 0;
+  border-top: 1px solid #E7E7E7;
+  display: flex;
+  margin: 0 0 20px;
+  justify-content: space-between;
+  z-index: 1;
+
+  h1 {
+    font-size: 18px;
+    margin: 0px;
+  }
+
+  p {
+    font-size: 14px;
+    margin: 0px;
+    color: ${props => props.theme.colors?.darkGray};
+  }
+
+  div.wrap {
+    width: 40px;
+    z-index: 1;
     > div {
-      p {
-        font-size: 14px;
-      }
+      position: relative;
+    }
+
+    svg {
+      color: ${props => props.theme.colors.primary};
     }
   }
 `
 
-export const WrapBack = styled.div`
-  display: flex;
-  align-items: center;
-  column-gap: 10px;
-  font-size: 24px;
-  color: ${props => props.theme.colors.primary};
-  font-weight: 500;
+export const MessagesIcon = styled.span`
+  position: relative;
   cursor: pointer;
+`
+
+export const ExclamationWrapper = styled.div`
+  position: absolute;
+  top: -5px;
+
+  ${props => props.theme.rtl ? css`
+    left: -5px;
+  ` : css`
+    right: -5px;
+  `}
+  svg{
+    font-size: 16px;
+    color: ${props => props.theme?.colors?.primary}
+  }
+`
+
+export const DriverInfo = styled.div`
+  border-top: 1px solid #E7E7E7;
+  padding: 20px 0;
 `

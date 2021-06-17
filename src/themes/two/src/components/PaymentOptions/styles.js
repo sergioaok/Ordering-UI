@@ -4,7 +4,6 @@ export const PaymentMethodsContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  margin-bottom: 20px;
 `
 
 export const PaymentMethodsList = styled.div`
@@ -43,20 +42,12 @@ export const PayCard = styled.div`
     fill: #000;
   }
 
-  @media (min-width: 351px) {
+  @media (min-width: 768px) {
     width: calc(33% - 12px);
   }
 
-  @media (min-width: 513px) {
-    width: calc(25% - 12px);
-  }
-
-  @media (min-width: 641px) {
-    width: calc(25% - 12px);
-  }
-
-  @media (min-width: 1200px) {
-    width: calc(25% - 12px);
+  @media (min-width: 1300px) {
+    width: calc(20% - 12px);
   }
 
   svg {

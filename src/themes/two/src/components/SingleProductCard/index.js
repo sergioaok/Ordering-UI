@@ -9,7 +9,6 @@ import {
   CardLogo,
   SoldOut
 } from './styles'
-import { useTheme } from 'styled-components'
 
 export const SingleProductCard = (props) => {
   const {
@@ -17,14 +16,14 @@ export const SingleProductCard = (props) => {
     product,
     isSoldOut,
     isSkeleton,
-    onProductClick
+    onProductClick,
+    isCartOnProductsList
   } = props
 
   const [, t] = useLanguage()
   const [stateConfig] = useConfig()
   const [{ parsePrice, optimizeImage }] = useUtils()
   const [orderState] = useOrder()
-  const theme = useTheme()
 
   const editMode = typeof product?.code !== 'undefined'
 
@@ -42,31 +41,53 @@ export const SingleProductCard = (props) => {
   const maxProductQuantity = Math.min(maxCartProductConfig, maxCartProductInventory)
 
   return (
-    <CardContainer
-      soldOut={isSoldOut || maxProductQuantity <= 0}
-      onClick={() => !isSkeleton && onProductClick(product)}
-    >
-      <CardInfo soldOut={isSoldOut || maxProductQuantity <= 0}>
-        {!isSkeleton ? (<h1>{product?.name}</h1>) : (<Skeleton width={100} />)}
-        {!isSkeleton ? (<p>{product?.description}</p>) : (<Skeleton width={100} />)}
+    <>
+      {props.beforeElements?.map((BeforeElement, i) => (
+        <React.Fragment key={i}>
+          {BeforeElement}
+        </React.Fragment>))}
+      {props.beforeComponents?.map((BeforeComponent, i) => (
+        <BeforeComponent key={i} {...props} />))}
+      <CardContainer
+        soldOut={isSoldOut || maxProductQuantity <= 0}
+        onClick={() => !isSkeleton && onProductClick(product)}
+        isCartOnProductsList={isCartOnProductsList}
+      >
+        <CardInfo
+          soldOut={isSoldOut || maxProductQuantity <= 0}
+          noImage={!product?.images}
+        >
+          {!isSkeleton ? (<h1>{product?.name}</h1>) : (<Skeleton width={130} />)}
+          {!isSkeleton ? (<p>{product?.description}</p>) : (<Skeleton width={130} />)}
+          {!isSkeleton ? (
+            <span>{parsePrice(product?.price)}</span>
+          ) : (
+            <Skeleton width={100} />
+          )}
+        </CardInfo>
         {!isSkeleton ? (
-          <span>{parsePrice(product?.price)}</span>
+          <>
+            {product?.images && (
+              <WrapLogo>
+                <CardLogo
+                  className='image'
+                  soldOut={isSoldOut || maxProductQuantity <= 0}
+                  bgimage={optimizeImage(product?.images, 'h_200,c_limit')}
+                />
+              </WrapLogo>
+            )}
+          </>
         ) : (
-          <Skeleton width={100} />
+          <Skeleton height={130} width={130} />
         )}
-      </CardInfo>
-      {!isSkeleton ? (
-        <WrapLogo>
-          <CardLogo
-            className='image'
-            soldOut={isSoldOut || maxProductQuantity <= 0}
-            bgimage={optimizeImage(product?.images || theme.images?.dummies?.product, 'h_200,c_limit')}
-          />
-        </WrapLogo>
-      ) : (
-        <Skeleton height={100} width={100} />
-      )}
-      {(isSoldOut || maxProductQuantity <= 0) && <SoldOut>{t('SOLD_OUT', 'SOLD OUT')}</SoldOut>}
-    </CardContainer>
+        {(isSoldOut || maxProductQuantity <= 0) && <SoldOut>{t('SOLD_OUT', 'SOLD OUT')}</SoldOut>}
+      </CardContainer>
+      {props.afterComponents?.map((AfterComponent, i) => (
+        <AfterComponent key={i} {...props} />))}
+      {props.afterElements?.map((AfterElement, i) => (
+        <React.Fragment key={i}>
+          {AfterElement}
+        </React.Fragment>))}
+    </>
   )
 }

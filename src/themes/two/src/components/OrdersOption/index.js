@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import Skeleton from 'react-loading-skeleton'
-import { OrderList, useLanguage, useEvent, useOrder } from 'ordering-components'
+import { OrderList, useLanguage, useOrder } from 'ordering-components'
 
 import { HorizontalOrdersLayout } from '../HorizontalOrdersLayout'
 import { VerticalOrdersLayout } from '../VerticalOrdersLayout'
-import { NotFoundSource } from '../NotFoundSource'
+import { NotFoundSource } from '../../../../../components/NotFoundSource'
 
 import { useTheme } from 'styled-components'
 
@@ -23,38 +23,44 @@ import {
 
 const OrdersOptionUI = (props) => {
   const {
+    horizontal,
+    activeOrders,
     orderList,
     pagination,
-    activeOrders,
-    onOrderClick,
+    isBusinessesPage,
     loadMoreOrders,
-    horizontal,
-    isBusinessList
+    titleContent,
+    customArray,
+    onRedirectPage,
+    businessesIds
   } = props
 
   const [, t] = useLanguage()
   const theme = useTheme()
-  const [events] = useEvent()
   const [, { reorder }] = useOrder()
-  const { loading, error, orders } = orderList
+  const { loading, error, orders: values } = orderList
 
   const imageFails = activeOrders
     ? theme.images?.general?.emptyActiveOrders
     : theme.images?.general?.emptyPastOrders
 
-  const [ordersSorted, setOrdersSorted] = useState([])
+  const orders = customArray || values
+  const isShowTitles = businessesIds
+    ? orders && orders.length > 0 && !orders.map(order => businessesIds && businessesIds.includes(order.business_id)).every(i => !i)
+    : orders.length > 0
 
+  const [ordersSorted, setOrdersSorted] = useState([])
   const [reorderLoading, setReorderLoading] = useState(false)
-  const [orderID, setOrderID] = useState(null)
 
   const handleReorder = async (orderId) => {
     setReorderLoading(true)
-    setOrderID(orderId)
     try {
       const { error, result } = await reorder(orderId)
       if (!error) {
-        events.emit('go_to_page', { page: 'checkout', params: { cartUuid: result.uuid } })
+        onRedirectPage && onRedirectPage({ page: 'checkout', params: { cartUuid: result.uuid } })
+        return
       }
+      setReorderLoading(false)
     } catch (err) {
       setReorderLoading(false)
     }
@@ -95,13 +101,19 @@ const OrdersOptionUI = (props) => {
 
   return (
     <>
-      {(orders.length > 0 || !isBusinessList) && (
+      {props.beforeElements?.map((BeforeElement, i) => (
+        <React.Fragment key={i}>
+          {BeforeElement}
+        </React.Fragment>))}
+      {props.beforeComponents?.map((BeforeComponent, i) => (
+        <BeforeComponent key={i} {...props} />))}
+      {(isShowTitles || !isBusinessesPage) && (
         <>
-          <OptionTitle isBusinessList={isBusinessList}>
+          <OptionTitle isBusinessesPage={isBusinessesPage}>
             <h1>
-              {activeOrders
+              {titleContent || (activeOrders
                 ? t('ACTIVE_ORDERS', 'Active Orders')
-                : t('PREVIOUS_ORDERS', 'Previous Orders')}
+                : t('PREVIOUS_ORDERS', 'Previous Orders'))}
             </h1>
           </OptionTitle>
           {!loading && ordersSorted.length === 0 && (
@@ -113,11 +125,16 @@ const OrdersOptionUI = (props) => {
           )}
         </>
       )}
+
       {loading && (
-        <OrdersContainer activeOrders={horizontal} isSkeleton isBusinessList={isBusinessList}>
+        <OrdersContainer
+          isSkeleton
+          activeOrders={horizontal}
+          isBusinessesPage={isBusinessesPage}
+        >
           {horizontal ? (
-            <SkeletonOrder activeOrders={horizontal} isBusinessList={isBusinessList}>
-              {[...Array(6)].map((item, i) => (
+            <SkeletonOrder activeOrders={horizontal} isBusinessesPage={isBusinessesPage}>
+              {[...Array(3)].map((item, i) => (
                 <SkeletonCard key={i}>
                   <SkeletonMap>
                     <Skeleton />
@@ -139,14 +156,17 @@ const OrdersOptionUI = (props) => {
               ))}
             </SkeletonOrder>
           ) : (
-            [...Array(6)].map((item, i) => (
+            [...Array(3)].map((item, i) => (
               <SkeletonOrder key={i}>
                 <SkeletonContent>
                   <SkeletonInformation>
+                    <div>
+                      <Skeleton width={70} height={70} />
+                    </div>
                     <SkeletonText>
                       <Skeleton width={100} />
                       <Skeleton width={120} />
-                      <Skeleton width={200} />
+                      <Skeleton width={80} />
                     </SkeletonText>
                   </SkeletonInformation>
                   <SkeletonReorder>
@@ -163,29 +183,35 @@ const OrdersOptionUI = (props) => {
       {!loading && !error && orders.length > 0 && (
         horizontal ? (
           <HorizontalOrdersLayout
+            businessesIds={businessesIds}
             orders={ordersSorted}
             pagination={pagination}
-            onOrderClick={onOrderClick}
+            onRedirectPage={onRedirectPage}
             loadMoreOrders={loadMoreOrders}
-            getOrderStatus={getOrderStatus}
-            isBusinessList={isBusinessList}
-            handleReorder={handleReorder}
+            isBusinessesPage={isBusinessesPage}
             reorderLoading={reorderLoading}
-            orderID={orderID}
+            customArray={customArray}
+            getOrderStatus={getOrderStatus}
+            handleReorder={handleReorder}
           />
         ) : (
           <VerticalOrdersLayout
+            reorderLoading={reorderLoading}
             orders={ordersSorted}
             pagination={pagination}
-            onOrderClick={onOrderClick}
             loadMoreOrders={loadMoreOrders}
+            onRedirectPage={onRedirectPage}
             getOrderStatus={getOrderStatus}
             handleReorder={handleReorder}
-            reorderLoading={reorderLoading}
-            orderID={orderID}
           />
         )
       )}
+      {props.afterComponents?.map((AfterComponent, i) => (
+        <AfterComponent key={i} {...props} />))}
+      {props.afterElements?.map((AfterElement, i) => (
+        <React.Fragment key={i}>
+          {AfterElement}
+        </React.Fragment>))}
     </>
   )
 }
@@ -194,7 +220,9 @@ export const OrdersOption = (props) => {
   const orderListProps = {
     ...props,
     UIComponent: OrdersOptionUI,
-    orderStatus: props.activeOrders ? [0, 3, 4, 7, 8, 9] : [1, 2, 5, 6, 10, 11, 12],
+    orderStatus: props.activeOrders
+      ? [0, 3, 4, 7, 8, 9, 13, 14, 15, 18, 19, 20, 21]
+      : [1, 2, 5, 6, 10, 11, 12, 16, 17],
     useDefualtSessionManager: true,
     paginationSettings: {
       initialPage: 1,

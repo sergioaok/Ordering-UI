@@ -1,6 +1,8 @@
 import React from 'react'
-import { useUtils, useLanguage } from 'ordering-components'
-import FaShoppingCart from '@meronex/icons/fa/FaShoppingCart'
+import { useUtils, useLanguage, useConfig } from 'ordering-components'
+import IosBasket from '@meronex/icons/ios/IosBasket'
+import FaMapMarkerAlt from '@meronex/icons/fa/FaMapMarkerAlt'
+import FaRegClock from '@meronex/icons/fa/FaRegClock'
 
 import {
   Container
@@ -14,32 +16,53 @@ export const HeaderOption = (props) => {
     totalCarts
   } = props
 
+  const [{ configs }] = useConfig()
   const [{ parseDate }] = useUtils()
   const [, t] = useLanguage()
   return (
-    <Container
-      variant={variant}
-      onClick={() => props.onClick(variant)}
-      isHome={props.isHome}
-    >
-      {variant === 'cart' && (
-        <span>
-          <FaShoppingCart id='icon' />
-          {totalCarts > 0 && <p>{totalCarts}</p>}
-        </span>
-      )}
-      {variant === 'moment' && (
-        <>
-          {momentState
-            ? parseDate(momentState, { outputFormat: 'MM/DD hh:mma' })
-            : t('ASAP_ABBREVIATION', 'ASAP')}
-        </>
-      )}
-      {variant === 'address' && (
-        <>
-          {addressState || t('SELECT_AN_ADDRESS', 'Select an address')}
-        </>
-      )}
-    </Container>
+    <>
+      {props.beforeElements?.map((BeforeElement, i) => (
+        <React.Fragment key={i}>
+          {BeforeElement}
+        </React.Fragment>))
+      }
+      {props.beforeComponents?.map((BeforeComponent, i) => (
+        <BeforeComponent key={i} {...props} />))
+      }
+      <Container
+        variant={variant}
+        onClick={() => props.onClick(variant)}
+        isHome={props.isHome}
+      >
+        {variant === 'cart' && (
+          <span>
+            <IosBasket id='icon' />
+            {totalCarts > 0 && <p>{totalCarts}</p>}
+          </span>
+        )}
+        {variant === 'address' && (
+          <>
+            <FaMapMarkerAlt id='icon' />
+            {addressState || t('SELECT_AN_ADDRESS', 'Select an address')}
+          </>
+        )}
+        {variant === 'moment' && (
+          <>
+            <FaRegClock id='icon' />
+            {momentState
+              ? parseDate(momentState, { outputFormat: configs?.dates_moment_format?.value })
+              : t('ASAP_ABBREVIATION', 'ASAP')}
+          </>
+        )}
+      </Container>
+      {props.afterComponents?.map((AfterComponent, i) => (
+        <AfterComponent key={i} {...props} />))
+      }
+      {props.afterElements?.map((AfterElement, i) => (
+        <React.Fragment key={i}>
+          {AfterElement}
+        </React.Fragment>))
+      }
+    </>
   )
 }

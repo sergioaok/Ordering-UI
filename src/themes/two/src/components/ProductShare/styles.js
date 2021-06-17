@@ -1,61 +1,80 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
-export const Container = styled.div`
-  width: 80%;
-  margin: 50px auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  row-gap: 30px;
-  position: relative;
-
-  @media (max-width: 576px) {
-    width: 91%;
-  }
-
-  > a {
+export const IconShare = styled.div`
+  position: fixed;
+  margin: 0px;
+  top: 10px;
+  font-size: 22px;
+  right: 16px;
+  z-index: 9999995;
+  background: rgba(255,255,255,0.5);
+  height: 30px;
+  border-radius: 50%;
+  width: 30px;
+  svg {
+    position: relative;
     cursor: pointer;
-    font-size: 42px;
-    position: absolute;
-    left: 0px;
-    top: -20px;
+    color: #333;
+    left: 3px;
+    ${props => props.theme?.rtl && css`
+      left: 0;
+      right: 5px;
+    `}
   }
-`
-export const WrapImage = styled.div`
-  width: 150px;
-  height: 150px;
-  > img {
-    width: 100%;
-    height: 100%;
-  }
-`
-export const WrapShareLink = styled.div`
-  width: 100%;
-  margin: 0 auto;
-  max-width: 1000px;
-  > div {
-    display: flex;
-    justify-content: space-between;
-    column-gap: 20px;
-    input {
-      flex: 1;
+  ${props => props.theme?.rtl && css`
+    left: 16px;
+    right: initial;
+  `}
+
+
+  @media(min-width: 769px){
+    position: relative;
+    left: 5px;
+    top: 0;
+
+    svg{
+      position: static;
     }
-    input,
-    button {
-      padding: 10px 20px;
-    }
+
+    ${props => props.theme?.rtl && css`
+      left: 0;
+      right: 5px;
+    `}
   }
 
-  p {
-    font-weight: 500;
-    font-size: 18px;
-    text-align: center;
-  }
-  
-  @media (max-width: 576px) {
-    > div {
-      flex-direction: column;
-      row-gap: 20px;
+  @media (min-width: 1201px) {
+    position: sticky;
+    width: 0;
+
+    &:nth-child(1) > svg {
+      background-color: white;
+      padding: 5px;
+      border-radius: 9px;
+      margin: 5px 0px;
     }
+
+    ${props => props.theme?.rtl && css`
+      right: 0;
+      left: initial;
+    `}
+  }
+`
+
+export const ShareButtons = styled.div`
+  visibility: ${({ showShareButton }) => showShareButton ? 'visible' : 'hidden'};
+  top: 28px;
+  width: 40px;
+  position: absolute !important;
+
+  ${props => props.theme?.rtl ? css`
+    right: -12px;
+  ` : css`
+    left: -12px;
+  `}
+
+  @media (min-width: 1201px) {
+    top: 35px;
+    left: 0px;
+    right: 0px;
   }
 `

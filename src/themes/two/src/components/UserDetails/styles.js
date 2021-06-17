@@ -1,39 +1,70 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 export const Container = styled.div`
   display: flex;
+  flex-direction: column;
   padding: 20px 0;
-  border-bottom: 1px solid ${props => props.theme.colors.secondary};
+  border-bottom: 1px solid #CCC;
 
-  @media (max-width: 700px){
-    flex-direction: column;
+  @media (min-width: 768px) {
+    flex-direction: row;
   }
 `
 
 export const Header = styled.div`
-  width: 200px;
+  width: 100%;
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   h1 {
-    text-transform: uppercase;
-    margin: 0px;
     font-size: 20px;
-  }
-  span {
-    cursor: pointer;
-    color: ${props => props.theme.colors.primary};
-    font-weight: 600;
+    margin: 0px;
+    text-transform: uppercase;
   }
 
-  @media (max-width: 700px){
-    width: 100%;
-    display: flex;
-    column-gap: 10px;
-    padding-bottom: 10px;
-    h1 {
-      font-size: 18px;
+  a {
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    color: ${props => props.theme.colors.primary};
+    ${props => props.theme?.rtl ? css`
+      margin-right: 10px;
+    ` : css`
+      margin-left: 10px;
+    `}
+  }
+
+  @media (min-width: 768px) {
+    margin-bottom: 0px;
+    width: 230px;
+    flex-direction: column;
+    align-items: initial;
+
+    a {
+      ${props => props.theme?.rtl ? css`
+        margin-right: 0px;
+      ` : css`
+        margin-left: 0px;
+      `}
     }
   }
 `
 
+export const SideForm = styled.div`
+  padding: 10px;
+`
+
 export const UserData = styled.div`
   flex: 1;
+  ${props => props.theme?.rtl ? css`
+    margin-right: 5px;
+  ` : css`
+    margin-left: 5px;
+  `}
+
+  > * {
+    margin-top: 3px;
+    margin-bottom: 8px;
+  }
 `

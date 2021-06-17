@@ -19,7 +19,9 @@ const AddressDetailsUI = (props) => {
     addressToShow,
     isCartPending,
     googleMapsUrl,
-    isCustomerMode
+    isCustomerMode,
+    apiKey,
+    isFromCheckout
   } = props
 
   const [orderState] = useOrder()
@@ -59,11 +61,13 @@ const AddressDetailsUI = (props) => {
               />}
           </Text>
         </Header>
-        <WrappMap>
-          <Map>
-            <img src={googleMapsUrl} id='google-maps-image' alt='google-maps-location' width='288px' height='162px' loading='lazy' />
-          </Map>
-        </WrappMap>
+        {apiKey && (
+          <WrappMap>
+            <Map>
+              <img src={googleMapsUrl} id='google-maps-image' alt='google-maps-location' width='288px' height='162px' loading='lazy' />
+            </Map>
+          </WrappMap>
+        )}
 
         <Modal
           title={t('ADDRESSES', 'Addresses')}
@@ -78,6 +82,7 @@ const AddressDetailsUI = (props) => {
             onCancel={() => setOpenModal(false)}
             onAccept={() => handleFindBusinesses()}
             userCustomerSetup={isCustomerMode && user}
+            isFromCheckout={isFromCheckout}
           />
         </Modal>
 

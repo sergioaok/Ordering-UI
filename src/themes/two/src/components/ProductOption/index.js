@@ -1,6 +1,6 @@
 import React from 'react'
 import { ProductOption as ProductOptionController, useLanguage } from 'ordering-components'
-import BsCheck from '@meronex/icons/bs/BsCheck'
+
 import {
   Container,
   WrapHeader,
@@ -12,9 +12,9 @@ import {
 
 const ProductOptionUI = (props) => {
   const {
+    error,
     children,
-    option,
-    error
+    option
   } = props
 
   const [, t] = useLanguage()
@@ -29,29 +29,32 @@ const ProductOptionUI = (props) => {
   }
 
   return (
-    <Container>
-      <WrapHeader>
-        <TitleContainer>
-          {option.image && (
-            <OptionThumbnail src={option.image} />
-          )}
-          <Title>
-            <span>{option.name}</span>
-            {option.min === 1 && option.max === 1 && (
-              <span>{t('SELECT_AT_LEAST_1', 'select at least 1')}</span>
+    <>
+      {props.beforeElements?.map((BeforeElement, i) => (
+        <React.Fragment key={i}>
+          {BeforeElement}
+        </React.Fragment>))}
+      {props.beforeComponents?.map((BeforeComponent, i) => (
+        <BeforeComponent key={i} {...props} />))}
+      <Container>
+        <WrapHeader>
+          <TitleContainer>
+            {option.image && (
+              <OptionThumbnail src={option.image} />
             )}
-          </Title>
-        </TitleContainer>
-
-        <Flag error={error}>
-          {option.min === 1 && option.max === 1 && !error && (
-            <BsCheck />
-          )}
-          {maxMin}
-        </Flag>
-      </WrapHeader>
-      {children}
-    </Container>
+            <Title><span>{option.name}</span></Title>
+          </TitleContainer>
+          <Flag error={error}>{maxMin}</Flag>
+        </WrapHeader>
+        {children}
+      </Container>
+      {props.afterComponents?.map((AfterComponent, i) => (
+        <AfterComponent key={i} {...props} />))}
+      {props.afterElements?.map((AfterElement, i) => (
+        <React.Fragment key={i}>
+          {AfterElement}
+        </React.Fragment>))}
+    </>
   )
 }
 

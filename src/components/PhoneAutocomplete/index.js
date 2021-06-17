@@ -111,8 +111,8 @@ const PhoneAutocompleteUI = (props) => {
 
   const optionsToSelect = customersPhones.users.map(user => {
     const obj = {}
-    obj.value = user.cellphone
-    obj.label = `${user.cellphone} (${user.name})`
+    obj.value = user.cellphone || user.phone
+    obj.label = `${user.cellphone || user.phone} (${user.name})`
     return obj
   }) || []
 
@@ -200,6 +200,7 @@ const PhoneAutocompleteUI = (props) => {
                   phone
                 }}
                 isEnableContinueButton
+                isCustomerMode
               />
             </>
           )}

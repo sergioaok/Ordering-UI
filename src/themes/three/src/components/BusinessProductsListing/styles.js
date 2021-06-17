@@ -1,23 +1,12 @@
 import styled, { css } from 'styled-components'
 
 export const ProductsContainer = styled.div`
-  width: 100%;
-  padding: 110px 0 30px 0;
-
-  @media (min-width: 992px) {
-    padding: 65px 0 30px 0;
-  }
+  min-height: calc(100vh - 300px);
 `
 
-export const InnerContainer = styled.div`
+export const BusinessProductsContent = styled.div`
   width: 91%;
   margin: 0 auto;
-
-  > div {
-    &: first-child {
-      top: 65px;
-    }
-  }
 `
 
 export const WrapContent = styled.div`
@@ -26,6 +15,36 @@ export const WrapContent = styled.div`
 
   @media (min-width: 381px) {
     padding: 15px;
+  }
+`
+
+export const WrapperSearch = styled.div`
+  margin: 15px 0px 0px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  input {
+    border: none;
+    border-radius: unset;
+    border-bottom: 1px solid #CCC;
+    background-color: ${props => props.theme.colors?.lightGray};
+  }
+
+  .search-bar {
+    margin-right: 10px;
+    ${props => props.theme?.rtl && css`
+      margin-left: 10px;
+      margin-right: 0;
+    `}
+  }
+
+  div:last-child {
+    text-align: right;
+
+    ${props => props.theme?.rtl && css`
+      text-align: left;
+    `}
   }
 `
 

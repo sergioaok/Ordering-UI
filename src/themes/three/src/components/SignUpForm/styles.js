@@ -5,8 +5,8 @@ export const SignUpContainer = styled.div`
   height: 100%;
   display: flex;
   min-height: ${({ isPopup }) => isPopup ? '500px' : 'calc(100vh - 65px)'};
+
   flex-direction: column;
-  padding-top: 65px;
 
   @media (min-width: 768px) {
     flex-direction: row;
@@ -20,12 +20,14 @@ const Side = styled.div`
 export const FormSide = styled(Side)`
   flex-direction: column;
   align-items: center;
-  margin: auto;
+  margin: 10px auto;
 
-  @media (min-width: 769px) {
-    ${({ isPopup }) => isPopup && css`
-      margin: 20px 0px;
-    `}
+  ${({ isPopup }) => isPopup && css`
+    margin: auto;
+  `}
+
+  @media (min-width: 768px) {
+    margin: auto;
   }
 
   @media (min-width: 992px) {
@@ -46,6 +48,10 @@ export const FormInput = styled.form`
   div.phone_number {
     margin: 10px 0px;
     width: 100%;
+  }
+
+  input.PhoneInputInput {
+    border-radius: unset;
   }
 
   input.form:not(:last-child) {
@@ -78,8 +84,13 @@ export const RedirectLink = styled.div`
   }
 
   a {
-    color: ${props => props.theme.colors.darkGreen};
+    color: ${props => props.theme.colors.secundary};
     text-decoration: none;
+
+    &:hover,
+    &:visited {
+      color: ${props => props.theme.colors.secundary};
+    }
   }
 
   * {
@@ -114,14 +125,64 @@ export const RedirectLink = styled.div`
     `};
   }
 `
+
+export const SocialButtons = styled.div`
+  width: ${({ isPopup }) => isPopup ? '90%' : '80%'};
+
+  button {
+    border-radius: unset;
+    display: flex;
+    justify-content: start;
+    width: 100%;
+    padding: 5px 30px;
+    color: #000000;
+    margin-bottom: 15px;
+
+    img {
+      width: 30px;
+    }
+
+    div {
+      font-size: 0.8em;
+    }
+  }
+`
+
 export const SkeletonWrapper = styled.div`
   span{
     margin: 10px 0;
   }
 `
 
-export const WrapInputPhoneNumber = styled.div`
-  input.PhoneInputInput {
-    border-radius: unset;
+export const SkeletonSocialWrapper = styled(SkeletonWrapper)`
+  width: ${({ isPopup }) => isPopup ? '90%' : '80%'};
+  span{
+    margin-top: 0;
   }
+`
+
+export const WrapperPassword = styled.div`
+  position: relative;
+  input{
+    box-sizing: border-box;
+    width: 100%;
+    padding-right: 40px;
+  }
+`
+
+export const TogglePassword = styled.span`
+  position: absolute;
+  font-weight: 300;
+  padding: 10px 0;
+  color: #333;
+  font-size: 26px;
+  transform: translate(-150%, 10%);
+  max-height: 100%;
+  ${props => props.theme?.rtl && css`
+    transform: translate(150%, 10%);
+  `}
+  span{
+    cursor: pointer;
+  }
+
 `

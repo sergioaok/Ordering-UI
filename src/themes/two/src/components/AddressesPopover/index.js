@@ -1,8 +1,10 @@
 import React, { useRef, useEffect } from 'react'
 import { useOrder, useLanguage, useEvent } from 'ordering-components'
 import { usePopper } from 'react-popper'
-import { HeaderItem, PopoverBody, PopoverArrow } from './styles'
-import { AddressContent } from '../AddressContent'
+import { HeaderItem, PopoverBody, PopoverArrow, Container, Title } from './styles'
+import FaMapMarkerAlt from '@meronex/icons/fa/FaMapMarkerAlt'
+import { AddressList } from '../../../../../components/AddressList'
+import { AddressForm } from '../../../../../components/AddressForm'
 
 export const AddressesPopover = (props) => {
   const {
@@ -30,6 +32,8 @@ export const AddressesPopover = (props) => {
       }
     ]
   })
+
+  const userCustomer = JSON.parse(window.localStorage.getItem('user-customer'))
 
   const { styles, attributes, forceUpdate } = popper
 
@@ -79,19 +83,53 @@ export const AddressesPopover = (props) => {
 
   return (
     <div className='address-popover' style={{ overflow: 'hidden' }}>
+      {props.beforeElements?.map((BeforeElement, i) => (
+        <React.Fragment key={i}>
+          {BeforeElement}
+        </React.Fragment>))
+      }
+      {props.beforeComponents?.map((BeforeComponent, i) => (
+        <BeforeComponent key={i} {...props} />))
+      }
       <HeaderItem ref={referenceElement} onClick={props.onClick} isHome={props.isHome}>
-        {orderState.options?.address?.address?.split(',')?.[0] || t('SELECT_AN_ADDRESS', 'Select an address')}
+        <FaMapMarkerAlt /> <span>{orderState.options?.address?.address?.split(',')?.[0] || t('SELECT_AN_ADDRESS', 'Select an address')}</span>
       </HeaderItem>
       <PopoverBody className='form_edit' ref={popperElement} style={popStyle} {...attributes.popper}>
         {open && (
-          <AddressContent
-            auth={auth}
-            onClose={props.onClose}
-            addressState={addressState}
-          />
+          <Container>
+            {auth && (
+              <>
+                <Title>{t('ADDRESSES', 'Addresses')}</Title>
+                <AddressList
+                  isPopover
+                  changeOrderAddressWithDefault
+                  userId={isNaN(userCustomer?.id) ? null : userCustomer?.id}
+                  onClosePopover={props.onClose}
+                />
+              </>)}
+            {!auth && (
+              <>
+                <Title>{t('ADDRESS', 'Address')}</Title>
+                <AddressForm
+                  useValidationFileds
+                  address={addressState || {}}
+                  onClose={() => props.onClose && props.onClose()}
+                  onCancel={() => props.onClose && props.onClose()}
+                  onSaveAddress={() => props.onClose && props.onClose()}
+                />
+              </>)}
+          </Container>
         )}
         <PopoverArrow key='arrow' ref={arrowElement} style={styles.arrow} />
       </PopoverBody>
+      {props.afterComponents?.map((AfterComponent, i) => (
+        <AfterComponent key={i} {...props} />))
+      }
+      {props.afterElements?.map((AfterElement, i) => (
+        <React.Fragment key={i}>
+          {AfterElement}
+        </React.Fragment>))
+      }
     </div>
   )
 }

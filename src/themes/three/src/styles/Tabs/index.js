@@ -4,7 +4,8 @@ export const Tabs = styled.div`
   display: flex;  
   ${({ variant }) => variant === 'primary' && css`
     color: ${props => props.theme.colors.darkTextColor};
-  `}  
+  `}
+  
 `
 
 export const Tab = styled.div`

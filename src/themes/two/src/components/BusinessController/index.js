@@ -11,52 +11,62 @@ import {
   BusinessHeader,
   BusinessTags,
   BusinessContent,
+  BusinessInfo,
+  BusinessInfoItem,
   BusinessName,
-  BusinessInfoRow
+  Categories,
+  Medadata
 } from './styles'
-import AiFillStar from '@meronex/icons/ai/AiFillStar'
+import GrClock from '@meronex/icons/gr/GrClock'
+import GrDeliver from '@meronex/icons/gr/GrDeliver'
+import GrLocation from '@meronex/icons/gr/GrLocation'
+import GrStar from '@meronex/icons/gr/GrStar'
+import FaCrown from '@meronex/icons/fa/FaCrown'
 
 const BusinessControllerUI = (props) => {
   const {
-    isPickupView,
-    twoColumnView,
-    isFeaturePage,
     isSkeleton,
     business,
     getBusinessOffer,
     orderState,
-    handleClick
+    handleClick,
+    orderType
   } = props
 
   const [, t] = useLanguage()
-  const [{ parsePrice, parseNumber, optimizeImage }] = useUtils()
+  const [{ parsePrice, parseDistance, optimizeImage }] = useUtils()
 
-  const types = ['food', 'laundry', 'alcohol', 'groceries']
+  const types = ['food', 'alcohol', 'groceries', 'laundry']
 
-  const getBusinessType = () => {
+  const businessType = () => {
     if (Object.keys(business).length <= 0) return t('GENERAL', 'General')
     const _types = []
-    types.forEach(type => {
-      if (business[type]) {
-        _types.push(t(type.toUpperCase(), type))
-      }
-    })
+    types.forEach(type => business[type] && _types.push(
+      t(`BUSINESS_TYPE_${type?.replace(/\s/g, '_')?.toUpperCase()}`, type)
+    ))
     return _types.join(', ')
   }
 
   return (
     <>
-      <ContainerCard
-        isSkeleton={isSkeleton}
-        pickupView={isPickupView}
-        twoColumnView={twoColumnView}
-      >
+      {props.beforeElements?.map((BeforeElement, i) => (
+        <React.Fragment key={i}>
+          {BeforeElement}
+        </React.Fragment>))}
+      {props.beforeComponents?.map((BeforeComponent, i) => (
+        <BeforeComponent key={i} {...props} />))}
+      <ContainerCard isSkeleton={isSkeleton}>
         <WrapperBusinessCard isSkeleton={isSkeleton} onClick={() => !isSkeleton && handleClick && handleClick(business)}>
           <BusinessHero>
             {business?.header ? (
-              <BusinessHeader twoColumnView={twoColumnView} bgimage={optimizeImage(business?.header, 'h_400,c_limit')} isClosed={!business?.open}>
+              <BusinessHeader bgimage={optimizeImage(business?.header, 'h_400,c_limit')} isClosed={!business?.open}>
                 <BusinessTags>
+                  {business?.featured &&
+                    <span className='crown'>
+                      <FaCrown />
+                    </span>}
                   <div>
+                    {getBusinessOffer(business?.offers) && <span>{getBusinessOffer(business?.offers) || parsePrice(0)}</span>}
                     {!business?.open && <span>{t('PREORDER', 'PreOrder')}</span>}
                   </div>
                 </BusinessTags>
@@ -67,72 +77,84 @@ const BusinessControllerUI = (props) => {
             )}
           </BusinessHero>
           <BusinessContent>
-            <BusinessInfoRow>
-              {business?.name ? (
-                <BusinessName>{business?.name}</BusinessName>
-              ) : (
-                <Skeleton width={100} />
-              )}
-            </BusinessInfoRow>
-            <BusinessInfoRow>
-              {business && Object.keys(business).length > 0 ? (
-                <span>
-                  {getBusinessType()}
-                </span>
-              ) : (
-                <Skeleton width={50} />
-              )}
-              {business && Object.keys(business).length > 0 ? (
-                <span className='bullet'>
-                  {convertHoursToMinutes(orderState?.options?.type === 1 ? business?.delivery_time : business?.pickup_time) || <Skeleton width={100} />}
-                </span>
-              ) : (
-                <Skeleton width={70} />
-              )}
-            </BusinessInfoRow>
-            {!twoColumnView && !isFeaturePage && (
-              <BusinessInfoRow>
-                {business?.reviews?.total > 0 ? (
-                  <div className='reviews'>
-                    <AiFillStar />
-                    <span>{business?.reviews?.total}</span>
-                  </div>
-                ) : (
-                  business?.reviews?.total !== 0 && <Skeleton width={50} />
-                )}
-                {business?.offers ? (
-                  <div>
-                    {getBusinessOffer(business?.offers) ? (
-                      <span>{t('FREE_DELIVEY_OVER', 'Free delivery over')} {getBusinessOffer(business?.offers) || parsePrice(0)}</span>
+            <BusinessInfo className='info'>
+              <BusinessInfoItem>
+                <div>
+                  {business?.name ? (
+                    <BusinessName>{business?.name}</BusinessName>
+                  ) : (
+                    <Skeleton width={100} />
+                  )}
+                  {business?.reviews?.total > 0 ? (
+                    <div className='reviews'>
+                      <GrStar />
+                      <span>{business?.reviews?.total}</span>
+                    </div>
+                  ) : (
+                    business?.reviews?.total !== 0 && <Skeleton width={50} />
+                  )}
+                </div>
+                <Categories>
+                  {
+                    Object.keys(business).length > 0 ? (
+                      businessType()
                     ) : (
-                      <>
-                        {orderState?.options.type === 1 && (
-                          <span>
-                            {parsePrice(business?.delivery_price || 0)} {t('DELIVERY', 'delivery')}
-                          </span>
-                        )}
-                      </>
-                    )}
-                  </div>
-                ) : (
-                  <Skeleton width={70} />
-                )}
-              </BusinessInfoRow>
-            )}
+                      <Skeleton width={100} />
+                    )
+                  }
+                </Categories>
+                <Medadata>
+                  {Object.keys(business).length > 0 ? (
+                    <p className='bullet'>
+                      <GrClock />
+                      {convertHoursToMinutes(orderState?.options?.type === 1 ? business?.delivery_time : business?.pickup_time) || <Skeleton width={100} />}
+                    </p>
+                  ) : (
+                    <Skeleton width={70} />
+                  )}
+                  {business?.distance >= 0 ? (
+                    <p className='bullet'>
+                      <GrLocation />
+                      {parseDistance(business?.distance)}
+                    </p>
+                  ) : (
+                    <Skeleton width={70} />
+                  )}
+                  {orderType === 1 && (
+                    <>
+                      {business?.delivery_price >= 0 ? (
+                        <p>
+                          <GrDeliver />
+                          {business && parsePrice(business?.delivery_price)}
+                        </p>
+                      ) : (
+                        <Skeleton width={70} />
+                      )}
+                    </>
+                  )}
+                </Medadata>
+              </BusinessInfoItem>
+            </BusinessInfo>
           </BusinessContent>
         </WrapperBusinessCard>
       </ContainerCard>
+      {props.afterComponents?.map((AfterComponent, i) => (
+        <AfterComponent key={i} {...props} />))}
+      {props.afterElements?.map((AfterElement, i) => (
+        <React.Fragment key={i}>
+          {AfterElement}
+        </React.Fragment>))}
     </>
   )
 }
 
 export const BusinessController = (props) => {
-  const AllBusinessControllerProps = {
+  const businessControllerProps = {
     ...props,
     UIComponent: BusinessControllerUI
   }
 
   return (
-    <BusinessSingleCard {...AllBusinessControllerProps} />
+    <BusinessSingleCard {...businessControllerProps} />
   )
 }

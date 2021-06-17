@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { DriverTips as DriverTipsController, useUtils, useLanguage } from 'ordering-components'
+import { DriverTips as DriverTipsController, useUtils, useLanguage, useConfig } from 'ordering-components'
 
 import {
   DriverTipContainer,
@@ -7,10 +7,11 @@ import {
   FormDriverTip,
   WrapperInput,
   DriverTipMessage,
-  DriverTipLabel
+  DriverTipLabel,
+  WrapperTips
 } from './styles'
 import { Input } from '../../styles/Inputs'
-import { Button } from '../../styles/Buttons'
+import { Button } from '../../../../../styles/Buttons'
 
 const DriverTipsUI = (props) => {
   const {
@@ -23,6 +24,8 @@ const DriverTipsUI = (props) => {
   } = props
   const [{ parsePrice }] = useUtils()
   const [, t] = useLanguage()
+  const [{ configs }] = useConfig()
+
   const [value, setvalue] = useState(0)
 
   const handleChangeDriverTip = (e) => {
@@ -31,29 +34,33 @@ const DriverTipsUI = (props) => {
     setvalue(tip)
   }
 
+  const placeholderCurrency = (configs?.currency_position?.value || 'left') === 'left'
+    ? `${configs?.format_number_currency?.value}0`
+    : `0${configs?.format_number_currency?.value}`
+
   return (
     <>
       {props.beforeElements?.map((BeforeElement, i) => (
         <React.Fragment key={i}>
           {BeforeElement}
-        </React.Fragment>))
-      }
+        </React.Fragment>))}
       {props.beforeComponents?.map((BeforeComponent, i) => (
-        <BeforeComponent key={i} {...props} />))
-      }
+        <BeforeComponent key={i} {...props} />))}
       <DriverTipContainer id='driver-tip-container'>
         {!isDriverTipUseCustom ? (
           <>
-            {driverTipsOptions.map((option, i) => (
-              <TipCard
-                key={i}
-                className={`${option === optionSelected ? 'active' : ''}`}
-                onClick={() => handlerChangeOption(option)}
-              >
-                {`${isFixedPrice ? parsePrice(option) : `${option}%`}`}
-              </TipCard>
-            ))}
-            {!driverTipsOptions.includes(driverTip) && (
+            <WrapperTips>
+              {driverTipsOptions.map((option, i) => (
+                <TipCard
+                  key={i}
+                  className={`${option === optionSelected ? 'active' : ''}`}
+                  onClick={() => handlerChangeOption(option)}
+                >
+                  {`${isFixedPrice ? parsePrice(option) : `${option}%`}`}
+                </TipCard>
+              ))}
+            </WrapperTips>
+            {!driverTipsOptions.includes(driverTip) && driverTip > 0 && (
               <DriverTipMessage>
                 {t('CUSTOM_DRIVER_TIP_AMOUNT', 'The driver\'s current tip comes from a custom option')}
               </DriverTipMessage>
@@ -62,13 +69,13 @@ const DriverTipsUI = (props) => {
         ) : (
           <FormDriverTip>
             <DriverTipLabel>
-              {t('LOREM', 'Lorem ipsu Ad sit veniam laboris aliquip nisi.')}
+              {t('CUSTOM_DRIVER_TIP_MESSAGE', '100% of these tips go directly to your driver')}
             </DriverTipLabel>
             <WrapperInput>
               <Input
                 name='drivertip'
                 type='text'
-                placeholder='0'
+                placeholder={placeholderCurrency}
                 onChange={handleChangeDriverTip}
               />
               <Button
@@ -79,7 +86,7 @@ const DriverTipsUI = (props) => {
                   setvalue(0)
                 }}
               >
-                {t('APPLY', 'Apply')}
+                {t('APPLY_TIP', 'Apply Tip')}
               </Button>
             </WrapperInput>
             {parseFloat(driverTip || 0) > 0 && (
@@ -91,13 +98,11 @@ const DriverTipsUI = (props) => {
         )}
       </DriverTipContainer>
       {props.afterComponents?.map((AfterComponent, i) => (
-        <AfterComponent key={i} {...props} />))
-      }
+        <AfterComponent key={i} {...props} />))}
       {props.afterElements?.map((AfterElement, i) => (
         <React.Fragment key={i}>
           {AfterElement}
-        </React.Fragment>))
-      }
+        </React.Fragment>))}
     </>
   )
 }

@@ -1,9 +1,10 @@
 import React from 'react'
 import { ProductIngredient as ProductIngredientController } from 'ordering-components'
-
-import { WrapIngredient } from './styles'
-import MdCheckBox from '@meronex/icons/md/MdCheckBox'
-import MdCheckBoxOutlineBlank from '@meronex/icons/md/MdCheckBoxOutlineBlank'
+import BsCheck from '@meronex/icons/bs/BsCheck'
+import {
+  Container,
+  CheckBoxContainer
+} from './styles'
 
 const ProductIngredientUI = (props) => {
   const {
@@ -14,18 +15,36 @@ const ProductIngredientUI = (props) => {
 
   return (
     <>
-      <WrapIngredient onClick={() => toggleSelect()}>
+      {props.beforeElements?.map((BeforeElement, i) => (
+        <React.Fragment key={i}>
+          {BeforeElement}
+        </React.Fragment>))
+      }
+      {props.beforeComponents?.map((BeforeComponent, i) => (
+        <BeforeComponent key={i} {...props} />))
+      }
+      <Container onClick={() => toggleSelect()}>
         <span>
           {state?.selected ? (
-            <MdCheckBox />
+            <CheckBoxContainer active>
+              <BsCheck />
+            </CheckBoxContainer>
           ) : (
-            <MdCheckBoxOutlineBlank disabled />
+            <CheckBoxContainer />
           )}
         </span>
         <span>
           {ingredient.name}
         </span>
-      </WrapIngredient>
+      </Container>
+      {props.afterComponents?.map((AfterComponent, i) => (
+        <AfterComponent key={i} {...props} />))
+      }
+      {props.afterElements?.map((AfterElement, i) => (
+        <React.Fragment key={i}>
+          {AfterElement}
+        </React.Fragment>))
+      }
     </>
   )
 }

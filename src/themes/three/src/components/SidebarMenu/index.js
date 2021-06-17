@@ -3,18 +3,18 @@ import IosMenu from '@meronex/icons/ios/IosMenu'
 import MdClose from '@meronex/icons/md/MdClose'
 import AiOutlineLogin from '@meronex/icons/ai/AiOutlineLogin'
 import AiOutlineUserAdd from '@meronex/icons/ai/AiOutlineUserAdd'
+import FaRegAddressCard from '@meronex/icons/fa/FaRegAddressCard'
 import FaRegListAlt from '@meronex/icons/fa/FaRegListAlt'
 import AiOutlineHome from '@meronex/icons/ai/AiOutlineHome'
 import BiStore from '@meronex/icons/bi/BiStore'
-import FaUserAlt from '@meronex/icons/fa/FaUserAlt'
-import AiFillAndroid from '@meronex/icons/ai/AiFillAndroid'
-import FaApple from '@meronex/icons/fa/FaApple'
-import { DropDownCircleImage } from '../../../../../components/Dropdown/style'
+import FaUserCircle from '@meronex/icons/fa/FaUserCircle'
+
 import { useEvent, useLanguage, useOrder } from 'ordering-components'
+
 import { useWindowSize } from '../../../../../hooks/useWindowSize'
 import { LogoutButton } from '../../../../../components/LogoutButton'
-import { Button } from '../../styles/Buttons'
-import { useTheme } from 'styled-components'
+import { DropDownCircleImage } from '../../../../../components/Dropdown/style'
+
 import {
   Container,
   IconContent,
@@ -26,17 +26,11 @@ import {
   MenuLinkText,
   TextInfo,
   MenuLinkSeparator,
-  WrappUserAccountContent,
-  WrappAccountText,
-  WrapDownloadAppLink,
-  DownloadAppDescription,
-  LogoWrap,
-  DownloadButtonGroup
+  WrapperUserAccountContent
 } from './styles'
 
 export const SidebarMenu = (props) => {
-  const { auth, user } = props
-  const theme = useTheme()
+  const { auth, user, isHideSignup, userCustomer } = props
   const [events] = useEvent()
   const [, t] = useLanguage()
   const [{ options }] = useOrder()
@@ -54,7 +48,7 @@ export const SidebarMenu = (props) => {
   const actionSidebar = (value) => {
     setIsMenuOpen(value)
     document.getElementById('sidebar_menu').style.width = value
-      ? width > 489 ? '300px' : '100vw'
+      ? width > 489 ? '340px' : '100vw'
       : '0'
   }
 
@@ -63,7 +57,7 @@ export const SidebarMenu = (props) => {
       if (width <= 489) {
         document.getElementById('sidebar_menu').style.width = '100vh'
       } else {
-        document.getElementById('sidebar_menu').style.width = '300px'
+        document.getElementById('sidebar_menu').style.width = '340px'
       }
     }
   }, [width])
@@ -73,12 +67,10 @@ export const SidebarMenu = (props) => {
       {props.beforeElements?.map((BeforeElement, i) => (
         <React.Fragment key={i}>
           {BeforeElement}
-        </React.Fragment>
-      ))}
+        </React.Fragment>))}
       {props.beforeComponents?.map((BeforeComponent, i) => (
-        <BeforeComponent key={i} {...props} />
-      ))}
-      <Container>
+        <BeforeComponent key={i} {...props} />))}
+      <Container auth={auth}>
         <IconContent
           isHome={isHome}
           aria-label='menu'
@@ -97,28 +89,53 @@ export const SidebarMenu = (props) => {
           >
             <MdClose />
           </MenuClose>
+
           {auth && (
-            <MenuLink
-              onClick={() => handleGoToPage({ page: 'profile' })}
-            >
-              <WrappUserAccountContent>
+            <MenuLink>
+              <WrapperUserAccountContent>
                 <DropDownCircleImage
                   src={user?.photo}
-                  fallback={<FaUserAlt />}
                 />
-                <WrappAccountText>
+                <p>
                   <span>{user.name} {user.lastname}</span>
-                  <span>{t('VIEW_ACCOUNT', 'View account')}</span>
-                </WrappAccountText>
-              </WrappUserAccountContent>
+                </p>
+              </WrapperUserAccountContent>
             </MenuLink>
           )}
+
+          {userCustomer && (
+            <MenuLink isHome={isHome} isCustomer={userCustomer}>
+              <WrappContent>
+                <MenuLinkIcon
+                  isHome={isHome}
+                  active={false}
+                >
+                  <FaUserCircle />
+                </MenuLinkIcon>
+                <MenuLinkText>
+                  <TextInfo
+                    isHome={isHome}
+                    active={false}
+                  >
+                    {`${userCustomer?.name} ${userCustomer?.lastname}`}
+                  </TextInfo>
+                </MenuLinkText>
+                <MenuLinkSeparator>
+                  <div>
+                    <hr />
+                  </div>
+                </MenuLinkSeparator>
+              </WrappContent>
+            </MenuLink>
+          )}
+
           <MenuLink
             isHome={isHome}
             onClick={() => handleGoToPage({ page: options?.address?.location ? 'search' : 'home' })}
           >
             <WrappContent>
               <MenuLinkIcon
+                isHome={isHome}
                 active={
                   window.location.pathname === '/' ||
                   window.location.pathname === '/home' ||
@@ -133,6 +150,7 @@ export const SidebarMenu = (props) => {
               </MenuLinkIcon>
               <MenuLinkText>
                 <TextInfo
+                  isHome={isHome}
                   active={
                     window.location.pathname === '/' ||
                     window.location.pathname === '/home' ||
@@ -158,10 +176,42 @@ export const SidebarMenu = (props) => {
             <>
               <MenuLink
                 isHome={isHome}
+                onClick={() => handleGoToPage({ page: 'profile' })}
+              >
+                <WrappContent>
+                  <MenuLinkIcon
+                    isHome={isHome}
+                    active={
+                      window.location.pathname === '/profile'
+                    }
+                  >
+                    <FaRegAddressCard />
+                  </MenuLinkIcon>
+                  <MenuLinkText>
+                    <TextInfo
+                      isHome={isHome}
+                      active={
+                        window.location.pathname === '/profile'
+                      }
+                    >
+                      {t('PROFILE', 'Profile')}
+                    </TextInfo>
+                  </MenuLinkText>
+                  <MenuLinkSeparator>
+                    <div>
+                      <hr />
+                    </div>
+                  </MenuLinkSeparator>
+                </WrappContent>
+              </MenuLink>
+
+              <MenuLink
+                isHome={isHome}
                 onClick={() => handleGoToPage({ page: 'orders' })}
               >
                 <WrappContent>
                   <MenuLinkIcon
+                    isHome={isHome}
                     active={
                       window.location.pathname === '/profile/orders'
                     }
@@ -170,6 +220,7 @@ export const SidebarMenu = (props) => {
                   </MenuLinkIcon>
                   <MenuLinkText>
                     <TextInfo
+                      isHome={isHome}
                       active={
                         window.location.pathname === '/profile/orders'
                       }
@@ -196,6 +247,7 @@ export const SidebarMenu = (props) => {
               >
                 <WrappContent>
                   <MenuLinkIcon
+                    isHome={isHome}
                     active={
                       window.location.pathname === '/signin' ||
                       window.location.pathname === '/login'
@@ -205,6 +257,7 @@ export const SidebarMenu = (props) => {
                   </MenuLinkIcon>
                   <MenuLinkText>
                     <TextInfo
+                      isHome={isHome}
                       active={
                         window.location.pathname === '/signin' ||
                         window.location.pathname === '/login'
@@ -220,64 +273,48 @@ export const SidebarMenu = (props) => {
                   </MenuLinkSeparator>
                 </WrappContent>
               </MenuLink>
-              <MenuLink
-                isHome={isHome}
-                onClick={() => handleGoToPage({ page: 'signup' })}
-              >
-                <WrappContent>
-                  <MenuLinkIcon
-                    active={
-                      window.location.pathname === '/signup'
-                    }
-                  >
-                    <AiOutlineUserAdd />
-                  </MenuLinkIcon>
-                  <MenuLinkText>
-                    <TextInfo
+              {!isHideSignup && (
+                <MenuLink
+                  isHome={isHome}
+                  onClick={() => handleGoToPage({ page: 'signup' })}
+                >
+                  <WrappContent>
+                    <MenuLinkIcon
+                      isHome={isHome}
                       active={
                         window.location.pathname === '/signup'
                       }
                     >
-                      {t('SIGNUP', 'Sign up')}
-                    </TextInfo>
-                  </MenuLinkText>
-                  <MenuLinkSeparator>
-                    <div>
-                      <hr />
-                    </div>
-                  </MenuLinkSeparator>
-                </WrappContent>
-              </MenuLink>
+                      <AiOutlineUserAdd />
+                    </MenuLinkIcon>
+                    <MenuLinkText>
+                      <TextInfo
+                        isHome={isHome}
+                        active={
+                          window.location.pathname === '/signup'
+                        }
+                      >
+                        {t('SIGNUP', 'Sign up')}
+                      </TextInfo>
+                    </MenuLinkText>
+                    <MenuLinkSeparator>
+                      <div>
+                        <hr />
+                      </div>
+                    </MenuLinkSeparator>
+                  </WrappContent>
+                </MenuLink>
+              )}
             </>
           )}
-          <WrapDownloadAppLink>
-            <DownloadAppDescription>
-              <LogoWrap>
-                <img alt='Isotype' width='45px' height='45px' src={theme?.images?.logos?.isotype} loading='lazy' />
-              </LogoWrap>
-              <p>{t('LOVE_IN_THE_APP', 'There’s more to love in the app.')}</p>
-            </DownloadAppDescription>
-            <DownloadButtonGroup>
-              <Button color='secundary' initialIcon>
-                <FaApple />
-                {t('IPHONE', 'iPhone')}
-              </Button>
-              <Button color='secundary' initialIcon>
-                <AiFillAndroid />
-                {t('ANDROID', 'Android')}
-              </Button>
-            </DownloadButtonGroup>
-          </WrapDownloadAppLink>
         </SidebarContent>
       </Container>
       {props.afterComponents?.map((AfterComponent, i) => (
-        <AfterComponent key={i} {...props} />
-      ))}
+        <AfterComponent key={i} {...props} />))}
       {props.afterElements?.map((AfterElement, i) => (
         <React.Fragment key={i}>
           {AfterElement}
-        </React.Fragment>
-      ))}
+        </React.Fragment>))}
     </>
   )
 }

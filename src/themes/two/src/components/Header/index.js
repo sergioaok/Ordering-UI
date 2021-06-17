@@ -1,57 +1,93 @@
-import React, { useState, useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
-import { useSession, useLanguage, useOrder, useEvent, useConfig } from 'ordering-components'
+import React, { useState, useEffect, useRef } from 'react'
+import { useSession, useLanguage, useOrder, useEvent, useConfig, useCustomer } from 'ordering-components'
 import { useTheme } from 'styled-components'
-import { SidebarMenu } from '../SidebarMenu'
-import { MomentPopover } from '../MomentPopover'
-import { AddressesPopover } from '../AddressesPopover'
-import { CartPopover } from '../CartPopover'
-import { MomentContent } from '../MomentContent'
-import { AddressList } from '../AddressList'
-import { AddressForm } from '../AddressForm'
-import { HeaderOption } from '../HeaderOption'
-import { Modal } from '../Modal'
-import { CartContent } from '../CartContent'
-import { LanguageSelector } from '../LanguageSelector'
+import FaUserCircle from '@meronex/icons/fa/FaUserCircle'
+import MdClose from '@meronex/icons/md/MdClose'
+
 import {
   Header as HeaderContainer,
   InnerHeader,
   LogoHeader,
-  CenterHeader,
   LeftHeader,
   RightHeader,
   Menu,
   MenuLink,
-  ToText,
-  WrapMomentAndAddress,
-  HeaderMobileViewBottom,
-  HeaderMobileViewInnerBottom
+  SubMenu,
+  CustomerInfo,
+  UserEdit,
+  ToTitle
 } from './styles'
-import { capitalize } from '../../../../../utils'
 import { useWindowSize } from '../../../../../hooks/useWindowSize'
 import { useOnlineStatus } from '../../../../../hooks/useOnlineStatus'
+import { capitalize } from '../../../../../utils'
+
+import { LanguageSelector } from '../LanguageSelector'
+import { AddressesPopover } from '../AddressesPopover'
+import { UserPopover } from '../../../../../components/UserPopover'
+import { MomentPopover } from '../MomentPopover'
+import { CartPopover } from '../CartPopover'
 import { OrderTypeSelectorHeader } from '../OrderTypeSelectorHeader'
+import { CartContent } from '../../../../../components/CartContent'
+import { Modal } from '../../../../../components/Modal'
+import { MomentContent } from '../MomentContent'
+import { AddressList } from '../../../../../components/AddressList'
+import { AddressForm } from '../../../../../components/AddressForm'
+import { HeaderOption } from '../HeaderOption'
+import { SidebarMenu } from '../SidebarMenu'
+import { UserDetails } from '../../../../../components/UserDetails'
+import { Confirm } from '../../../../../components/Confirm'
+
 export const Header = (props) => {
-  const { isHome } = props
-  const location = useLocation()
+  const {
+    isHome,
+    location,
+    isShowOrderOptions,
+    isHideSignup,
+    isCustomerMode
+  } = props
+
   const [events] = useEvent()
   const [, t] = useLanguage()
   const [{ auth }] = useSession()
-  const [orderState] = useOrder()
+  const [orderState, { refreshOrderOptions }] = useOrder()
   const [openPopover, setOpenPopover] = useState({})
   const theme = useTheme()
   const [configState] = useConfig()
-  const [modalIsOpen, setModalIsOpen] = useState(false)
-  const [modalSelected, setModalSelected] = useState(null)
+  const [customerState, { deleteUserCustomer }] = useCustomer()
 
-  const isBusinessListingPage = location.pathname === '/delivery' || location.pathname === '/pickup' || location.pathname === '/eatin' || location.pathname === '/curbside' || location.pathname === '/drivethru' || location.pathname.includes('/store')
-  const isAuthPage = location.pathname === '/signin' || location.pathname === '/login' || location.pathname === '/signup'
+  const clearCustomer = useRef(null)
+
+  const [modalIsOpen, setModalIsOpen] = useState(false)
+  const [customerModalOpen, setCustomerModalOpen] = useState(false)
+  const [modalSelected, setModalSelected] = useState(null)
+  const [confirm, setConfirm] = useState({ open: false, content: null, handleOnAccept: null })
+
+  const cartsWithProducts = (orderState?.carts && Object.values(orderState?.carts).filter(cart => cart.products.length > 0)) || null
 
   const windowSize = useWindowSize()
   const onlineStatus = useOnlineStatus()
-  const cartsWithProducts = Object.values(orderState?.carts).filter(cart => cart.products.length > 0)
+
+  const userCustomer = JSON.parse(window.localStorage.getItem('user-customer'))
 
   const configTypes = configState?.configs?.order_types_allowed?.value.split('|').map(value => Number(value)) || []
+
+  const handleClickUserCustomer = (e) => {
+    const isActionsClick = clearCustomer.current?.contains(e?.target)
+    if (isActionsClick) {
+      setConfirm({
+        open: true,
+        content: t('QUESTION_CLEAR_CUSTOMER', 'Are you sure that you want to clear the customer?'),
+        handleOnAccept: () => {
+          deleteUserCustomer(true)
+          refreshOrderOptions()
+          handleGoToPage({ page: 'home' })
+          setConfirm({ ...confirm, open: false })
+        }
+      })
+      return
+    }
+    setCustomerModalOpen(true)
+  }
 
   const openModal = (opt) => {
     setModalSelected(opt)
@@ -64,6 +100,7 @@ export const Header = (props) => {
       [type]: !openPopover[type]
     })
   }
+
   const handleClosePopover = (type) => {
     setOpenPopover({
       ...openPopover,
@@ -71,97 +108,192 @@ export const Header = (props) => {
     })
   }
 
-  const handleAddProduct = () => {
-    handleTogglePopover('cart')
-  }
-
   const handleGoToPage = (data) => {
     events.emit('go_to_page', data)
   }
 
   useEffect(() => {
-    if (windowSize.width > 992) return
-    events.on('cart_product_added', handleAddProduct)
-    return () => events.off('cart_product_added', handleAddProduct)
-  }, [windowSize.width])
+    if (isCustomerMode) {
+      setCustomerModalOpen(false)
+    }
+  }, [customerState?.user?.address])
 
   return (
     <>
-      <HeaderContainer isHome={isHome} auth={auth} isAuthPage={isAuthPage}>
+      {props.beforeElements?.map((BeforeElement, i) => (
+        <React.Fragment key={i}>
+          {BeforeElement}
+        </React.Fragment>))}
+      {props.beforeComponents?.map((BeforeComponent, i) => (
+        <BeforeComponent key={i} {...props} />))}
+      <HeaderContainer home={isHome}>
         <InnerHeader>
           <LeftHeader>
             <SidebarMenu
               auth={auth}
-              configTypes={configTypes}
+              isHideSignup={isHideSignup}
+              userCustomer={userCustomer}
             />
-            {(!auth && !isAuthPage) && <LanguageSelector />}
-            {!configState?.loading && configTypes.length > 0 && isBusinessListingPage && windowSize.width > 992 && (
-              <OrderTypeSelectorHeader
-                dropDownStyle
-                configTypes={configTypes}
-              />
+            {!isHome && (
+              <>
+                {windowSize.width < 768 ? (
+                  <LogoHeader>
+                    <img
+                      alt='Isotype'
+                      width='35px'
+                      height='45px'
+                      src={isHome ? theme?.images?.logos?.isotypeInvert : theme?.images?.logos?.isotype} loading='lazy'
+                      onClick={() => handleGoToPage({ page: orderState?.options?.address?.location && !isCustomerMode ? 'search' : 'home' })}
+                    />
+                  </LogoHeader>
+                ) : (
+                  <LogoHeader>
+                    <img
+                      alt='Logotype'
+                      width='170px'
+                      height='45px'
+                      src={isHome ? theme?.images?.logos?.logotypeInvert : theme?.images?.logos?.logotype} loading='lazy'
+                      onClick={() => handleGoToPage({ page: orderState?.options?.address?.location && !isCustomerMode ? 'search' : 'home' })}
+                    />
+                  </LogoHeader>
+                )}
+              </>
             )}
-            {onlineStatus && (isBusinessListingPage || (isHome && auth)) && (
-              windowSize.width > 992 && (
-                <WrapMomentAndAddress>
-                  <MomentPopover
-                    open={openPopover.moment}
-                    onClick={() => handleTogglePopover('moment')}
-                    onClose={() => handleClosePopover('moment')}
+            {isShowOrderOptions && (
+              <Menu className='left-header'>
+                {isCustomerMode && windowSize.width > 450 && (
+                  <CustomerInfo
                     isHome={isHome}
-                  />
-                  <ToText>{t('TO', 'to')}</ToText>
-                  <AddressesPopover
-                    auth={auth}
-                    addressState={orderState?.options?.address}
-                    open={openPopover.addresses}
-                    onClick={() => handleTogglePopover('addresses')}
-                    onClose={() => handleClosePopover('addresses')}
-                    isHome={isHome}
-                  />
-                </WrapMomentAndAddress>
-              ))}
+                    onClick={(e) => handleClickUserCustomer(e)}
+                  >
+                    <span>
+                      <FaUserCircle />
+                      <p>{userCustomer?.name} {userCustomer?.lastname}</p>
+                    </span>
+                    <span
+                      style={styles.headCustomer}
+                      ref={clearCustomer}
+                    >
+                      <MdClose style={styles.clearCustomer} />
+                    </span>
+                  </CustomerInfo>
+                )}
+                {!configState?.loading && configTypes.length > 0 && (
+                  <OrderTypeSelectorHeader configTypes={configTypes} />
+                )}
+                {onlineStatus && windowSize.width > 992 && (
+                  <>
+                    <MomentPopover
+                      open={openPopover.moment}
+                      onClick={() => handleTogglePopover('moment')}
+                      onClose={() => handleClosePopover('moment')}
+                      isHome={isHome}
+                    />
+                    <ToTitle home={isHome}>
+                      {t('TO', 'to')}
+                    </ToTitle>
+                    <AddressesPopover
+                      auth={auth}
+                      addressState={orderState?.options?.address}
+                      open={openPopover.addresses}
+                      onClick={() => handleTogglePopover('addresses')}
+                      onClose={() => handleClosePopover('addresses')}
+                      isHome={isHome}
+                    />
+                  </>
+                )}
+              </Menu>
+            )}
           </LeftHeader>
-          <CenterHeader isHome={isHome}>
-            <LogoHeader isHome={isHome} onClick={() => handleGoToPage({ page: orderState?.options?.address?.location ? 'search' : 'home' })}>
-              <img alt='Logotype' width='170px' height='45px' src={isHome ? theme?.images?.logos?.logotypeInvert : theme?.images?.logos?.logotype} loading='lazy' />
-              <img alt='Isotype' width='35px' height='45px' src={isHome ? theme?.images?.logos?.isotypeInvert : theme?.images?.logos?.isotype} loading='lazy' />
-            </LogoHeader>
-          </CenterHeader>
           {onlineStatus && (
             <RightHeader>
+              <LanguageSelector />
               <Menu>
                 {
-                  !auth && isHome && (
+                  !auth && windowSize.width > 870 && (
                     <>
-                      <MenuLink onClick={() => handleGoToPage({ page: 'signin' })} name='signin'>{t('SIGN_IN', 'Sign in')}</MenuLink>
-                      <MenuLink onClick={() => handleGoToPage({ page: 'signup' })} highlight={1} name='signup'>{t('SIGN_UP', 'Sign up')}</MenuLink>
+                      <MenuLink home={isHome} onClick={() => handleGoToPage({ page: 'signin' })} name='signin'>{t('SIGN_IN', 'Sign in')}</MenuLink>
+                      {!isHideSignup && (
+                        <MenuLink onClick={() => handleGoToPage({ page: 'signup' })} highlight={1} name='signup'>{t('SIGN_UP', 'Sign up')}</MenuLink>
+                      )}
                     </>
                   )
                 }
-                {(!isHome || (isHome && auth)) && !isAuthPage && auth && (
-                  windowSize.width > 768 ? (
-                    <CartPopover
-                      open={openPopover.cart}
-                      carts={cartsWithProducts}
-                      onClick={() => handleTogglePopover('cart')}
-                      onClose={() => handleClosePopover('cart')}
-                      auth={auth}
-                      location={location}
-                    />
-                  ) : (
-                    <HeaderOption
-                      variant='cart'
-                      totalCarts={cartsWithProducts?.length}
-                      onClick={(variant) => openModal(variant)}
-                    />
+                {
+                  auth && (
+                    <>
+                      {windowSize.width > 768 && (
+                        <UserPopover
+                          withLogout
+                          isCustomerMode={isCustomerMode}
+                          open={openPopover.user}
+                          isHome={isHome}
+                          onClick={() => handleTogglePopover('user')}
+                          onClose={() => handleClosePopover('user')}
+                        />
+                      )}
+                      {isShowOrderOptions && (
+                        windowSize.width > 768 ? (
+                          <CartPopover
+                            open={openPopover.cart}
+                            carts={cartsWithProducts}
+                            onClick={() => handleTogglePopover('cart')}
+                            onClose={() => handleClosePopover('cart')}
+                            auth={auth}
+                            location={location}
+                          />
+                        ) : (
+                          <HeaderOption
+                            variant='cart'
+                            totalCarts={cartsWithProducts?.length}
+                            onClick={(variant) => openModal(variant)}
+                          />
+                        )
+                      )}
+                    </>
                   )
-                )}
-
+                }
               </Menu>
             </RightHeader>
           )}
         </InnerHeader>
+        {onlineStatus && isShowOrderOptions && (
+          windowSize.width > 768 && windowSize.width <= 992 ? (
+            <SubMenu>
+              <AddressesPopover
+                auth={auth}
+                addressState={orderState?.options?.address}
+                open={openPopover.addresses}
+                onClick={() => handleTogglePopover('addresses')}
+                onClose={() => handleClosePopover('addresses')}
+                isHome={isHome}
+              />
+              <MomentPopover
+                open={openPopover.moment}
+                onClick={() => handleTogglePopover('moment')}
+                onClose={() => handleClosePopover('moment')}
+                isHome={isHome}
+              />
+            </SubMenu>
+          ) : (
+            <SubMenu>
+              <HeaderOption
+                variant='address'
+                addressState={orderState?.options?.address?.address?.split(',')?.[0]}
+                onClick={(variant) => openModal(variant)}
+                isHome={isHome}
+              />
+              <HeaderOption
+                variant='moment'
+                momentState={orderState?.options?.moment}
+                onClick={configState?.configs?.max_days_preorder?.value === -1 || configState?.configs?.max_days_preorder?.value === 0
+                  ? null
+                  : (variant) => openModal(variant)}
+                isHome={isHome}
+              />
+            </SubMenu>
+          )
+        )}
         {modalIsOpen && (
           <Modal
             title={t(modalSelected.toUpperCase(), capitalize(modalSelected))}
@@ -182,6 +314,7 @@ export const Header = (props) => {
                 <AddressList
                   isModal
                   changeOrderAddressWithDefault
+                  userId={isNaN(userCustomer?.id) ? null : userCustomer?.id}
                   onCancel={() => setModalIsOpen(false)}
                   onAccept={() => setModalIsOpen(false)}
                 />
@@ -199,38 +332,68 @@ export const Header = (props) => {
             )}
           </Modal>
         )}
-      </HeaderContainer>
-      {onlineStatus && isBusinessListingPage && (
-        windowSize.width <= 992 && (
-          <HeaderMobileViewBottom>
-            <HeaderMobileViewInnerBottom>
-              {!configState?.loading && configTypes.length > 0 && isBusinessListingPage && (
-                <OrderTypeSelectorHeader
-                  dropDownStyle
-                  configTypes={configTypes}
-                />
+        {isCustomerMode && customerModalOpen && (
+          <Modal
+            open={customerModalOpen}
+            width='60%'
+            onClose={() => setCustomerModalOpen(false)}
+          >
+            <UserEdit>
+              {!customerState?.loading && (
+                <>
+                  <UserDetails
+                    userData={customerState?.user}
+                    userId={customerState?.user?.id}
+                    isCustomerMode
+                  />
+                  <AddressList
+                    isModal
+                    userId={customerState?.user?.id}
+                    changeOrderAddressWithDefault
+                    userCustomerSetup={customerState.user}
+                    setCustomerModalOpen={setCustomerModalOpen}
+                  />
+                </>
               )}
-              <WrapMomentAndAddress>
-                <HeaderOption
-                  variant='moment'
-                  momentState={orderState?.options?.moment}
-                  onClick={configState?.configs?.max_days_preorder?.value === -1 || configState?.configs?.max_days_preorder?.value === 0
-                    ? null
-                    : (variant) => openModal(variant)}
-                  isHome={isHome}
-                />
-                <ToText>{t('TO', 'to')}</ToText>
-                <HeaderOption
-                  variant='address'
-                  addressState={orderState?.options?.address?.address?.split(',')?.[0]}
-                  onClick={(variant) => openModal(variant)}
-                  isHome={isHome}
-                />
-              </WrapMomentAndAddress>
-            </HeaderMobileViewInnerBottom>
-          </HeaderMobileViewBottom>
-        )
-      )}
+            </UserEdit>
+          </Modal>
+        )}
+        <Confirm
+          title={t('CUSTOMER', 'Customer')}
+          content={confirm.content}
+          acceptText={t('ACCEPT', 'Accept')}
+          open={isCustomerMode && confirm.open}
+          onClose={() => setConfirm({ ...confirm, open: false })}
+          onCancel={() => setConfirm({ ...confirm, open: false })}
+          onAccept={confirm.handleOnAccept}
+          closeOnBackdrop={false}
+        />
+      </HeaderContainer>
+      {props.afterComponents?.map((AfterComponent, i) => (
+        <AfterComponent key={i} {...props} />))}
+      {props.afterElements?.map((AfterElement, i) => (
+        <React.Fragment key={i}>
+          {AfterElement}
+        </React.Fragment>))}
     </>
   )
+}
+
+const styles = {
+  headCustomer: {
+    margin: 0,
+    height: 20,
+    width: 20,
+    backgroundColor: '#CCCCCC',
+    borderRadius: '100%',
+    marginLeft: 5
+  },
+  clearCustomer: {
+    margin: 0,
+    fontSize: 20
+  }
+}
+
+Header.defaultProps = {
+  isShowOrderOptions: true
 }

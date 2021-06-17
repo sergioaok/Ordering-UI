@@ -3,6 +3,7 @@ import React, { useRef, useEffect } from 'react'
 import { Input } from '../../styles/Inputs'
 import { useTheme } from '../../../../../contexts/ThemeContext'
 import { useLanguage } from 'ordering-components'
+import MdcClose from '@meronex/icons/mdc/MdcClose'
 
 import {
   BusinessSearch,
@@ -15,9 +16,7 @@ export const SearchBar = (props) => {
     search,
     placeholder,
     lazyLoad,
-    isEnterKeyLoad,
-    isCustomMode,
-    externalBusinessMap
+    isCustomLayout
   } = props
   const [theme] = useTheme()
   const [, t] = useLanguage()
@@ -25,21 +24,16 @@ export const SearchBar = (props) => {
   let previousSearch
   const el = useRef()
   const onChangeSearch = e => {
-    if (isEnterKeyLoad) {
-      if (e.keyCode === 13) {
+    if (e.keyCode === 13) return
+
+    if (previousSearch !== e.target.value) {
+      if (!lazyLoad) {
         onSearch(e.target.value)
-      }
-    } else {
-      if (e.keyCode === 13) return
-      if (previousSearch !== e.target.value) {
-        if (!lazyLoad) {
+      } else {
+        clearTimeout(timeout)
+        timeout = setTimeout(function () {
           onSearch(e.target.value)
-        } else {
-          clearTimeout(timeout)
-          timeout = setTimeout(function () {
-            onSearch(e.target.value)
-          }, 750)
-        }
+        }, 750)
       }
     }
     previousSearch = e.target.value
@@ -60,25 +54,42 @@ export const SearchBar = (props) => {
   }, [search])
 
   return (
-    <BusinessSearch className={!externalBusinessMap && 'search-bar'} externalBusinessMap={externalBusinessMap} hasValue={el.current?.value}>
-      <Input
-        ref={el}
-        name='search'
-        aria-label='search'
-        placeholder={placeholder}
-        autoComplete='off'
-        maxLength='500'
-      />
-      <DeleteContent>
-        {isCustomMode ? (
-          <img src={theme?.images?.general?.searchIcon} />
-        ) : (
-          <>
-            {el.current?.value ? <span onClick={handleClear}>{t('CLEAR', 'Clear')}</span> : <img src={theme?.images?.general?.searchIcon} />}
-          </>
-        )}
-      </DeleteContent>
-
-    </BusinessSearch>
+    <>
+      {props.beforeElements?.map((BeforeElement, i) => (
+        <React.Fragment key={i}>
+          {BeforeElement}
+        </React.Fragment>))
+      }
+      {props.beforeComponents?.map((BeforeComponent, i) => (
+        <BeforeComponent key={i} {...props} />))
+      }
+      <BusinessSearch
+        className={!isCustomLayout && 'search-bar'}
+        isCustomLayout={isCustomLayout}
+        hasValue={el.current?.value}
+      >
+        <DeleteContent>
+          {el.current?.value
+            ? <MdcClose onClick={handleClear} />
+            : <img src={theme?.images?.general?.searchIcon} />}
+        </DeleteContent>
+        <Input
+          ref={el}
+          name='search'
+          aria-label='search'
+          placeholder={placeholder}
+          autoComplete='off'
+          maxLength='500'
+        />
+      </BusinessSearch>
+      {props.afterComponents?.map((AfterComponent, i) => (
+        <AfterComponent key={i} {...props} />))
+      }
+      {props.afterElements?.map((AfterElement, i) => (
+        <React.Fragment key={i}>
+          {AfterElement}
+        </React.Fragment>))
+      }
+    </>
   )
 }

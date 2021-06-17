@@ -26,6 +26,7 @@ import {
   useOrder,
   useSession,
   useLanguage,
+  useConfig,
   BusinessList as BusinessListController
 } from 'ordering-components'
 
@@ -46,7 +47,7 @@ const BusinessesListingUI = (props) => {
   const [, t] = useLanguage()
   const [orderState] = useOrder()
   const [{ auth }] = useSession()
-
+  const [{ configs }] = useConfig()
   const [modals, setModals] = useState({ listOpen: false, formOpen: false })
   const [alertState, setAlertState] = useState({ open: false, content: [] })
   const [activeMap, setActiveMap] = useState(false)
@@ -124,13 +125,14 @@ const BusinessesListingUI = (props) => {
       {props.beforeComponents?.map((BeforeComponent, i) => (
         <BeforeComponent key={i} {...props} />))}
       <BusinessContainer>
-        <BusinessTypeFilter
-          images={props.images}
-          businessTypes={props.businessTypes}
-          defaultBusinessType={props.defaultBusinessType}
-          handleChangeBusinessType={handleChangeBusinessType}
-        />
-
+        {((configs && configs?.business_listing_categories !== false) || !isCustomLayout) && (
+          <BusinessTypeFilter
+            images={props.images}
+            businessTypes={props.businessTypes}
+            defaultBusinessType={props.defaultBusinessType}
+            handleChangeBusinessType={handleChangeBusinessType}
+          />
+        )}
         <WrapperSearch isCustomLayout={isCustomLayout}>
           <SearchBar
             lazyLoad
@@ -161,10 +163,10 @@ const BusinessesListingUI = (props) => {
               titleContent={t('CARTS', 'Carts')}
               businessesIds={businessesIds}
               customArray={
-                getCustomArray(
-                  orderState.carts)?.filter(cart => cart.products.length > 0
-                )
+                getCustomArray(orderState.carts)?.filter(cart => cart.products.length > 0)
               }
+              isCustomLayout
+              isBusinessesLoading={businessesList.loading}
             />
             <OrdersOption
               horizontal
@@ -173,6 +175,8 @@ const BusinessesListingUI = (props) => {
               businessesIds={businessesIds}
               onRedirectPage={onRedirectPage}
               userCustomerId={userCustomer?.id}
+              isCustomLayout
+              isBusinessesLoading={businessesList.loading}
             />
           </>
         )}
@@ -207,6 +211,7 @@ const BusinessesListingUI = (props) => {
                 business={business}
                 handleCustomClick={handleBusinessClick}
                 orderType={orderState?.options?.type}
+                isCustomLayout={isCustomLayout}
               />
             ))
           }

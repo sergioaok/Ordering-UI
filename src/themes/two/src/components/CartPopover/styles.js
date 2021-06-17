@@ -1,29 +1,25 @@
-import styled from 'styled-components'
-import { darken } from 'polished'
+import styled, { css } from 'styled-components'
 
-export const HeaderItem = styled.button`
-  background-color: ${props => props.theme.colors.primary};
-  border-radius: 5px;
-  border: none;
-  outline: none;
+export const HeaderItem = styled.div`
   cursor: pointer;
-  padding: 10px 20px;
-  span {
-    display: flex;
-    align-items: center;
-    column-gap: 15px;
-    p {
-     color: #fff;
-     margin: 0px;
-    }
-    svg {
-      color: #fff;
-      font-size: 24px;
-    }
+  background-color: ${props => props.theme.colors.primary};
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  padding: 7px 15px;
+  p {
+    color: #FFF;
+    margin: 0px;
+    font-size: 14px;
+    ${props => props.theme?.rtl ? css`
+      margin-right: 5px;
+    ` : css`
+      margin-left: 5px;
+    `}
   }
-
-  &:active {
-    background-color:  ${props => darken(0.07, props.theme.colors.primary)};
+  svg {
+    color: #FFF;
+    font-size: 20px;
   }
 `
 
