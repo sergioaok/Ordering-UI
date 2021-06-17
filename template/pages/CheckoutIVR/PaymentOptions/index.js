@@ -85,7 +85,7 @@ const PaymentOptionsUI = (props) => {
 
   useEffect(() => {
     let timeout
-    if(cart?.pay_reference){
+    if(cart?.pay_reference || cart?.paymethod_data?.pay_reference){
       setIsOpenIvrModal(true)
       timeout = setInterval(() => {
         if(cart.status === 2){
@@ -98,7 +98,7 @@ const PaymentOptionsUI = (props) => {
         clearTimeout(timeout)
       }
     }
-  }, [cart?.pay_reference])
+  }, [cart?.pay_reference, cart?.paymethod_data?.pay_reference])
 
   useEffect(() => {
     if (paymethodsList.paymethods.length === 1) {
@@ -158,7 +158,7 @@ const PaymentOptionsUI = (props) => {
             paymethodsList.paymethods.sort((a, b) => a.id - b.id).map(paymethod => (
               <React.Fragment key={paymethod.id}>
                 {
-                  (!isCustomerMode || (isCustomerMode && (paymethod.gateway === 'card_delivery' || paymethod.gateway === 'cash' || paymethod.gateway === 'ivr'))) && (
+                  (!isCustomerMode || (isCustomerMode && (paymethod.gateway === 'card_delivery' || paymethod.gateway === 'cash' || paymethod.gateway === 'ivrpay'))) && (
                     <PayCard
                       isDisabled={isDisabled}
                       className={`card ${paymethodSelected?.id === paymethod.id ? 'active' : ''}`}
@@ -318,6 +318,8 @@ const PaymentOptionsUI = (props) => {
             handleStripeRedirect={handlePaymethodDataChange}
           />
         </Modal>
+
+        {/* IVR */}
         <Modal
           title={t('IVR', 'IVR')}
           open={isOpenIvrModal && cart?.status === 2}
@@ -325,7 +327,7 @@ const PaymentOptionsUI = (props) => {
           onClose={() => handleCloseIvr()}
         >
           <PaymentOptionIvr
-            payReference={cart?.pay_reference}
+            payReference={cart?.pay_reference || cart?.paymethod_data?.pay_reference}
             cartStatus={cart?.status}
             onClose={() => handleCloseIvr()}
             confirmCartIvr={confirmCartIvr}

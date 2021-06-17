@@ -19,7 +19,8 @@ export const OrderDetailsPage = (props) => {
     },
     handleBusinessRedirect: (slug) => {
       history.push(`/store/${slug}`)
-    }
+    },
+    isCustomerMode: true
   }
   return (
     <>

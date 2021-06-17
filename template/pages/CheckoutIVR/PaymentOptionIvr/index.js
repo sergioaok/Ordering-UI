@@ -21,9 +21,6 @@ export const PaymentOptionIvr = (props) => {
         {t('CODE_IRV', 'The IVR code is')}: {payReference}
       </Code>
       <WrapperButtons>
-        <Button onClick={onClose}>
-          {t('CANCEL_PAYMENT', 'Cancel payment')}
-        </Button>
         <Button color='primary' onClick={() => confirmCartIvr()}>
           {t('CHECK_STATUS_MANUALLY', 'Check status manually')}
         </Button>

@@ -206,6 +206,7 @@ const CheckoutUI = (props) => {
                 apiKey={configs?.google_maps_api_key?.value}
                 mapConfigs={mapConfigs}
                 isCustomerMode={isCustomerMode}
+                isFromCheckout
               />
             )
           )}
@@ -347,10 +348,11 @@ const CheckoutUI = (props) => {
                 setErrorCash={setErrorCash}
                 handleOrderRedirect={handleOrderRedirect}
                 isPaymethodNull={paymethodSelected}
-                paymethodsCallCenterCustom={['cash', 'card_delivery', 'ivr']}
+                paymethodsCallCenterCustom={['cash', 'card_delivery', 'ivrpay']}
                 setAlertState={setAlertState}
                 isOpenIvrModal={isOpenIvrModal}
                 setIsOpenIvrModal={setIsOpenIvrModal}
+                isCustomerMode
               />
             </PaymentMethodContainer>
           )}
@@ -648,59 +650,76 @@ export const CheckoutPage = (props) => {
   const [events] = useEvent()
   const [errors, setErrors] = useState([])
 
+  const stripePayments = ['stripe', 'stripe_connect', 'stripe_direct']
+
   const useQuery = () => {
     return new URLSearchParams(useLocation().search)
   }
 
   const actionsBeforePlace = async (paymethod, cart) => {
-    switch (paymethod.gateway) {
-      case 'stripe':
-      case 'stripe_connect':
-      case 'stripe_direct': {
-        const stripe = await loadStripe(paymethod.paymethod.credentials.publishable)
-        await stripe.confirmCardPayment(cart.paymethod_data.result.client_secret)
+    if (stripePayments.includes(paymethod.gateway)) {
+      try {
+        const stripe = await loadStripe(paymethod.paymethod?.credentials?.publishable)
+        const result = await stripe.confirmCardPayment(cart.paymethod_data.result.client_secret)
+        if (result?.paymentIntent?.status === 'succeeded') {
+          try {
+            const confirmCartRes = await confirmCart(cartUuid)
+            if (confirmCartRes.error) {
+              setErrors([confirmCartRes.error.message])
+            }
+            if (confirmCartRes.result.order?.uuid) {
+              events.emit('go_to_page', { page: 'order_detail', params: { orderId: confirmCartRes.result.order.uuid }, replace: true })
+            }
+          } catch (error) {
+            setErrors([error.message])
+          }
+        }
+        if (result?.error?.code === 'payment_intent_authentication_failure') {
+          setErrors([t('CART_STATUS_CANCEL_MESSAGE', 'The payment has not been successful, please try again')])
+        }
         return true
+      } catch (error) {
+        setErrors([error.message])
       }
-      case 'stripe_redirect': {
-        const stripe = await loadStripe(paymethod.paymethod.credentials.publishable)
-        const confirmOption = {
-          bancontact: {
-            name: 'confirmBancontactPayment',
-            type: 1
-          },
-          alipay: {
-            name: 'confirmAlipayPayment',
-            type: 2
-          },
-          giropay: {
-            name: 'confirmGiropayPayment',
-            type: 1
-          },
-          ideal: {
-            name: 'confirmIdealPayment',
-            type: 2
-          }
+    } else if (paymethod.gateway === 'stripe_redirect') {
+      const stripe = await loadStripe(paymethod.paymethod?.credentials?.publishable)
+      const confirmOption = {
+        bancontact: {
+          name: 'confirmBancontactPayment',
+          type: 1
+        },
+        alipay: {
+          name: 'confirmAlipayPayment',
+          type: 2
+        },
+        giropay: {
+          name: 'confirmGiropayPayment',
+          type: 1
+        },
+        ideal: {
+          name: 'confirmIdealPayment',
+          type: 2
         }
-        const params = {
-          1: {
-            payment_method: {
-              billing_details: cart.paymethod_data.data.owner
-            },
-            return_url: `${window.location.origin}/checkout/${cartUuid}`
-          },
-          2: {
-            return_url: `${window.location.origin}/checkout/${cartUuid}`
-          }
-        }
-        stripe[confirmOption[paymethod.data.type].name](
-          cart.paymethod_data.result.client_secret,
-          params[confirmOption[paymethod.data.type].type]
-        ).then((result) => {
-          if (result?.error) {
-            setErrors([...errors, result?.error?.message])
-          }
-        })
       }
+      const params = {
+        1: {
+          payment_method: {
+            billing_details: cart.paymethod_data.data.owner
+          },
+          return_url: `${window.location.origin}/checkout/${cartUuid}`
+        },
+        2: {
+          return_url: `${window.location.origin}/checkout/${cartUuid}`
+        }
+      }
+      stripe[confirmOption[paymethod.data.type]?.name](
+        cart.paymethod_data.result.client_secret,
+        params[confirmOption[paymethod.data.type]?.type]
+      ).then((result) => {
+        if (result?.error) {
+          setErrors([...errors, result?.error?.message])
+        }
+      })
     }
   }
 
