@@ -21,12 +21,13 @@ const UserDetailsUI = (props) => {
     toggleIsEdit,
     validationFields,
     isUserDetailsEdit,
-    isCustomerMode
+    isCustomerMode,
+    userState
   } = props
 
   const [, t] = useLanguage()
   const [{ user }] = useSession()
-  const userData = props.userData || formState.result?.result || user
+  const userData = userState.result?.result || formState.result?.result || user
 
   useEffect(() => {
     if (isUserDetailsEdit) {
@@ -47,7 +48,7 @@ const UserDetailsUI = (props) => {
         </React.Fragment>))}
       {props.beforeComponents?.map((BeforeComponent, i) => (
         <BeforeComponent key={i} {...props} />))}
-      {(validationFields.loading || formState.loading) && (
+      {(validationFields.loading || formState.loading || userState.loading) && (
         <UserData>
           <Skeleton width={250} height={25} />
           <Skeleton width={180} height={25} />
@@ -55,7 +56,7 @@ const UserDetailsUI = (props) => {
         </UserData>
       )}
 
-      {!(validationFields.loading || formState.loading) && (
+      {!(validationFields.loading || formState.loading || userState.loading) && (
         <Container>
           <Header className='user-form'>
             <h1>{t('CUSTOMER_DETAILS', 'Customer Details')}</h1>
@@ -84,10 +85,20 @@ const UserDetailsUI = (props) => {
                   {(userData?.country_phone_code) && `+${(userData?.country_phone_code)} `}{(userData?.cellphone)}
                 </p>
               )}
+              {(userData?.phone || user?.phone) && (
+                <p>
+                  <strong>{t('PHONE', 'Phone')}:</strong>
+                  {(userData?.cellphone)}
+                </p>
+              )}
             </UserData>
           ) : (
             <SideForm>
-              <UserFormDetailsUI {...props} isCustomerMode={isCustomerMode} />
+              <UserFormDetailsUI
+                {...props}
+                userData={userData}
+                isCustomerMode={isCustomerMode}
+              />
             </SideForm>
           )}
         </Container>

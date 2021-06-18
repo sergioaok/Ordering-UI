@@ -45,22 +45,16 @@ export const FormControl = styled.form`
     width: 100%;
     &.internal_number,
     &.zipcode {
-      width: 100%;
+      flex: auto;
     }
     &::placeholder{
       color: #CBCBCB
-    }
-
-    @media (min-width: 621px) {
-      &.internal_number,
-      &.zipcode  {
-        width: 48%;
-      }
     }
   }
 
   textarea {
     width: 100%;
+    margin: 10px 0;
   }
 
   .input-autocomplete {
