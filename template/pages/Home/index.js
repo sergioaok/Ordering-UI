@@ -17,7 +17,8 @@ export const HomePage = (props) => {
     countryCallingCode: settings.country_calling_code,
     onRedirectPage: (page) => {
       events.emit('go_to_page', { page })
-    }
+    },
+    isCustomerMode: true
   }
 
   return (
